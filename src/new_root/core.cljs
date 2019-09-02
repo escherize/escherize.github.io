@@ -17,7 +17,7 @@
                [:p "I'm here, and im post 0."]
                [:p "Here's " [:a {:href (rfee/href ::post {:id 1})} "post 1"] "."]])})
 
-(def posts [post-0 post-1])
+(def posts [post-1 post-0])
 
 ;; define your app data so that it doesn't get over-written on reload
 
