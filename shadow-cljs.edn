@@ -15,15 +15,15 @@
         :asset-path "/js/compiled"
 
         :modules
-        {:main
-         {:entries [new_root.core]}}
+        {:main {:entries [new_root.core]}}
 
         :devtools
-        ;; before live-reloading any code call this function
         {:before-load new_root.core/stop
-         ;; after live-reloading finishes call this function
          :after-load  new_root.core/start
-         ;; serve the public directory over http at port 8700
          :http-root   "public"
          :http-port   8700
-         :preloads    [devtools.preload]}}}}
+         :preloads    [devtools.preload]}
+
+        :release
+        {:output-dir "./js/compiled"
+         :asset-path "/js/compiled"}}}}
