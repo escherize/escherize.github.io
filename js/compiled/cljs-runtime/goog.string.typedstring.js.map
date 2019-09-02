@@ -1,0 +1,8 @@
+{
+"version":3,
+"file":"goog.string.typedstring.js",
+"lineCount":9,
+"mappings":"AAcAA,IAAAC,QAAA,CAAa,yBAAb,CAAA;AAeA,kBAAAD,IAAAE,OAAAC,YAAA,GAA0BC,QAAQ,EAAG;CAArC;AAWA,uBAAAJ,IAAAE,OAAAC,YAAAE,UAAAC,gCAAA;AAOA;;;AAAAN,IAAAE,OAAAC,YAAAE,UAAAE,oBAAA;;",
+"sources":["goog/string/typedstring.js"],
+"names":["goog","provide","string","TypedString","goog.string.TypedString","prototype","implementsGoogStringTypedString","getTypedStringValue"]
+}

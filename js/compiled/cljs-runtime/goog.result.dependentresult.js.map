@@ -1,0 +1,8 @@
+{
+"version":3,
+"file":"goog.result.dependentresult.js",
+"lineCount":15,
+"mappings":"AAmBAA,IAAAC,QAAA,CAAa,6BAAb,CAAA;AAEAD,IAAAE,QAAA,CAAa,oBAAb,CAAA;AAaA;;;;;AAAAF,IAAAG,OAAAC,gBAAA,GAA8BC,QAAQ,EAAG;CAAzC;AAUA;;;AAAAL,IAAAG,OAAAC,gBAAAE,UAAAC,iBAAA,GAAyDC,QAAQ,EAAG;CAApE;;",
+"sources":["goog/result/dependentresult.js"],
+"names":["goog","provide","require","result","DependentResult","goog.result.DependentResult","prototype","getParentResults","goog.result.DependentResult.prototype.getParentResults"]
+}

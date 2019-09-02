@@ -1,0 +1,8 @@
+{
+"version":3,
+"file":"goog.result.result_interface.js",
+"lineCount":56,
+"mappings":"AAqBAA,IAAAC,QAAA,CAAa,oBAAb,CAAA;AAEAD,IAAAE,QAAA,CAAa,eAAb,CAAA;AAaA;;;;;AAAAF,IAAAG,OAAAC,OAAA,GAAqBC,QAAQ,EAAG;CAAhC;AAaA;;;;;AAAAL,IAAAG,OAAAC,OAAAE,UAAAC,KAAA,GAAoCC,QAAQ,CAACC,OAAD,EAAUC,SAAV,CAAqB;CAAjE;AASA;;;;AAAAV,IAAAG,OAAAC,OAAAO,MAAA,GAA2B,CAEzBC,QAAS,SAFgB,EAKzBC,MAAO,OALkB,EAQzBC,QAAS,SARgB,CAA3B;AAeA;;;AAAAd,IAAAG,OAAAC,OAAAE,UAAAS,SAAA,GAAwCC,QAAQ,EAAG;CAAnD;AAOA;;;AAAAhB,IAAAG,OAAAC,OAAAE,UAAAW,SAAA,GAAwCC,QAAQ,EAAG;CAAnD;AAQA;;;AAAAlB,IAAAG,OAAAC,OAAAE,UAAAa,SAAA,GAAwCC,QAAQ,EAAG;CAAnD;AAQA;;;AAAApB,IAAAG,OAAAC,OAAAE,UAAAe,OAAA,GAAsCC,QAAQ,EAAG;CAAjD;AAMA;;;AAAAtB,IAAAG,OAAAC,OAAAE,UAAAiB,WAAA,GAA0CC,QAAQ,EAAG;CAArD;AAWA;;;;;;AAAAxB,IAAAG,OAAAC,OAAAqB,YAAA,GAAiCC,QAAQ,EAAG;CAA5C;AAKA1B,IAAA2B,SAAA,CAAc3B,IAAAG,OAAAC,OAAAqB,YAAd,EAA8CG,KAA9C,CAAA;;",
+"sources":["goog/result/result_interface.js"],
+"names":["goog","provide","require","result","Result","goog.result.Result","prototype","wait","goog.result.Result.prototype.wait","handler","opt_scope","State","SUCCESS","ERROR","PENDING","getState","goog.result.Result.prototype.getState","getValue","goog.result.Result.prototype.getValue","getError","goog.result.Result.prototype.getError","cancel","goog.result.Result.prototype.cancel","isCanceled","goog.result.Result.prototype.isCanceled","CancelError","goog.result.Result.CancelError","inherits","Error"]
+}
