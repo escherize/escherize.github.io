@@ -97,7 +97,7 @@
    (fn [m]
      (swap! app-state assoc :match m))
    ;; set to false to enable HistoryAPI
-   {:use-fragment false})
+   {:use-fragment true})
   (start))
 
 (defn stop []

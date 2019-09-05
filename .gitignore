@@ -39,3 +39,5 @@ yarn.lock
 package-lock.json
 /package.json
 *.log
+.shadow-cljs/builds/*
+public/js/compiled/*
