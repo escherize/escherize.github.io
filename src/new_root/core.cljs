@@ -3,21 +3,33 @@
    [reagent.core :as reagent :refer [atom]]
    [re-frame.core :as rf]
    [reitit.frontend :as rfe]
-   [reitit.frontend.easy :as rfee]))
+   [reitit.frontend.easy :as rfee]
+   [new-root.paint-snake.core :as ps]))
+
+(def post-2
+  {:title "It's a project in a project!"
+   :release :beta
+   :preview (fn []
+              [:div "This is a "
+               [:a {:href (rfee/href ::post {:id 2})} "game"]
+               " I'm working on"])
+   :content ps/view})
 
 (def post-1
   {:title "Hello Again"
-   :content (fn [] [:p "I'm here and im post 1."]
-              [:p "Here's " [:a {:href (rfee/href ::post {:id 0})} "post 0"] "."])})
+   :content (fn []
+              [:div
+               [:h1 "I'm post 1."]
+               [:p "Here's " [:a {:href (rfee/href ::post {:id 0})} "post 0"] "."]])})
 
 (def post-0
   {:title "Hello World"
    :content (fn []
               [:div
-               [:p "I'm here, and im post 0."]
+               [:h1 "I'm here, and im post 0."]
                [:p "Here's " [:a {:href (rfee/href ::post {:id 1})} "post 1"] "."]])})
 
-(def posts [post-1 post-0])
+(def posts [post-0 post-1 post-2])
 
 ;; define your app data so that it doesn't get over-written on reload
 
@@ -42,17 +54,19 @@
    [:div.row [nav]]
    [:div.row page]])
 
-(defn teaser [{:as _ :keys [title content]}]
+(defn teaser [{:as _ :keys [title preview content]}]
   [:div.card
    [:h3.small {:style {:color "#d24c53"}} title]
-   [:div.row [content]]])
+   [:div.row (cond preview [preview]
+                   content (content)
+                   :else nil)]])
 
 (defn home [_]
   [:div
    [:h1 "Bryan Zone"]
    [blog
     (into [:div]
-          (for [p posts] (teaser p)))]])
+          (for [p (reverse posts)] (teaser p)))]])
 
 (defn projects []
   [:div
@@ -94,10 +108,10 @@
   ;; so it is available even in :advanced release builds
   (rfee/start!
    (rfe/router routes)
-   (fn [m]
-     (swap! app-state assoc :match m))
+   (fn [m] (swap! app-state assoc :match m))
    ;; set to false to enable HistoryAPI
    {:use-fragment true})
+  (ps/init)
   (start))
 
 (defn stop []

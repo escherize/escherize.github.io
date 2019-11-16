@@ -5,11 +5,11 @@ goog.require("goog.i18n.bidi.DirectionalString");
 goog.require("goog.string.Const");
 goog.require("goog.string.TypedString");
 /**
- @final
- @struct
- @constructor
- @implements {goog.i18n.bidi.DirectionalString}
- @implements {goog.string.TypedString}
+ * @final
+ * @struct
+ * @constructor
+ * @implements {goog.i18n.bidi.DirectionalString}
+ * @implements {goog.string.TypedString}
  */
 goog.html.TrustedResourceUrl = function() {
   /** @private @type {string} */ this.privateDoNotAccessOrElseTrustedResourceUrlWrappedValue_ = "";
@@ -24,9 +24,9 @@ goog.html.TrustedResourceUrl = function() {
   return goog.i18n.bidi.Dir.LTR;
 };
 /**
- @param {(string|?Object<string,*>|undefined)} searchParams
- @param {(string|?Object<string,*>)=} opt_hashParams
- @return {!goog.html.TrustedResourceUrl}
+ * @param {(string|?Object<string,*>|undefined)} searchParams
+ * @param {(string|?Object<string,*>)=} opt_hashParams
+ * @return {!goog.html.TrustedResourceUrl}
  */
 goog.html.TrustedResourceUrl.prototype.cloneWithParams = function(searchParams, opt_hashParams) {
   var url = goog.html.TrustedResourceUrl.unwrap(this);
@@ -42,8 +42,8 @@ if (goog.DEBUG) {
   };
 }
 /**
- @param {!goog.html.TrustedResourceUrl} trustedResourceUrl
- @return {string}
+ * @param {!goog.html.TrustedResourceUrl} trustedResourceUrl
+ * @return {string}
  */
 goog.html.TrustedResourceUrl.unwrap = function(trustedResourceUrl) {
   if (trustedResourceUrl instanceof goog.html.TrustedResourceUrl && trustedResourceUrl.constructor === goog.html.TrustedResourceUrl && trustedResourceUrl.TRUSTED_RESOURCE_URL_TYPE_MARKER_GOOG_HTML_SECURITY_PRIVATE_ === goog.html.TrustedResourceUrl.TYPE_MARKER_GOOG_HTML_SECURITY_PRIVATE_) {
@@ -54,10 +54,10 @@ goog.html.TrustedResourceUrl.unwrap = function(trustedResourceUrl) {
   }
 };
 /**
- @param {!goog.string.Const} format
- @param {!Object<string,(string|number|!goog.string.Const)>} args
- @return {!goog.html.TrustedResourceUrl}
- @throws {!Error}
+ * @param {!goog.string.Const} format
+ * @param {!Object<string,(string|number|!goog.string.Const)>} args
+ * @return {!goog.html.TrustedResourceUrl}
+ * @throws {!Error}
  */
 goog.html.TrustedResourceUrl.format = function(format, args) {
   var formatStr = goog.string.Const.unwrap(format);
@@ -81,27 +81,27 @@ goog.html.TrustedResourceUrl.format = function(format, args) {
 /** @private @const @type {!RegExp} */ goog.html.TrustedResourceUrl.BASE_URL_ = new RegExp("^((https:)?//[0-9a-z.:[\\]-]+/" + "|/[^/\\\\]" + "|[^:/\\\\%]+/" + "|[^:/\\\\%]*[?#]" + "|about:blank#" + ")", "i");
 /** @private @const @type {!RegExp} */ goog.html.TrustedResourceUrl.URL_PARAM_PARSER_ = /^([^?#]*)(\?[^#]*)?(#[\s\S]*)?/;
 /**
- @param {!goog.string.Const} format
- @param {!Object<string,(string|number|!goog.string.Const)>} args
- @param {(string|?Object<string,*>|undefined)} searchParams
- @param {(string|?Object<string,*>)=} opt_hashParams
- @return {!goog.html.TrustedResourceUrl}
- @throws {!Error}
+ * @param {!goog.string.Const} format
+ * @param {!Object<string,(string|number|!goog.string.Const)>} args
+ * @param {(string|?Object<string,*>|undefined)} searchParams
+ * @param {(string|?Object<string,*>)=} opt_hashParams
+ * @return {!goog.html.TrustedResourceUrl}
+ * @throws {!Error}
  */
 goog.html.TrustedResourceUrl.formatWithParams = function(format, args, searchParams, opt_hashParams) {
   var url = goog.html.TrustedResourceUrl.format(format, args);
   return url.cloneWithParams(searchParams, opt_hashParams);
 };
 /**
- @param {!goog.string.Const} url
- @return {!goog.html.TrustedResourceUrl}
+ * @param {!goog.string.Const} url
+ * @return {!goog.html.TrustedResourceUrl}
  */
 goog.html.TrustedResourceUrl.fromConstant = function(url) {
   return goog.html.TrustedResourceUrl.createTrustedResourceUrlSecurityPrivateDoNotAccessOrElse(goog.string.Const.unwrap(url));
 };
 /**
- @param {!Array<!goog.string.Const>} parts
- @return {!goog.html.TrustedResourceUrl}
+ * @param {!Array<!goog.string.Const>} parts
+ * @return {!goog.html.TrustedResourceUrl}
  */
 goog.html.TrustedResourceUrl.fromConstants = function(parts) {
   var unwrapped = "";
@@ -112,9 +112,9 @@ goog.html.TrustedResourceUrl.fromConstants = function(parts) {
 };
 /** @private @const @type {!Object} */ goog.html.TrustedResourceUrl.TYPE_MARKER_GOOG_HTML_SECURITY_PRIVATE_ = {};
 /**
- @package
- @param {string} url
- @return {!goog.html.TrustedResourceUrl}
+ * @package
+ * @param {string} url
+ * @return {!goog.html.TrustedResourceUrl}
  */
 goog.html.TrustedResourceUrl.createTrustedResourceUrlSecurityPrivateDoNotAccessOrElse = function(url) {
   var trustedResourceUrl = new goog.html.TrustedResourceUrl;
@@ -122,11 +122,11 @@ goog.html.TrustedResourceUrl.createTrustedResourceUrlSecurityPrivateDoNotAccessO
   return trustedResourceUrl;
 };
 /**
- @private
- @param {string} prefix
- @param {string} currentString
- @param {(string|?Object<string,*>|undefined)} params
- @return {string}
+ * @private
+ * @param {string} prefix
+ * @param {string} currentString
+ * @param {(string|?Object<string,*>|undefined)} params
+ * @return {string}
  */
 goog.html.TrustedResourceUrl.stringifyParams_ = function(prefix, currentString, params) {
   if (params == null) {

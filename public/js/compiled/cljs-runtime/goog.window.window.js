@@ -11,18 +11,18 @@ goog.require("goog.userAgent");
 /** @type {number} */ goog.window.DEFAULT_POPUP_WIDTH = 690;
 /** @type {string} */ goog.window.DEFAULT_POPUP_TARGET = "google_popup";
 /**
- @private
- @return {!Window}
- @suppress {checkTypes}
+ * @private
+ * @return {!Window}
+ * @suppress {checkTypes}
  */
 goog.window.createFakeWindow_ = function() {
   return (/** @type {!Window} */ ({}));
 };
 /**
- @param {(goog.html.SafeUrl|string|Object|null)} linkRef
- @param {?Object=} opt_options
- @param {?Window=} opt_parentWin
- @return {?Window}
+ * @param {(goog.html.SafeUrl|string|Object|null)} linkRef
+ * @param {?Object=} opt_options
+ * @param {?Window=} opt_parentWin
+ * @return {?Window}
  */
 goog.window.open = function(linkRef, opt_options, opt_parentWin) {
   if (!opt_options) {
@@ -34,14 +34,14 @@ goog.window.open = function(linkRef, opt_options, opt_parentWin) {
     safeLinkRef = linkRef;
   } else {
     /**
-     @type {(string|!goog.string.TypedString)}
-     @suppress {missingProperties}
+     * @type {(string|!goog.string.TypedString)}
+     * @suppress {missingProperties}
      */
     var url = typeof linkRef.href != "undefined" ? linkRef.href : String(linkRef);
     safeLinkRef = goog.html.SafeUrl.sanitize(url);
   }
   /**
-   @suppress {strictMissingProperties}
+   * @suppress {strictMissingProperties}
    */
   var target = opt_options.target || linkRef.target;
   var sb = [];
@@ -99,10 +99,10 @@ goog.window.open = function(linkRef, opt_options, opt_parentWin) {
   return newWin;
 };
 /**
- @param {string=} opt_message
- @param {?Object=} opt_options
- @param {?Window=} opt_parentWin
- @return {?Window}
+ * @param {string=} opt_message
+ * @param {?Object=} opt_options
+ * @param {?Window=} opt_parentWin
+ * @return {?Window}
  */
 goog.window.openBlank = function(opt_message, opt_options, opt_parentWin) {
   var loadingMessage;
@@ -115,9 +115,9 @@ goog.window.openBlank = function(opt_message, opt_options, opt_parentWin) {
   return (/** @type {?Window} */ (goog.window.open(url, opt_options, opt_parentWin)));
 };
 /**
- @param {(?goog.html.SafeUrl|string|?Object)} linkRef
- @param {?Object=} opt_options
- @return {boolean}
+ * @param {(?goog.html.SafeUrl|string|?Object)} linkRef
+ * @param {?Object=} opt_options
+ * @return {boolean}
  */
 goog.window.popup = function(linkRef, opt_options) {
   if (!opt_options) {

@@ -1,11 +1,11 @@
 goog.provide("goog.async.FreeList");
 /**
- @template ITEM
+ * @template ITEM
  */
 goog.async.FreeList = goog.defineClass(null, {/**
- @param {function():ITEM} create
- @param {function(ITEM):void} reset
- @param {number} limit
+ * @param {function():ITEM} create
+ * @param {function(ITEM):void} reset
+ * @param {number} limit
  */
 constructor:function(create, reset, limit) {
   /** @private @const @type {number} */ this.limit_ = limit;
@@ -14,7 +14,7 @@ constructor:function(create, reset, limit) {
   /** @private @type {number} */ this.occupants_ = 0;
   /** @private @type {ITEM} */ this.head_ = null;
 }, /**
- @return {ITEM}
+ * @return {ITEM}
  */
 get:function() {
   var item;
@@ -28,7 +28,7 @@ get:function() {
   }
   return item;
 }, /**
- @param {ITEM} item
+ * @param {ITEM} item
  */
 put:function(item) {
   this.reset_(item);
@@ -38,8 +38,8 @@ put:function(item) {
     this.head_ = item;
   }
 }, /**
- @package
- @return {number}
+ * @package
+ * @return {number}
  */
 occupants:function() {
   return this.occupants_;

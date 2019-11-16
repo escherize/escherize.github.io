@@ -14,19 +14,19 @@ goog.require("goog.string");
 /** @define {boolean} */ goog.define("goog.userAgent.ASSUME_ANY_VERSION", false);
 /** @private @type {boolean} */ goog.userAgent.BROWSER_KNOWN_ = goog.userAgent.ASSUME_IE || goog.userAgent.ASSUME_EDGE || goog.userAgent.ASSUME_GECKO || goog.userAgent.ASSUME_MOBILE_WEBKIT || goog.userAgent.ASSUME_WEBKIT || goog.userAgent.ASSUME_OPERA;
 /**
- @return {string}
+ * @return {string}
  */
 goog.userAgent.getUserAgentString = function() {
   return goog.labs.userAgent.util.getUserAgent();
 };
 /**
- @return {?Navigator}
+ * @return {?Navigator}
  */
 goog.userAgent.getNavigatorTyped = function() {
   return goog.global["navigator"] || null;
 };
 /**
- @return {?Object}
+ * @return {?Object}
  */
 goog.userAgent.getNavigator = function() {
   return goog.userAgent.getNavigatorTyped();
@@ -38,21 +38,21 @@ goog.userAgent.getNavigator = function() {
 /** @type {boolean} */ goog.userAgent.GECKO = goog.userAgent.BROWSER_KNOWN_ ? goog.userAgent.ASSUME_GECKO : goog.labs.userAgent.engine.isGecko();
 /** @type {boolean} */ goog.userAgent.WEBKIT = goog.userAgent.BROWSER_KNOWN_ ? goog.userAgent.ASSUME_WEBKIT || goog.userAgent.ASSUME_MOBILE_WEBKIT : goog.labs.userAgent.engine.isWebKit();
 /**
- @private
- @return {boolean}
+ * @private
+ * @return {boolean}
  */
 goog.userAgent.isMobile_ = function() {
   return goog.userAgent.WEBKIT && goog.labs.userAgent.util.matchUserAgent("Mobile");
 };
 /** @type {boolean} */ goog.userAgent.MOBILE = goog.userAgent.ASSUME_MOBILE_WEBKIT || goog.userAgent.isMobile_();
 /**
- @type {boolean}
- @deprecated Use {@link goog.userAgent.product.SAFARI} instead. TODO(nicksantos): Delete this from goog.userAgent.
+ * @type {boolean}
+ * @deprecated Use {@link goog.userAgent.product.SAFARI} instead. TODO(nicksantos): Delete this from goog.userAgent.
  */
 goog.userAgent.SAFARI = goog.userAgent.WEBKIT;
 /**
- @private
- @return {string}
+ * @private
+ * @return {string}
  */
 goog.userAgent.determinePlatform_ = function() {
   var navigator = goog.userAgent.getNavigatorTyped();
@@ -73,16 +73,16 @@ goog.userAgent.determinePlatform_ = function() {
 /** @type {boolean} */ goog.userAgent.MAC = goog.userAgent.PLATFORM_KNOWN_ ? goog.userAgent.ASSUME_MAC : goog.labs.userAgent.platform.isMacintosh();
 /** @type {boolean} */ goog.userAgent.WINDOWS = goog.userAgent.PLATFORM_KNOWN_ ? goog.userAgent.ASSUME_WINDOWS : goog.labs.userAgent.platform.isWindows();
 /**
- @private
- @return {boolean}
+ * @private
+ * @return {boolean}
  */
 goog.userAgent.isLegacyLinux_ = function() {
   return goog.labs.userAgent.platform.isLinux() || goog.labs.userAgent.platform.isChromeOS();
 };
 /** @type {boolean} */ goog.userAgent.LINUX = goog.userAgent.PLATFORM_KNOWN_ ? goog.userAgent.ASSUME_LINUX : goog.userAgent.isLegacyLinux_();
 /**
- @private
- @return {boolean}
+ * @private
+ * @return {boolean}
  */
 goog.userAgent.isX11_ = function() {
   var navigator = goog.userAgent.getNavigatorTyped();
@@ -97,8 +97,8 @@ goog.userAgent.isX11_ = function() {
 goog.userAgent.KAIOS = goog.userAgent.PLATFORM_KNOWN_ ? goog.userAgent.ASSUME_KAIOS : goog.labs.userAgent.platform.isKaiOS();
 goog.userAgent.GO2PHONE = goog.userAgent.PLATFORM_KNOWN_ ? goog.userAgent.ASSUME_GO2PHONE : goog.labs.userAgent.platform.isGo2Phone();
 /**
- @private
- @return {string}
+ * @private
+ * @return {string}
  */
 goog.userAgent.determineVersion_ = function() {
   var version = "";
@@ -115,8 +115,8 @@ goog.userAgent.determineVersion_ = function() {
   return version;
 };
 /**
- @private
- @return {(?IArrayLike<string>|undefined)}
+ * @private
+ * @return {(?IArrayLike<string>|undefined)}
  */
 goog.userAgent.getVersionRegexResult_ = function() {
   var userAgent = goog.userAgent.getUserAgentString();
@@ -138,8 +138,8 @@ goog.userAgent.getVersionRegexResult_ = function() {
   return undefined;
 };
 /**
- @private
- @return {(number|undefined)}
+ * @private
+ * @return {(number|undefined)}
  */
 goog.userAgent.getDocumentMode_ = function() {
   var doc = goog.global["document"];
@@ -147,18 +147,18 @@ goog.userAgent.getDocumentMode_ = function() {
 };
 /** @type {string} */ goog.userAgent.VERSION = goog.userAgent.determineVersion_();
 /**
- @param {string} v1
- @param {string} v2
- @return {number}
- @deprecated Use goog.string.compareVersions.
+ * @param {string} v1
+ * @param {string} v2
+ * @return {number}
+ * @deprecated Use goog.string.compareVersions.
  */
 goog.userAgent.compare = function(v1, v2) {
   return goog.string.compareVersions(v1, v2);
 };
 /** @private @const */ goog.userAgent.isVersionOrHigherCache_ = {};
 /**
- @param {(string|number)} version
- @return {boolean}
+ * @param {(string|number)} version
+ * @return {boolean}
  */
 goog.userAgent.isVersionOrHigher = function(version) {
   return goog.userAgent.ASSUME_ANY_VERSION || goog.reflect.cache(goog.userAgent.isVersionOrHigherCache_, version, function() {
@@ -166,22 +166,22 @@ goog.userAgent.isVersionOrHigher = function(version) {
   });
 };
 /**
- @param {(string|number)} version
- @return {boolean}
- @deprecated Use goog.userAgent.isVersionOrHigher().
+ * @param {(string|number)} version
+ * @return {boolean}
+ * @deprecated Use goog.userAgent.isVersionOrHigher().
  */
 goog.userAgent.isVersion = goog.userAgent.isVersionOrHigher;
 /**
- @param {number} documentMode
- @return {boolean}
+ * @param {number} documentMode
+ * @return {boolean}
  */
 goog.userAgent.isDocumentModeOrHigher = function(documentMode) {
   return Number(goog.userAgent.DOCUMENT_MODE) >= documentMode;
 };
 /**
- @param {number} version
- @return {boolean}
- @deprecated Use goog.userAgent.isDocumentModeOrHigher().
+ * @param {number} version
+ * @return {boolean}
+ * @deprecated Use goog.userAgent.isDocumentModeOrHigher().
  */
 goog.userAgent.isDocumentMode = goog.userAgent.isDocumentModeOrHigher;
 /** @const @type {(number|undefined)} */ goog.userAgent.DOCUMENT_MODE = function() {

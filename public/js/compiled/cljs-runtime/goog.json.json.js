@@ -5,8 +5,8 @@ goog.provide("goog.json.Serializer");
 /** @define {boolean} */ goog.define("goog.json.USE_NATIVE_JSON", false);
 /** @define {boolean} */ goog.define("goog.json.TRY_NATIVE_JSON", false);
 /**
- @param {string} s
- @return {boolean}
+ * @param {string} s
+ * @return {boolean}
  */
 goog.json.isValid = function(s) {
   if (/^\s*$/.test(s)) {
@@ -20,15 +20,15 @@ goog.json.isValid = function(s) {
 };
 /** @private @type {function(string,!Error)} */ goog.json.errorLogger_ = goog.nullFunction;
 /**
- @param {function(string,!Error)} errorLogger
+ * @param {function(string,!Error)} errorLogger
  */
 goog.json.setErrorLogger = function(errorLogger) {
   goog.json.errorLogger_ = errorLogger;
 };
 /**
- @param {*} s
- @return {Object}
- @deprecated Use JSON.parse.
+ * @param {*} s
+ * @return {Object}
+ * @deprecated Use JSON.parse.
  */
 goog.json.parse = goog.json.USE_NATIVE_JSON ? /** @type {function(*):Object} */ (goog.global["JSON"]["parse"]) : function(s) {
   var error;
@@ -55,23 +55,23 @@ goog.json.parse = goog.json.USE_NATIVE_JSON ? /** @type {function(*):Object} */ 
 /** @typedef {function(this:Object,string,*):*} */ goog.json.Replacer;
 /** @typedef {function(this:Object,string,*):*} */ goog.json.Reviver;
 /**
- @param {*} object
- @param {?goog.json.Replacer=} opt_replacer
- @return {string}
+ * @param {*} object
+ * @param {?goog.json.Replacer=} opt_replacer
+ * @return {string}
  */
 goog.json.serialize = goog.json.USE_NATIVE_JSON ? /** @type {function(*,?goog.json.Replacer=):string} */ (goog.global["JSON"]["stringify"]) : function(object, opt_replacer) {
   return (new goog.json.Serializer(opt_replacer)).serialize(object);
 };
 /**
- @constructor
- @param {?goog.json.Replacer=} opt_replacer
+ * @constructor
+ * @param {?goog.json.Replacer=} opt_replacer
  */
 goog.json.Serializer = function(opt_replacer) {
   /** @private @type {(goog.json.Replacer|null|undefined)} */ this.replacer_ = opt_replacer;
 };
 /**
- @param {*} object
- @return {string}
+ * @param {*} object
+ * @return {string}
  */
 goog.json.Serializer.prototype.serialize = function(object) {
   var sb = [];
@@ -79,9 +79,9 @@ goog.json.Serializer.prototype.serialize = function(object) {
   return sb.join("");
 };
 /**
- @protected
- @param {*} object
- @param {Array<string>} sb
+ * @protected
+ * @param {*} object
+ * @param {Array<string>} sb
  */
 goog.json.Serializer.prototype.serializeInternal = function(object, sb) {
   if (object == null) {
@@ -121,9 +121,9 @@ goog.json.Serializer.prototype.serializeInternal = function(object, sb) {
 /** @private @type {!Object} */ goog.json.Serializer.charToJsonCharCache_ = {'"':'\\"', "\\":"\\\\", "/":"\\/", "\b":"\\b", "\f":"\\f", "\n":"\\n", "\r":"\\r", "\t":"\\t", "\x0B":"\\u000b"};
 /** @private @type {!RegExp} */ goog.json.Serializer.charsToReplace_ = /\uffff/.test("￿") ? /[\\"\x00-\x1f\x7f-\uffff]/g : /[\\"\x00-\x1f\x7f-\xff]/g;
 /**
- @private
- @param {string} s
- @param {Array<string>} sb
+ * @private
+ * @param {string} s
+ * @param {Array<string>} sb
  */
 goog.json.Serializer.prototype.serializeString_ = function(s, sb) {
   sb.push('"', s.replace(goog.json.Serializer.charsToReplace_, function(c) {
@@ -136,17 +136,17 @@ goog.json.Serializer.prototype.serializeString_ = function(s, sb) {
   }), '"');
 };
 /**
- @private
- @param {number} n
- @param {Array<string>} sb
+ * @private
+ * @param {number} n
+ * @param {Array<string>} sb
  */
 goog.json.Serializer.prototype.serializeNumber_ = function(n, sb) {
   sb.push(isFinite(n) && !isNaN(n) ? String(n) : "null");
 };
 /**
- @protected
- @param {Array<string>} arr
- @param {Array<string>} sb
+ * @protected
+ * @param {Array<string>} arr
+ * @param {Array<string>} sb
  */
 goog.json.Serializer.prototype.serializeArray = function(arr, sb) {
   var l = arr.length;
@@ -161,9 +161,9 @@ goog.json.Serializer.prototype.serializeArray = function(arr, sb) {
   sb.push("]");
 };
 /**
- @private
- @param {!Object} obj
- @param {Array<string>} sb
+ * @private
+ * @param {!Object} obj
+ * @param {Array<string>} sb
  */
 goog.json.Serializer.prototype.serializeObject_ = function(obj, sb) {
   sb.push("{");

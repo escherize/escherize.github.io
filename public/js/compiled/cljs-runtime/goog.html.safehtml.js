@@ -16,11 +16,11 @@ goog.require("goog.string.Const");
 goog.require("goog.string.TypedString");
 goog.require("goog.string.internal");
 /**
- @final
- @struct
- @constructor
- @implements {goog.i18n.bidi.DirectionalString}
- @implements {goog.string.TypedString}
+ * @final
+ * @struct
+ * @constructor
+ * @implements {goog.i18n.bidi.DirectionalString}
+ * @implements {goog.string.TypedString}
  */
 goog.html.SafeHtml = function() {
   /** @private @type {string} */ this.privateDoNotAccessOrElseSafeHtmlWrappedValue_ = "";
@@ -41,8 +41,8 @@ if (goog.DEBUG) {
   };
 }
 /**
- @param {!goog.html.SafeHtml} safeHtml
- @return {string}
+ * @param {!goog.html.SafeHtml} safeHtml
+ * @return {string}
  */
 goog.html.SafeHtml.unwrap = function(safeHtml) {
   if (safeHtml instanceof goog.html.SafeHtml && safeHtml.constructor === goog.html.SafeHtml && safeHtml.SAFE_HTML_TYPE_MARKER_GOOG_HTML_SECURITY_PRIVATE_ === goog.html.SafeHtml.TYPE_MARKER_GOOG_HTML_SECURITY_PRIVATE_) {
@@ -54,8 +54,8 @@ goog.html.SafeHtml.unwrap = function(safeHtml) {
 };
 /** @private @typedef {(string|number|boolean|!goog.string.TypedString|!goog.i18n.bidi.DirectionalString)} */ goog.html.SafeHtml.TextOrHtml_;
 /**
- @param {!goog.html.SafeHtml.TextOrHtml_} textOrHtml
- @return {!goog.html.SafeHtml}
+ * @param {!goog.html.SafeHtml.TextOrHtml_} textOrHtml
+ * @return {!goog.html.SafeHtml}
  */
 goog.html.SafeHtml.htmlEscape = function(textOrHtml) {
   if (textOrHtml instanceof goog.html.SafeHtml) {
@@ -75,8 +75,8 @@ goog.html.SafeHtml.htmlEscape = function(textOrHtml) {
   return goog.html.SafeHtml.createSafeHtmlSecurityPrivateDoNotAccessOrElse(goog.string.internal.htmlEscape(textAsString), dir);
 };
 /**
- @param {!goog.html.SafeHtml.TextOrHtml_} textOrHtml
- @return {!goog.html.SafeHtml}
+ * @param {!goog.html.SafeHtml.TextOrHtml_} textOrHtml
+ * @return {!goog.html.SafeHtml}
  */
 goog.html.SafeHtml.htmlEscapePreservingNewlines = function(textOrHtml) {
   if (textOrHtml instanceof goog.html.SafeHtml) {
@@ -86,8 +86,8 @@ goog.html.SafeHtml.htmlEscapePreservingNewlines = function(textOrHtml) {
   return goog.html.SafeHtml.createSafeHtmlSecurityPrivateDoNotAccessOrElse(goog.string.internal.newLineToBr(goog.html.SafeHtml.unwrap(html)), html.getDirection());
 };
 /**
- @param {!goog.html.SafeHtml.TextOrHtml_} textOrHtml
- @return {!goog.html.SafeHtml}
+ * @param {!goog.html.SafeHtml.TextOrHtml_} textOrHtml
+ * @return {!goog.html.SafeHtml}
  */
 goog.html.SafeHtml.htmlEscapePreservingNewlinesAndSpaces = function(textOrHtml) {
   if (textOrHtml instanceof goog.html.SafeHtml) {
@@ -97,9 +97,9 @@ goog.html.SafeHtml.htmlEscapePreservingNewlinesAndSpaces = function(textOrHtml) 
   return goog.html.SafeHtml.createSafeHtmlSecurityPrivateDoNotAccessOrElse(goog.string.internal.whitespaceEscape(goog.html.SafeHtml.unwrap(html)), html.getDirection());
 };
 /**
- @param {!goog.html.SafeHtml.TextOrHtml_} textOrHtml
- @return {!goog.html.SafeHtml}
- @deprecated Use goog.html.SafeHtml.htmlEscape.
+ * @param {!goog.html.SafeHtml.TextOrHtml_} textOrHtml
+ * @return {!goog.html.SafeHtml}
+ * @deprecated Use goog.html.SafeHtml.htmlEscape.
  */
 goog.html.SafeHtml.from = goog.html.SafeHtml.htmlEscape;
 /** @private @const */ goog.html.SafeHtml.VALID_NAMES_IN_TAG_ = /^[a-zA-Z0-9-]+$/;
@@ -107,20 +107,20 @@ goog.html.SafeHtml.from = goog.html.SafeHtml.htmlEscape;
 /** @private @const @type {!Object<string,boolean>} */ goog.html.SafeHtml.NOT_ALLOWED_TAG_NAMES_ = goog.object.createSet(goog.dom.TagName.APPLET, goog.dom.TagName.BASE, goog.dom.TagName.EMBED, goog.dom.TagName.IFRAME, goog.dom.TagName.LINK, goog.dom.TagName.MATH, goog.dom.TagName.META, goog.dom.TagName.OBJECT, goog.dom.TagName.SCRIPT, goog.dom.TagName.STYLE, goog.dom.TagName.SVG, goog.dom.TagName.TEMPLATE);
 /** @typedef {(string|number|goog.string.TypedString|goog.html.SafeStyle.PropertyMap|undefined)} */ goog.html.SafeHtml.AttributeValue;
 /**
- @param {(!goog.dom.TagName|string)} tagName
- @param {?Object<string,?goog.html.SafeHtml.AttributeValue>=} opt_attributes
- @param {(!goog.html.SafeHtml.TextOrHtml_|!Array<!goog.html.SafeHtml.TextOrHtml_>)=} opt_content
- @return {!goog.html.SafeHtml}
- @throws {Error}
+ * @param {(!goog.dom.TagName|string)} tagName
+ * @param {?Object<string,?goog.html.SafeHtml.AttributeValue>=} opt_attributes
+ * @param {(!goog.html.SafeHtml.TextOrHtml_|!Array<!goog.html.SafeHtml.TextOrHtml_>)=} opt_content
+ * @return {!goog.html.SafeHtml}
+ * @throws {Error}
  */
 goog.html.SafeHtml.create = function(tagName, opt_attributes, opt_content) {
   goog.html.SafeHtml.verifyTagName(String(tagName));
   return goog.html.SafeHtml.createSafeHtmlTagSecurityPrivateDoNotAccessOrElse(String(tagName), opt_attributes, opt_content);
 };
 /**
- @package
- @param {string} tagName
- @throws {Error}
+ * @package
+ * @param {string} tagName
+ * @throws {Error}
  */
 goog.html.SafeHtml.verifyTagName = function(tagName) {
   if (!goog.html.SafeHtml.VALID_NAMES_IN_TAG_.test(tagName)) {
@@ -131,12 +131,12 @@ goog.html.SafeHtml.verifyTagName = function(tagName) {
   }
 };
 /**
- @param {?goog.html.TrustedResourceUrl=} opt_src
- @param {?goog.html.SafeHtml=} opt_srcdoc
- @param {?Object<string,?goog.html.SafeHtml.AttributeValue>=} opt_attributes
- @param {(!goog.html.SafeHtml.TextOrHtml_|!Array<!goog.html.SafeHtml.TextOrHtml_>)=} opt_content
- @return {!goog.html.SafeHtml}
- @throws {Error}
+ * @param {?goog.html.TrustedResourceUrl=} opt_src
+ * @param {?goog.html.SafeHtml=} opt_srcdoc
+ * @param {?Object<string,?goog.html.SafeHtml.AttributeValue>=} opt_attributes
+ * @param {(!goog.html.SafeHtml.TextOrHtml_|!Array<!goog.html.SafeHtml.TextOrHtml_>)=} opt_content
+ * @return {!goog.html.SafeHtml}
+ * @throws {Error}
  */
 goog.html.SafeHtml.createIframe = function(opt_src, opt_srcdoc, opt_attributes, opt_content) {
   if (opt_src) {
@@ -150,12 +150,12 @@ goog.html.SafeHtml.createIframe = function(opt_src, opt_srcdoc, opt_attributes, 
   return goog.html.SafeHtml.createSafeHtmlTagSecurityPrivateDoNotAccessOrElse("iframe", attributes, opt_content);
 };
 /**
- @param {(string|!goog.html.SafeUrl)=} opt_src
- @param {string=} opt_srcdoc
- @param {!Object<string,?goog.html.SafeHtml.AttributeValue>=} opt_attributes
- @param {(!goog.html.SafeHtml.TextOrHtml_|!Array<!goog.html.SafeHtml.TextOrHtml_>)=} opt_content
- @return {!goog.html.SafeHtml}
- @throws {Error}
+ * @param {(string|!goog.html.SafeUrl)=} opt_src
+ * @param {string=} opt_srcdoc
+ * @param {!Object<string,?goog.html.SafeHtml.AttributeValue>=} opt_attributes
+ * @param {(!goog.html.SafeHtml.TextOrHtml_|!Array<!goog.html.SafeHtml.TextOrHtml_>)=} opt_content
+ * @return {!goog.html.SafeHtml}
+ * @throws {Error}
  */
 goog.html.SafeHtml.createSandboxIframe = function(opt_src, opt_srcdoc, opt_attributes, opt_content) {
   if (!goog.html.SafeHtml.canUseSandboxIframe()) {
@@ -173,16 +173,16 @@ goog.html.SafeHtml.createSandboxIframe = function(opt_src, opt_srcdoc, opt_attri
   return goog.html.SafeHtml.createSafeHtmlTagSecurityPrivateDoNotAccessOrElse("iframe", attributes, opt_content);
 };
 /**
- @return {boolean}
+ * @return {boolean}
  */
 goog.html.SafeHtml.canUseSandboxIframe = function() {
   return goog.global["HTMLIFrameElement"] && "sandbox" in goog.global["HTMLIFrameElement"].prototype;
 };
 /**
- @param {!goog.html.TrustedResourceUrl} src
- @param {?Object<string,?goog.html.SafeHtml.AttributeValue>=} opt_attributes
- @return {!goog.html.SafeHtml}
- @throws {Error}
+ * @param {!goog.html.TrustedResourceUrl} src
+ * @param {?Object<string,?goog.html.SafeHtml.AttributeValue>=} opt_attributes
+ * @return {!goog.html.SafeHtml}
+ * @throws {Error}
  */
 goog.html.SafeHtml.createScriptSrc = function(src, opt_attributes) {
   goog.html.TrustedResourceUrl.unwrap(src);
@@ -192,10 +192,10 @@ goog.html.SafeHtml.createScriptSrc = function(src, opt_attributes) {
   return goog.html.SafeHtml.createSafeHtmlTagSecurityPrivateDoNotAccessOrElse("script", attributes);
 };
 /**
- @param {(!goog.html.SafeScript|!Array<!goog.html.SafeScript>)} script
- @param {?Object<string,?goog.html.SafeHtml.AttributeValue>=} opt_attributes
- @return {!goog.html.SafeHtml}
- @throws {Error}
+ * @param {(!goog.html.SafeScript|!Array<!goog.html.SafeScript>)} script
+ * @param {?Object<string,?goog.html.SafeHtml.AttributeValue>=} opt_attributes
+ * @return {!goog.html.SafeHtml}
+ * @throws {Error}
  */
 goog.html.SafeHtml.createScript = function(script, opt_attributes) {
   for (var attr in opt_attributes) {
@@ -213,10 +213,10 @@ goog.html.SafeHtml.createScript = function(script, opt_attributes) {
   return goog.html.SafeHtml.createSafeHtmlTagSecurityPrivateDoNotAccessOrElse("script", opt_attributes, htmlContent);
 };
 /**
- @param {(!goog.html.SafeStyleSheet|!Array<!goog.html.SafeStyleSheet>)} styleSheet
- @param {?Object<string,?goog.html.SafeHtml.AttributeValue>=} opt_attributes
- @return {!goog.html.SafeHtml}
- @throws {Error}
+ * @param {(!goog.html.SafeStyleSheet|!Array<!goog.html.SafeStyleSheet>)} styleSheet
+ * @param {?Object<string,?goog.html.SafeHtml.AttributeValue>=} opt_attributes
+ * @return {!goog.html.SafeHtml}
+ * @throws {Error}
  */
 goog.html.SafeHtml.createStyle = function(styleSheet, opt_attributes) {
   var fixedAttributes = {"type":"text/css"};
@@ -231,9 +231,9 @@ goog.html.SafeHtml.createStyle = function(styleSheet, opt_attributes) {
   return goog.html.SafeHtml.createSafeHtmlTagSecurityPrivateDoNotAccessOrElse("style", attributes, htmlContent);
 };
 /**
- @param {(!goog.html.SafeUrl|string)} url
- @param {number=} opt_secs
- @return {!goog.html.SafeHtml}
+ * @param {(!goog.html.SafeUrl|string)} url
+ * @param {number=} opt_secs
+ * @return {!goog.html.SafeHtml}
  */
 goog.html.SafeHtml.createMetaRefresh = function(url, opt_secs) {
   var unwrappedUrl = goog.html.SafeUrl.unwrap(goog.html.SafeUrl.sanitize(url));
@@ -246,12 +246,12 @@ goog.html.SafeHtml.createMetaRefresh = function(url, opt_secs) {
   return goog.html.SafeHtml.createSafeHtmlTagSecurityPrivateDoNotAccessOrElse("meta", attributes);
 };
 /**
- @private
- @param {string} tagName
- @param {string} name
- @param {!goog.html.SafeHtml.AttributeValue} value
- @return {string}
- @throws {Error}
+ * @private
+ * @param {string} tagName
+ * @param {string} name
+ * @param {!goog.html.SafeHtml.AttributeValue} value
+ * @return {string}
+ * @throws {Error}
  */
 goog.html.SafeHtml.getAttrNameAndValue_ = function(tagName, name, value) {
   if (value instanceof goog.string.Const) {
@@ -288,10 +288,10 @@ goog.html.SafeHtml.getAttrNameAndValue_ = function(tagName, name, value) {
   return name + '\x3d"' + goog.string.internal.htmlEscape(String(value)) + '"';
 };
 /**
- @private
- @param {!goog.html.SafeHtml.AttributeValue} value
- @return {string}
- @throws {Error}
+ * @private
+ * @param {!goog.html.SafeHtml.AttributeValue} value
+ * @return {string}
+ * @throws {Error}
  */
 goog.html.SafeHtml.getStyleValue_ = function(value) {
   if (!goog.isObject(value)) {
@@ -303,11 +303,11 @@ goog.html.SafeHtml.getStyleValue_ = function(value) {
   return goog.html.SafeStyle.unwrap(value);
 };
 /**
- @param {!goog.i18n.bidi.Dir} dir
- @param {string} tagName
- @param {?Object<string,?goog.html.SafeHtml.AttributeValue>=} opt_attributes
- @param {(!goog.html.SafeHtml.TextOrHtml_|!Array<!goog.html.SafeHtml.TextOrHtml_>)=} opt_content
- @return {!goog.html.SafeHtml}
+ * @param {!goog.i18n.bidi.Dir} dir
+ * @param {string} tagName
+ * @param {?Object<string,?goog.html.SafeHtml.AttributeValue>=} opt_attributes
+ * @param {(!goog.html.SafeHtml.TextOrHtml_|!Array<!goog.html.SafeHtml.TextOrHtml_>)=} opt_content
+ * @return {!goog.html.SafeHtml}
  */
 goog.html.SafeHtml.createWithDir = function(dir, tagName, opt_attributes, opt_content) {
   var html = goog.html.SafeHtml.create(tagName, opt_attributes, opt_content);
@@ -315,14 +315,14 @@ goog.html.SafeHtml.createWithDir = function(dir, tagName, opt_attributes, opt_co
   return html;
 };
 /**
- @param {...(!goog.html.SafeHtml.TextOrHtml_|!Array<!goog.html.SafeHtml.TextOrHtml_>)} var_args
- @return {!goog.html.SafeHtml}
+ * @param {...(!goog.html.SafeHtml.TextOrHtml_|!Array<!goog.html.SafeHtml.TextOrHtml_>)} var_args
+ * @return {!goog.html.SafeHtml}
  */
 goog.html.SafeHtml.concat = function(var_args) {
   var dir = goog.i18n.bidi.Dir.NEUTRAL;
   var content = "";
   /**
-   @param {(!goog.html.SafeHtml.TextOrHtml_|!Array<!goog.html.SafeHtml.TextOrHtml_>)} argument
+   * @param {(!goog.html.SafeHtml.TextOrHtml_|!Array<!goog.html.SafeHtml.TextOrHtml_>)} argument
    */
   var addArgument = function(argument) {
     if (goog.isArray(argument)) {
@@ -344,9 +344,9 @@ goog.html.SafeHtml.concat = function(var_args) {
   return goog.html.SafeHtml.createSafeHtmlSecurityPrivateDoNotAccessOrElse(content, dir);
 };
 /**
- @param {!goog.i18n.bidi.Dir} dir
- @param {...(!goog.html.SafeHtml.TextOrHtml_|!Array<!goog.html.SafeHtml.TextOrHtml_>)} var_args
- @return {!goog.html.SafeHtml}
+ * @param {!goog.i18n.bidi.Dir} dir
+ * @param {...(!goog.html.SafeHtml.TextOrHtml_|!Array<!goog.html.SafeHtml.TextOrHtml_>)} var_args
+ * @return {!goog.html.SafeHtml}
  */
 goog.html.SafeHtml.concatWithDir = function(dir, var_args) {
   var html = goog.html.SafeHtml.concat(goog.array.slice(arguments, 1));
@@ -355,19 +355,19 @@ goog.html.SafeHtml.concatWithDir = function(dir, var_args) {
 };
 /** @private @const @type {!Object} */ goog.html.SafeHtml.TYPE_MARKER_GOOG_HTML_SECURITY_PRIVATE_ = {};
 /**
- @package
- @param {string} html
- @param {?goog.i18n.bidi.Dir} dir
- @return {!goog.html.SafeHtml}
+ * @package
+ * @param {string} html
+ * @param {?goog.i18n.bidi.Dir} dir
+ * @return {!goog.html.SafeHtml}
  */
 goog.html.SafeHtml.createSafeHtmlSecurityPrivateDoNotAccessOrElse = function(html, dir) {
   return (new goog.html.SafeHtml).initSecurityPrivateDoNotAccessOrElse_(html, dir);
 };
 /**
- @private
- @param {string} html
- @param {?goog.i18n.bidi.Dir} dir
- @return {!goog.html.SafeHtml}
+ * @private
+ * @param {string} html
+ * @param {?goog.i18n.bidi.Dir} dir
+ * @return {!goog.html.SafeHtml}
  */
 goog.html.SafeHtml.prototype.initSecurityPrivateDoNotAccessOrElse_ = function(html, dir) {
   this.privateDoNotAccessOrElseSafeHtmlWrappedValue_ = html;
@@ -375,12 +375,12 @@ goog.html.SafeHtml.prototype.initSecurityPrivateDoNotAccessOrElse_ = function(ht
   return this;
 };
 /**
- @package
- @param {string} tagName
- @param {?Object<string,?goog.html.SafeHtml.AttributeValue>=} opt_attributes
- @param {(!goog.html.SafeHtml.TextOrHtml_|!Array<!goog.html.SafeHtml.TextOrHtml_>)=} opt_content
- @return {!goog.html.SafeHtml}
- @throws {Error}
+ * @package
+ * @param {string} tagName
+ * @param {?Object<string,?goog.html.SafeHtml.AttributeValue>=} opt_attributes
+ * @param {(!goog.html.SafeHtml.TextOrHtml_|!Array<!goog.html.SafeHtml.TextOrHtml_>)=} opt_content
+ * @return {!goog.html.SafeHtml}
+ * @throws {Error}
  */
 goog.html.SafeHtml.createSafeHtmlTagSecurityPrivateDoNotAccessOrElse = function(tagName, opt_attributes, opt_content) {
   var dir = null;
@@ -413,11 +413,11 @@ goog.html.SafeHtml.createSafeHtmlTagSecurityPrivateDoNotAccessOrElse = function(
   return goog.html.SafeHtml.createSafeHtmlSecurityPrivateDoNotAccessOrElse(result, dir);
 };
 /**
- @package
- @param {string} tagName
- @param {?Object<string,?goog.html.SafeHtml.AttributeValue>=} opt_attributes
- @return {string}
- @throws {Error}
+ * @package
+ * @param {string} tagName
+ * @param {?Object<string,?goog.html.SafeHtml.AttributeValue>=} opt_attributes
+ * @return {string}
+ * @throws {Error}
  */
 goog.html.SafeHtml.stringifyAttributes = function(tagName, opt_attributes) {
   var result = "";
@@ -436,12 +436,12 @@ goog.html.SafeHtml.stringifyAttributes = function(tagName, opt_attributes) {
   return result;
 };
 /**
- @package
- @param {!Object<string,?goog.html.SafeHtml.AttributeValue>} fixedAttributes
- @param {!Object<string,string>} defaultAttributes
- @param {?Object<string,?goog.html.SafeHtml.AttributeValue>=} opt_attributes
- @return {!Object<string,?goog.html.SafeHtml.AttributeValue>}
- @throws {Error}
+ * @package
+ * @param {!Object<string,?goog.html.SafeHtml.AttributeValue>} fixedAttributes
+ * @param {!Object<string,string>} defaultAttributes
+ * @param {?Object<string,?goog.html.SafeHtml.AttributeValue>=} opt_attributes
+ * @return {!Object<string,?goog.html.SafeHtml.AttributeValue>}
+ * @throws {Error}
  */
 goog.html.SafeHtml.combineAttributes = function(fixedAttributes, defaultAttributes, opt_attributes) {
   var combinedAttributes = {};

@@ -4,11 +4,11 @@ goog.require("goog.debug.Error");
 goog.require("goog.dom.NodeType");
 /** @define {boolean} */ goog.define("goog.asserts.ENABLE_ASSERTS", goog.DEBUG);
 /**
- @final
- @constructor
- @extends {goog.debug.Error}
- @param {string} messagePattern
- @param {!Array<*>} messageArgs
+ * @final
+ * @constructor
+ * @extends {goog.debug.Error}
+ * @param {string} messagePattern
+ * @param {!Array<*>} messageArgs
  */
 goog.asserts.AssertionError = function(messagePattern, messageArgs) {
   goog.debug.Error.call(this, goog.asserts.subs_(messagePattern, messageArgs));
@@ -17,17 +17,17 @@ goog.asserts.AssertionError = function(messagePattern, messageArgs) {
 goog.inherits(goog.asserts.AssertionError, goog.debug.Error);
 /** @override */ goog.asserts.AssertionError.prototype.name = "AssertionError";
 /**
- @param {!goog.asserts.AssertionError} e
+ * @param {!goog.asserts.AssertionError} e
  */
 goog.asserts.DEFAULT_ERROR_HANDLER = function(e) {
   throw e;
 };
 /** @private @type {function(!goog.asserts.AssertionError)} */ goog.asserts.errorHandler_ = goog.asserts.DEFAULT_ERROR_HANDLER;
 /**
- @private
- @param {string} pattern
- @param {!Array<*>} subs
- @return {string}
+ * @private
+ * @param {string} pattern
+ * @param {!Array<*>} subs
+ * @return {string}
  */
 goog.asserts.subs_ = function(pattern, subs) {
   var splitParts = pattern.split("%s");
@@ -40,12 +40,12 @@ goog.asserts.subs_ = function(pattern, subs) {
   return returnString + splitParts[subLast];
 };
 /**
- @private
- @param {string} defaultMessage
- @param {Array<*>} defaultArgs
- @param {(string|undefined)} givenMessage
- @param {Array<*>} givenArgs
- @throws {goog.asserts.AssertionError}
+ * @private
+ * @param {string} defaultMessage
+ * @param {Array<*>} defaultArgs
+ * @param {(string|undefined)} givenMessage
+ * @param {Array<*>} givenArgs
+ * @throws {goog.asserts.AssertionError}
  */
 goog.asserts.doAssertFailure_ = function(defaultMessage, defaultArgs, givenMessage, givenArgs) {
   var message = "Assertion failed";
@@ -62,7 +62,7 @@ goog.asserts.doAssertFailure_ = function(defaultMessage, defaultArgs, givenMessa
   goog.asserts.errorHandler_(e);
 };
 /**
- @param {function(!goog.asserts.AssertionError)} errorHandler
+ * @param {function(!goog.asserts.AssertionError)} errorHandler
  */
 goog.asserts.setErrorHandler = function(errorHandler) {
   if (goog.asserts.ENABLE_ASSERTS) {
@@ -70,12 +70,12 @@ goog.asserts.setErrorHandler = function(errorHandler) {
   }
 };
 /**
- @param {T} condition
- @param {string=} opt_message
- @param {...*} var_args
- @return {T}
- @throws {goog.asserts.AssertionError}
- @template T
+ * @param {T} condition
+ * @param {string=} opt_message
+ * @param {...*} var_args
+ * @return {T}
+ * @throws {goog.asserts.AssertionError}
+ * @template T
  */
 goog.asserts.assert = function(condition, opt_message, var_args) {
   if (goog.asserts.ENABLE_ASSERTS && !condition) {
@@ -84,9 +84,9 @@ goog.asserts.assert = function(condition, opt_message, var_args) {
   return condition;
 };
 /**
- @param {string=} opt_message
- @param {...*} var_args
- @throws {goog.asserts.AssertionError}
+ * @param {string=} opt_message
+ * @param {...*} var_args
+ * @throws {goog.asserts.AssertionError}
  */
 goog.asserts.fail = function(opt_message, var_args) {
   if (goog.asserts.ENABLE_ASSERTS) {
@@ -94,11 +94,11 @@ goog.asserts.fail = function(opt_message, var_args) {
   }
 };
 /**
- @param {*} value
- @param {string=} opt_message
- @param {...*} var_args
- @return {number}
- @throws {goog.asserts.AssertionError}
+ * @param {*} value
+ * @param {string=} opt_message
+ * @param {...*} var_args
+ * @return {number}
+ * @throws {goog.asserts.AssertionError}
  */
 goog.asserts.assertNumber = function(value, opt_message, var_args) {
   if (goog.asserts.ENABLE_ASSERTS && !goog.isNumber(value)) {
@@ -107,11 +107,11 @@ goog.asserts.assertNumber = function(value, opt_message, var_args) {
   return (/** @type {number} */ (value));
 };
 /**
- @param {*} value
- @param {string=} opt_message
- @param {...*} var_args
- @return {string}
- @throws {goog.asserts.AssertionError}
+ * @param {*} value
+ * @param {string=} opt_message
+ * @param {...*} var_args
+ * @return {string}
+ * @throws {goog.asserts.AssertionError}
  */
 goog.asserts.assertString = function(value, opt_message, var_args) {
   if (goog.asserts.ENABLE_ASSERTS && !goog.isString(value)) {
@@ -120,11 +120,11 @@ goog.asserts.assertString = function(value, opt_message, var_args) {
   return (/** @type {string} */ (value));
 };
 /**
- @param {*} value
- @param {string=} opt_message
- @param {...*} var_args
- @return {!Function}
- @throws {goog.asserts.AssertionError}
+ * @param {*} value
+ * @param {string=} opt_message
+ * @param {...*} var_args
+ * @return {!Function}
+ * @throws {goog.asserts.AssertionError}
  */
 goog.asserts.assertFunction = function(value, opt_message, var_args) {
   if (goog.asserts.ENABLE_ASSERTS && !goog.isFunction(value)) {
@@ -133,11 +133,11 @@ goog.asserts.assertFunction = function(value, opt_message, var_args) {
   return (/** @type {!Function} */ (value));
 };
 /**
- @param {*} value
- @param {string=} opt_message
- @param {...*} var_args
- @return {!Object}
- @throws {goog.asserts.AssertionError}
+ * @param {*} value
+ * @param {string=} opt_message
+ * @param {...*} var_args
+ * @return {!Object}
+ * @throws {goog.asserts.AssertionError}
  */
 goog.asserts.assertObject = function(value, opt_message, var_args) {
   if (goog.asserts.ENABLE_ASSERTS && !goog.isObject(value)) {
@@ -146,11 +146,11 @@ goog.asserts.assertObject = function(value, opt_message, var_args) {
   return (/** @type {!Object} */ (value));
 };
 /**
- @param {*} value
- @param {string=} opt_message
- @param {...*} var_args
- @return {!Array<?>}
- @throws {goog.asserts.AssertionError}
+ * @param {*} value
+ * @param {string=} opt_message
+ * @param {...*} var_args
+ * @return {!Array<?>}
+ * @throws {goog.asserts.AssertionError}
  */
 goog.asserts.assertArray = function(value, opt_message, var_args) {
   if (goog.asserts.ENABLE_ASSERTS && !goog.isArray(value)) {
@@ -159,11 +159,11 @@ goog.asserts.assertArray = function(value, opt_message, var_args) {
   return (/** @type {!Array<?>} */ (value));
 };
 /**
- @param {*} value
- @param {string=} opt_message
- @param {...*} var_args
- @return {boolean}
- @throws {goog.asserts.AssertionError}
+ * @param {*} value
+ * @param {string=} opt_message
+ * @param {...*} var_args
+ * @return {boolean}
+ * @throws {goog.asserts.AssertionError}
  */
 goog.asserts.assertBoolean = function(value, opt_message, var_args) {
   if (goog.asserts.ENABLE_ASSERTS && !goog.isBoolean(value)) {
@@ -172,11 +172,11 @@ goog.asserts.assertBoolean = function(value, opt_message, var_args) {
   return (/** @type {boolean} */ (value));
 };
 /**
- @param {*} value
- @param {string=} opt_message
- @param {...*} var_args
- @return {!Element}
- @throws {goog.asserts.AssertionError}
+ * @param {*} value
+ * @param {string=} opt_message
+ * @param {...*} var_args
+ * @return {!Element}
+ * @throws {goog.asserts.AssertionError}
  */
 goog.asserts.assertElement = function(value, opt_message, var_args) {
   if (goog.asserts.ENABLE_ASSERTS && (!goog.isObject(value) || value.nodeType != goog.dom.NodeType.ELEMENT)) {
@@ -185,13 +185,13 @@ goog.asserts.assertElement = function(value, opt_message, var_args) {
   return (/** @type {!Element} */ (value));
 };
 /**
- @param {?} value
- @param {function(new:T,...)} type
- @param {string=} opt_message
- @param {...*} var_args
- @return {T}
- @throws {goog.asserts.AssertionError}
- @template T
+ * @param {?} value
+ * @param {function(new:T,...)} type
+ * @param {string=} opt_message
+ * @param {...*} var_args
+ * @return {T}
+ * @throws {goog.asserts.AssertionError}
+ * @template T
  */
 goog.asserts.assertInstanceof = function(value, type, opt_message, var_args) {
   if (goog.asserts.ENABLE_ASSERTS && !(value instanceof type)) {
@@ -200,11 +200,11 @@ goog.asserts.assertInstanceof = function(value, type, opt_message, var_args) {
   return value;
 };
 /**
- @param {*} value
- @param {string=} opt_message
- @param {...*} var_args
- @return {number}
- @throws {goog.asserts.AssertionError}
+ * @param {*} value
+ * @param {string=} opt_message
+ * @param {...*} var_args
+ * @return {number}
+ * @throws {goog.asserts.AssertionError}
  */
 goog.asserts.assertFinite = function(value, opt_message, var_args) {
   if (goog.asserts.ENABLE_ASSERTS && (typeof value != "number" || !isFinite(value))) {
@@ -218,9 +218,9 @@ goog.asserts.assertObjectPrototypeIsIntact = function() {
   }
 };
 /**
- @private
- @param {*} value
- @return {string}
+ * @private
+ * @param {*} value
+ * @return {string}
  */
 goog.asserts.getType_ = function(value) {
   if (value instanceof Function) {

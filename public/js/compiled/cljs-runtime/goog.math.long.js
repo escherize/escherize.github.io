@@ -2,11 +2,11 @@ goog.provide("goog.math.Long");
 goog.require("goog.asserts");
 goog.require("goog.reflect");
 /**
- @final
- @struct
- @constructor
- @param {number} low
- @param {number} high
+ * @final
+ * @struct
+ * @constructor
+ * @param {number} low
+ * @param {number} high
  */
 goog.math.Long = function(low, high) {
   /** @private @const @type {number} */ this.low_ = low | 0;
@@ -14,9 +14,9 @@ goog.math.Long = function(low, high) {
 };
 /** @private @type {!Object<number,!goog.math.Long>} */ goog.math.Long.IntCache_ = {};
 /**
- @private
- @param {number} value
- @return {!goog.math.Long}
+ * @private
+ * @param {number} value
+ * @return {!goog.math.Long}
  */
 goog.math.Long.getCachedIntValue_ = function(value) {
   return goog.reflect.cache(goog.math.Long.IntCache_, value, function(val) {
@@ -28,8 +28,8 @@ goog.math.Long.getCachedIntValue_ = function(value) {
 /** @private @const @type {!Array<string>} */ goog.math.Long.MIN_VALUE_FOR_RADIX_ = ["", "", "-1000000000000000000000000000000000000000000000000000000000000000", "-2021110011022210012102010021220101220222", "-20000000000000000000000000000000", "-1104332401304422434310311213", "-1540241003031030222122212", "-22341010611245052052301", "-1000000000000000000000", "-67404283172107811828", "-9223372036854775808", "-1728002635214590698", "-41a792678515120368", "-10b269549075433c38", "-4340724c6c71dc7a8", 
 "-160e2ad3246366808", "-8000000000000000", "-33d3d8307b214009", "-16agh595df825fa8", "-ba643dci0ffeehi", "-5cbfjia3fh26ja8", "-2heiciiie82dh98", "-1adaibb21dckfa8", "-i6k448cf4192c3", "-acd772jnc9l0l8", "-64ie1focnn5g78", "-3igoecjbmca688", "-27c48l5b37oaoq", "-1bk39f3ah3dmq8", "-q1se8f0m04isc", "-hajppbc1fc208", "-bm03i95hia438", "-8000000000000", "-5hg4ck9jd4u38", "-3tdtk1v8j6tpq", "-2pijmikexrxp8", "-1y2p0ij32e8e8"];
 /**
- @param {number} value
- @return {!goog.math.Long}
+ * @param {number} value
+ * @return {!goog.math.Long}
  */
 goog.math.Long.fromInt = function(value) {
   var intValue = value | 0;
@@ -41,8 +41,8 @@ goog.math.Long.fromInt = function(value) {
   }
 };
 /**
- @param {number} value
- @return {!goog.math.Long}
+ * @param {number} value
+ * @return {!goog.math.Long}
  */
 goog.math.Long.fromNumber = function(value) {
   if (value > 0) {
@@ -62,18 +62,18 @@ goog.math.Long.fromNumber = function(value) {
   }
 };
 /**
- @param {number} lowBits
- @param {number} highBits
- @return {!goog.math.Long}
+ * @param {number} lowBits
+ * @param {number} highBits
+ * @return {!goog.math.Long}
  */
 goog.math.Long.fromBits = function(lowBits, highBits) {
   return new goog.math.Long(lowBits, highBits);
 };
 /** @private @type {number} */ goog.math.Long.MAX_SAFE_INTEGER_ = 9007199254740991;
 /**
- @param {string} str
- @param {number=} opt_radix
- @return {!goog.math.Long}
+ * @param {string} str
+ * @param {number=} opt_radix
+ * @return {!goog.math.Long}
  */
 goog.math.Long.fromString = function(str, opt_radix) {
   if (str.charAt(0) == "-") {
@@ -109,9 +109,9 @@ goog.math.Long.fromString = function(str, opt_radix) {
   return result;
 };
 /**
- @param {string} str
- @param {number=} opt_radix
- @return {boolean}
+ * @param {string} str
+ * @param {number=} opt_radix
+ * @return {boolean}
  */
 goog.math.Long.isStringInRange = function(str, opt_radix) {
   var radix = opt_radix || 10;
@@ -133,75 +133,75 @@ goog.math.Long.isStringInRange = function(str, opt_radix) {
 /** @private @const @type {number} */ goog.math.Long.TWO_PWR_63_DBL_ = 0x7fffffffffffffff;
 /** @private @const @type {!goog.math.Long} */ goog.math.Long.ZERO_ = goog.math.Long.fromBits(0, 0);
 /**
- @public
- @return {!goog.math.Long}
+ * @public
+ * @return {!goog.math.Long}
  */
 goog.math.Long.getZero = function() {
   return goog.math.Long.ZERO_;
 };
 /** @private @const @type {!goog.math.Long} */ goog.math.Long.ONE_ = goog.math.Long.fromBits(1, 0);
 /**
- @public
- @return {!goog.math.Long}
+ * @public
+ * @return {!goog.math.Long}
  */
 goog.math.Long.getOne = function() {
   return goog.math.Long.ONE_;
 };
 /** @private @const @type {!goog.math.Long} */ goog.math.Long.NEG_ONE_ = goog.math.Long.fromBits(-1, -1);
 /**
- @public
- @return {!goog.math.Long}
+ * @public
+ * @return {!goog.math.Long}
  */
 goog.math.Long.getNegOne = function() {
   return goog.math.Long.NEG_ONE_;
 };
 /** @private @const @type {!goog.math.Long} */ goog.math.Long.MAX_VALUE_ = goog.math.Long.fromBits(4294967295, 2147483647);
 /**
- @public
- @return {!goog.math.Long}
+ * @public
+ * @return {!goog.math.Long}
  */
 goog.math.Long.getMaxValue = function() {
   return goog.math.Long.MAX_VALUE_;
 };
 /** @private @const @type {!goog.math.Long} */ goog.math.Long.MIN_VALUE_ = goog.math.Long.fromBits(0, 2147483648);
 /**
- @public
- @return {!goog.math.Long}
+ * @public
+ * @return {!goog.math.Long}
  */
 goog.math.Long.getMinValue = function() {
   return goog.math.Long.MIN_VALUE_;
 };
 /** @private @const @type {!goog.math.Long} */ goog.math.Long.TWO_PWR_24_ = goog.math.Long.fromBits(1 << 24, 0);
 /**
- @public
- @return {!goog.math.Long}
+ * @public
+ * @return {!goog.math.Long}
  */
 goog.math.Long.getTwoPwr24 = function() {
   return goog.math.Long.TWO_PWR_24_;
 };
 /**
- @return {number}
+ * @return {number}
  */
 goog.math.Long.prototype.toInt = function() {
   return this.low_;
 };
 /**
- @return {number}
+ * @return {number}
  */
 goog.math.Long.prototype.toNumber = function() {
   return this.high_ * goog.math.Long.TWO_PWR_32_DBL_ + this.getLowBitsUnsigned();
 };
 /**
- @return {boolean}
+ * @return {boolean}
  */
 goog.math.Long.prototype.isSafeInteger = function() {
   var top11Bits = this.high_ >> 21;
   return top11Bits == 0 || top11Bits == -1 && !(this.low_ == 0 && this.high_ == (4292870144 | 0));
 };
 /**
- @param {number=} opt_radix
- @return {string}
- @override
+ * @param {number=} opt_radix
+ * @return {string}
+ * @override
  */
 goog.math.Long.prototype.toString = function(opt_radix) {
   var radix = opt_radix || 10;
@@ -225,25 +225,25 @@ goog.math.Long.prototype.toString = function(opt_radix) {
   return (radix == 10 ? val : val.toString(radix)) + digits;
 };
 /**
- @return {number}
+ * @return {number}
  */
 goog.math.Long.prototype.getHighBits = function() {
   return this.high_;
 };
 /**
- @return {number}
+ * @return {number}
  */
 goog.math.Long.prototype.getLowBits = function() {
   return this.low_;
 };
 /**
- @return {number}
+ * @return {number}
  */
 goog.math.Long.prototype.getLowBitsUnsigned = function() {
   return this.low_ >>> 0;
 };
 /**
- @return {number}
+ * @return {number}
  */
 goog.math.Long.prototype.getNumBitsAbs = function() {
   if (this.isNegative()) {
@@ -263,68 +263,68 @@ goog.math.Long.prototype.getNumBitsAbs = function() {
   }
 };
 /**
- @return {boolean}
+ * @return {boolean}
  */
 goog.math.Long.prototype.isZero = function() {
   return this.low_ == 0 && this.high_ == 0;
 };
 /**
- @return {boolean}
+ * @return {boolean}
  */
 goog.math.Long.prototype.isNegative = function() {
   return this.high_ < 0;
 };
 /**
- @return {boolean}
+ * @return {boolean}
  */
 goog.math.Long.prototype.isOdd = function() {
   return (this.low_ & 1) == 1;
 };
 /**
- @param {goog.math.Long} other
- @return {boolean}
+ * @param {goog.math.Long} other
+ * @return {boolean}
  */
 goog.math.Long.prototype.equals = function(other) {
   return this.low_ == other.low_ && this.high_ == other.high_;
 };
 /**
- @param {goog.math.Long} other
- @return {boolean}
+ * @param {goog.math.Long} other
+ * @return {boolean}
  */
 goog.math.Long.prototype.notEquals = function(other) {
   return !this.equals(other);
 };
 /**
- @param {goog.math.Long} other
- @return {boolean}
+ * @param {goog.math.Long} other
+ * @return {boolean}
  */
 goog.math.Long.prototype.lessThan = function(other) {
   return this.compare(other) < 0;
 };
 /**
- @param {goog.math.Long} other
- @return {boolean}
+ * @param {goog.math.Long} other
+ * @return {boolean}
  */
 goog.math.Long.prototype.lessThanOrEqual = function(other) {
   return this.compare(other) <= 0;
 };
 /**
- @param {goog.math.Long} other
- @return {boolean}
+ * @param {goog.math.Long} other
+ * @return {boolean}
  */
 goog.math.Long.prototype.greaterThan = function(other) {
   return this.compare(other) > 0;
 };
 /**
- @param {goog.math.Long} other
- @return {boolean}
+ * @param {goog.math.Long} other
+ * @return {boolean}
  */
 goog.math.Long.prototype.greaterThanOrEqual = function(other) {
   return this.compare(other) >= 0;
 };
 /**
- @param {goog.math.Long} other
- @return {number}
+ * @param {goog.math.Long} other
+ * @return {number}
  */
 goog.math.Long.prototype.compare = function(other) {
   if (this.high_ == other.high_) {
@@ -336,7 +336,7 @@ goog.math.Long.prototype.compare = function(other) {
   return this.high_ > other.high_ ? 1 : -1;
 };
 /**
- @return {!goog.math.Long}
+ * @return {!goog.math.Long}
  */
 goog.math.Long.prototype.negate = function() {
   var negLow = ~this.low_ + 1 | 0;
@@ -345,8 +345,8 @@ goog.math.Long.prototype.negate = function() {
   return goog.math.Long.fromBits(negLow, negHigh);
 };
 /**
- @param {goog.math.Long} other
- @return {!goog.math.Long}
+ * @param {goog.math.Long} other
+ * @return {!goog.math.Long}
  */
 goog.math.Long.prototype.add = function(other) {
   var a48 = this.high_ >>> 16;
@@ -372,15 +372,15 @@ goog.math.Long.prototype.add = function(other) {
   return goog.math.Long.fromBits(c16 << 16 | c00, c48 << 16 | c32);
 };
 /**
- @param {goog.math.Long} other
- @return {!goog.math.Long}
+ * @param {goog.math.Long} other
+ * @return {!goog.math.Long}
  */
 goog.math.Long.prototype.subtract = function(other) {
   return this.add(other.negate());
 };
 /**
- @param {goog.math.Long} other
- @return {!goog.math.Long}
+ * @param {goog.math.Long} other
+ * @return {!goog.math.Long}
  */
 goog.math.Long.prototype.multiply = function(other) {
   if (this.isZero()) {
@@ -421,8 +421,8 @@ goog.math.Long.prototype.multiply = function(other) {
   return goog.math.Long.fromBits(c16 << 16 | c00, c48 << 16 | c32);
 };
 /**
- @param {goog.math.Long} other
- @return {!goog.math.Long}
+ * @param {goog.math.Long} other
+ * @return {!goog.math.Long}
  */
 goog.math.Long.prototype.div = function(other) {
   if (other.isZero()) {
@@ -481,42 +481,42 @@ goog.math.Long.prototype.div = function(other) {
   return res;
 };
 /**
- @param {goog.math.Long} other
- @return {!goog.math.Long}
+ * @param {goog.math.Long} other
+ * @return {!goog.math.Long}
  */
 goog.math.Long.prototype.modulo = function(other) {
   return this.subtract(this.div(other).multiply(other));
 };
 /**
- @return {!goog.math.Long}
+ * @return {!goog.math.Long}
  */
 goog.math.Long.prototype.not = function() {
   return goog.math.Long.fromBits(~this.low_, ~this.high_);
 };
 /**
- @param {goog.math.Long} other
- @return {!goog.math.Long}
+ * @param {goog.math.Long} other
+ * @return {!goog.math.Long}
  */
 goog.math.Long.prototype.and = function(other) {
   return goog.math.Long.fromBits(this.low_ & other.low_, this.high_ & other.high_);
 };
 /**
- @param {goog.math.Long} other
- @return {!goog.math.Long}
+ * @param {goog.math.Long} other
+ * @return {!goog.math.Long}
  */
 goog.math.Long.prototype.or = function(other) {
   return goog.math.Long.fromBits(this.low_ | other.low_, this.high_ | other.high_);
 };
 /**
- @param {goog.math.Long} other
- @return {!goog.math.Long}
+ * @param {goog.math.Long} other
+ * @return {!goog.math.Long}
  */
 goog.math.Long.prototype.xor = function(other) {
   return goog.math.Long.fromBits(this.low_ ^ other.low_, this.high_ ^ other.high_);
 };
 /**
- @param {number} numBits
- @return {!goog.math.Long}
+ * @param {number} numBits
+ * @return {!goog.math.Long}
  */
 goog.math.Long.prototype.shiftLeft = function(numBits) {
   numBits &= 63;
@@ -533,8 +533,8 @@ goog.math.Long.prototype.shiftLeft = function(numBits) {
   }
 };
 /**
- @param {number} numBits
- @return {!goog.math.Long}
+ * @param {number} numBits
+ * @return {!goog.math.Long}
  */
 goog.math.Long.prototype.shiftRight = function(numBits) {
   numBits &= 63;
@@ -551,8 +551,8 @@ goog.math.Long.prototype.shiftRight = function(numBits) {
   }
 };
 /**
- @param {number} numBits
- @return {!goog.math.Long}
+ * @param {number} numBits
+ * @return {!goog.math.Long}
  */
 goog.math.Long.prototype.shiftRightUnsigned = function(numBits) {
   numBits &= 63;

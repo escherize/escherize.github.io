@@ -4,9 +4,9 @@ goog.require("goog.async.nextTick");
 goog.require("goog.async.throwException");
 /** @define {boolean} */ goog.define("goog.ASSUME_NATIVE_PROMISE", false);
 /**
- @param {function(this:THIS)} callback
- @param {THIS=} opt_context
- @template THIS
+ * @param {function(this:THIS)} callback
+ * @param {THIS=} opt_context
+ * @template THIS
  */
 goog.async.run = function(callback, opt_context) {
   if (!goog.async.run.schedule_) {
@@ -31,7 +31,7 @@ goog.async.run = function(callback, opt_context) {
   }
 };
 /**
- @param {function(function())=} opt_realSetTimeout
+ * @param {function(function())=} opt_realSetTimeout
  */
 goog.async.run.forceNextTick = function(opt_realSetTimeout) {
   goog.async.run.schedule_ = function() {

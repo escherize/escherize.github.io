@@ -12,9 +12,9 @@ goog.require("goog.style");
 goog.require("goog.userAgent");
 /** @typedef {({property:string,duration:number,timing:string,delay:number}|string)} */ goog.style.transition.Css3Property;
 /**
- @param {Element} element
- @param {(goog.style.transition.Css3Property|Array<goog.style.transition.Css3Property>)} properties
- @suppress {strictMissingProperties}
+ * @param {Element} element
+ * @param {(goog.style.transition.Css3Property|Array<goog.style.transition.Css3Property>)} properties
+ * @suppress {strictMissingProperties}
  */
 goog.style.transition.set = function(element, properties) {
   if (!goog.isArray(properties)) {
@@ -34,13 +34,13 @@ goog.style.transition.set = function(element, properties) {
   goog.style.transition.setPropertyValue_(element, values.join(","));
 };
 /**
- @param {Element} element
+ * @param {Element} element
  */
 goog.style.transition.removeAll = function(element) {
   goog.style.transition.setPropertyValue_(element, "");
 };
 /**
- @return {boolean}
+ * @return {boolean}
  */
 goog.style.transition.isSupported = goog.functions.cacheReturnValue(function() {
   if (goog.userAgent.IE) {
@@ -59,9 +59,9 @@ goog.style.transition.isSupported = goog.functions.cacheReturnValue(function() {
   return goog.style.getStyle(testElement, "transition") != "";
 });
 /**
- @private
- @param {Element} element
- @param {string} transitionValue
+ * @private
+ * @param {Element} element
+ * @param {string} transitionValue
  */
 goog.style.transition.setPropertyValue_ = function(element, transitionValue) {
   goog.style.setStyle(element, "transition", transitionValue);

@@ -1,8 +1,8 @@
 goog.provide("goog.functions");
 /**
- @param {T} retValue
- @return {function():T}
- @template T
+ * @param {T} retValue
+ * @return {function():T}
+ * @template T
  */
 goog.functions.constant = function(retValue) {
   return function() {
@@ -19,17 +19,17 @@ goog.functions.constant = function(retValue) {
   return null;
 };
 /**
- @param {T=} opt_returnValue
- @param {...*} var_args
- @return {T}
- @template T
+ * @param {T=} opt_returnValue
+ * @param {...*} var_args
+ * @return {T}
+ * @template T
  */
 goog.functions.identity = function(opt_returnValue, var_args) {
   return opt_returnValue;
 };
 /**
- @param {string} message
- @return {!Function}
+ * @param {string} message
+ * @return {!Function}
  */
 goog.functions.error = function(message) {
   return function() {
@@ -37,8 +37,8 @@ goog.functions.error = function(message) {
   };
 };
 /**
- @param {*} err
- @return {!Function}
+ * @param {*} err
+ * @return {!Function}
  */
 goog.functions.fail = function(err) {
   return function() {
@@ -46,9 +46,9 @@ goog.functions.fail = function(err) {
   };
 };
 /**
- @param {Function} f
- @param {number=} opt_numArgs
- @return {!Function}
+ * @param {Function} f
+ * @param {number=} opt_numArgs
+ * @return {!Function}
  */
 goog.functions.lock = function(f, opt_numArgs) {
   opt_numArgs = opt_numArgs || 0;
@@ -58,8 +58,8 @@ goog.functions.lock = function(f, opt_numArgs) {
   };
 };
 /**
- @param {number} n
- @return {!Function}
+ * @param {number} n
+ * @return {!Function}
  */
 goog.functions.nth = function(n) {
   return function() {
@@ -67,9 +67,9 @@ goog.functions.nth = function(n) {
   };
 };
 /**
- @param {!Function} fn
- @param {...*} var_args
- @return {!Function}
+ * @param {!Function} fn
+ * @param {...*} var_args
+ * @return {!Function}
  */
 goog.functions.partialRight = function(fn, var_args) {
   var rightArgs = Array.prototype.slice.call(arguments, 1);
@@ -81,18 +81,18 @@ goog.functions.partialRight = function(fn, var_args) {
   };
 };
 /**
- @param {Function} f
- @param {T} retValue
- @return {function(...?):T}
- @template T
+ * @param {Function} f
+ * @param {T} retValue
+ * @return {function(...?):T}
+ * @template T
  */
 goog.functions.withReturnValue = function(f, retValue) {
   return goog.functions.sequence(f, goog.functions.constant(retValue));
 };
 /**
- @param {*} value
- @param {boolean=} opt_useLooseComparison
- @return {function(*):boolean}
+ * @param {*} value
+ * @param {boolean=} opt_useLooseComparison
+ * @return {function(*):boolean}
  */
 goog.functions.equalTo = function(value, opt_useLooseComparison) {
   return function(other) {
@@ -100,10 +100,10 @@ goog.functions.equalTo = function(value, opt_useLooseComparison) {
   };
 };
 /**
- @param {function(...?):T} fn
- @param {...Function} var_args
- @return {function(...?):T}
- @template T
+ * @param {function(...?):T} fn
+ * @param {...Function} var_args
+ * @return {function(...?):T}
+ * @template T
  */
 goog.functions.compose = function(fn, var_args) {
   var functions = arguments;
@@ -121,8 +121,8 @@ goog.functions.compose = function(fn, var_args) {
   };
 };
 /**
- @param {...Function} var_args
- @return {!Function}
+ * @param {...Function} var_args
+ * @return {!Function}
  */
 goog.functions.sequence = function(var_args) {
   var functions = arguments;
@@ -137,8 +137,8 @@ goog.functions.sequence = function(var_args) {
   };
 };
 /**
- @param {...Function} var_args
- @return {function(...?):boolean}
+ * @param {...Function} var_args
+ * @return {function(...?):boolean}
  */
 goog.functions.and = function(var_args) {
   var functions = arguments;
@@ -154,8 +154,8 @@ goog.functions.and = function(var_args) {
   };
 };
 /**
- @param {...Function} var_args
- @return {function(...?):boolean}
+ * @param {...Function} var_args
+ * @return {function(...?):boolean}
  */
 goog.functions.or = function(var_args) {
   var functions = arguments;
@@ -171,8 +171,8 @@ goog.functions.or = function(var_args) {
   };
 };
 /**
- @param {!Function} f
- @return {function(...?):boolean}
+ * @param {!Function} f
+ * @return {function(...?):boolean}
  */
 goog.functions.not = function(f) {
   return function() {
@@ -181,10 +181,10 @@ goog.functions.not = function(f) {
   };
 };
 /**
- @param {function(new:T,...)} constructor
- @param {...*} var_args
- @return {T}
- @template T
+ * @param {function(new:T,...)} constructor
+ * @param {...*} var_args
+ * @return {T}
+ * @template T
  */
 goog.functions.create = function(constructor, var_args) {
   /** @final @constructor */ var temp = function() {
@@ -196,9 +196,9 @@ goog.functions.create = function(constructor, var_args) {
 };
 /** @define {boolean} */ goog.define("goog.functions.CACHE_RETURN_VALUE", true);
 /**
- @param {function():T} fn
- @return {function():T}
- @template T
+ * @param {function():T} fn
+ * @return {function():T}
+ * @template T
  */
 goog.functions.cacheReturnValue = function(fn) {
   var called = false;
@@ -215,8 +215,8 @@ goog.functions.cacheReturnValue = function(fn) {
   };
 };
 /**
- @param {function():*} f
- @return {function():undefined}
+ * @param {function():*} f
+ * @return {function():undefined}
  */
 goog.functions.once = function(f) {
   var inner = f;
@@ -229,11 +229,11 @@ goog.functions.once = function(f) {
   };
 };
 /**
- @param {function(this:SCOPE,...?)} f
- @param {number} interval
- @param {SCOPE=} opt_scope
- @return {function(...?):undefined}
- @template SCOPE
+ * @param {function(this:SCOPE,...?)} f
+ * @param {number} interval
+ * @param {SCOPE=} opt_scope
+ * @return {function(...?):undefined}
+ * @template SCOPE
  */
 goog.functions.debounce = function(f, interval, opt_scope) {
   var timeout = 0;
@@ -246,11 +246,11 @@ goog.functions.debounce = function(f, interval, opt_scope) {
   }));
 };
 /**
- @param {function(this:SCOPE,...?)} f
- @param {number} interval
- @param {SCOPE=} opt_scope
- @return {function(...?):undefined}
- @template SCOPE
+ * @param {function(this:SCOPE,...?)} f
+ * @param {number} interval
+ * @param {SCOPE=} opt_scope
+ * @return {function(...?):undefined}
+ * @template SCOPE
  */
 goog.functions.throttle = function(f, interval, opt_scope) {
   var timeout = 0;
@@ -277,11 +277,11 @@ goog.functions.throttle = function(f, interval, opt_scope) {
   }));
 };
 /**
- @param {function(this:SCOPE,...?)} f
- @param {number} interval
- @param {SCOPE=} opt_scope
- @return {function(...?):undefined}
- @template SCOPE
+ * @param {function(this:SCOPE,...?)} f
+ * @param {number} interval
+ * @param {SCOPE=} opt_scope
+ * @return {function(...?):undefined}
+ * @template SCOPE
  */
 goog.functions.rateLimit = function(f, interval, opt_scope) {
   var timeout = 0;

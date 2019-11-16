@@ -6,7 +6,7 @@ goog.require("goog.functions");
 goog.require("goog.labs.userAgent.browser");
 goog.require("goog.labs.userAgent.engine");
 /**
- @param {*} exception
+ * @param {*} exception
  */
 goog.async.throwException = function(exception) {
   goog.global.setTimeout(function() {
@@ -14,10 +14,10 @@ goog.async.throwException = function(exception) {
   }, 0);
 };
 /**
- @param {function(this:SCOPE)} callback
- @param {SCOPE=} opt_context
- @param {boolean=} opt_useSetImmediate
- @template SCOPE
+ * @param {function(this:SCOPE)} callback
+ * @param {SCOPE=} opt_context
+ * @param {boolean=} opt_useSetImmediate
+ * @template SCOPE
  */
 goog.async.nextTick = function(callback, opt_context, opt_useSetImmediate) {
   var cb = callback;
@@ -35,9 +35,9 @@ goog.async.nextTick = function(callback, opt_context, opt_useSetImmediate) {
   goog.async.nextTick.setImmediate_(cb);
 };
 /**
- @private
- @return {boolean}
- @suppress {missingProperties}
+ * @private
+ * @return {boolean}
+ * @suppress {missingProperties}
  */
 goog.async.nextTick.useSetImmediate_ = function() {
   if (!goog.global.Window || !goog.global.Window.prototype) {
@@ -50,8 +50,8 @@ goog.async.nextTick.useSetImmediate_ = function() {
 };
 /** @private @type {function(function())} */ goog.async.nextTick.setImmediate_;
 /**
- @private
- @return {function(function())}
+ * @private
+ * @return {function(function())}
  */
 goog.async.nextTick.getSetImmediateEmulator_ = function() {
   /** @type {(!Function|undefined)} */ var Channel = goog.global["MessageChannel"];
@@ -117,13 +117,13 @@ goog.async.nextTick.getSetImmediateEmulator_ = function() {
   };
 };
 /**
- @private
- @param {function()} callback
- @return {function()}
+ * @private
+ * @param {function()} callback
+ * @return {function()}
  */
 goog.async.nextTick.wrapCallback_ = goog.functions.identity;
 goog.debug.entryPointRegistry.register(/**
- @param {function(!Function):!Function} transformer
+ * @param {function(!Function):!Function} transformer
  */
 function(transformer) {
   goog.async.nextTick.wrapCallback_ = transformer;

@@ -1,5 +1,5 @@
 /**
- @suppress {strictMissingProperties}
+ * @suppress {strictMissingProperties}
  */
 goog.provide("goog.dom.forms");
 goog.require("goog.dom.InputType");
@@ -7,10 +7,10 @@ goog.require("goog.dom.TagName");
 goog.require("goog.structs.Map");
 goog.require("goog.window");
 /**
- @param {!HTMLFormElement} form
- @param {!HTMLElement=} opt_submitElement
- @return {boolean}
- @throws {!Error}
+ * @param {!HTMLFormElement} form
+ * @param {!HTMLElement=} opt_submitElement
+ * @return {boolean}
+ * @throws {!Error}
  */
 goog.dom.forms.submitFormInNewWindow = function(form, opt_submitElement) {
   var formData = goog.dom.forms.getFormDataMap(form);
@@ -34,10 +34,10 @@ goog.dom.forms.submitFormInNewWindow = function(form, opt_submitElement) {
   return goog.dom.forms.submitFormDataInNewWindow(action, method, formData);
 };
 /**
- @param {string} actionUri
- @param {string} method
- @param {!goog.structs.Map<string,!Array<string>>} formData
- @return {boolean}
+ * @param {string} actionUri
+ * @param {string} method
+ * @param {!goog.structs.Map<string,!Array<string>>} formData
+ * @return {boolean}
  */
 goog.dom.forms.submitFormDataInNewWindow = function(actionUri, method, formData) {
   var newWin = goog.window.openBlank("", {noreferrer:true});
@@ -62,8 +62,8 @@ goog.dom.forms.submitFormDataInNewWindow = function(actionUri, method, formData)
   return true;
 };
 /**
- @param {HTMLFormElement} form
- @return {!goog.structs.Map<string,!Array<string>>}
+ * @param {HTMLFormElement} form
+ * @return {!goog.structs.Map<string,!Array<string>>}
  */
 goog.dom.forms.getFormDataMap = function(form) {
   var map = new goog.structs.Map;
@@ -71,8 +71,8 @@ goog.dom.forms.getFormDataMap = function(form) {
   return map;
 };
 /**
- @param {HTMLFormElement} form
- @return {string}
+ * @param {HTMLFormElement} form
+ * @return {string}
  */
 goog.dom.forms.getFormDataString = function(form) {
   var sb = [];
@@ -80,10 +80,10 @@ goog.dom.forms.getFormDataString = function(form) {
   return sb.join("\x26");
 };
 /**
- @private
- @param {HTMLFormElement} form
- @param {Object} result
- @param {Function} fnAppend
+ * @private
+ * @param {HTMLFormElement} form
+ * @param {Object} result
+ * @param {Function} fnAppend
  */
 goog.dom.forms.getFormDataHelper_ = function(form, result, fnAppend) {
   var els = form.elements;
@@ -124,10 +124,10 @@ goog.dom.forms.getFormDataHelper_ = function(form, result, fnAppend) {
   }
 };
 /**
- @private
- @param {!goog.structs.Map<string,!Array<string>>} map
- @param {string} name
- @param {string} value
+ * @private
+ * @param {!goog.structs.Map<string,!Array<string>>} map
+ * @param {string} name
+ * @param {string} value
  */
 goog.dom.forms.addFormDataToMap_ = function(map, name, value) {
   var array = map.get(name);
@@ -138,17 +138,17 @@ goog.dom.forms.addFormDataToMap_ = function(map, name, value) {
   array.push(value);
 };
 /**
- @private
- @param {Array<string>} sb
- @param {string} name
- @param {string} value
+ * @private
+ * @param {Array<string>} sb
+ * @param {string} name
+ * @param {string} value
  */
 goog.dom.forms.addFormDataToStringBuffer_ = function(sb, name, value) {
   sb.push(encodeURIComponent(name) + "\x3d" + encodeURIComponent(value));
 };
 /**
- @param {HTMLFormElement} form
- @return {boolean}
+ * @param {HTMLFormElement} form
+ * @return {boolean}
  */
 goog.dom.forms.hasFileInput = function(form) {
   var els = form.elements;
@@ -160,8 +160,8 @@ goog.dom.forms.hasFileInput = function(form) {
   return false;
 };
 /**
- @param {Element} el
- @param {boolean} disabled
+ * @param {Element} el
+ * @param {boolean} disabled
  */
 goog.dom.forms.setDisabled = function(el, disabled) {
   if (el.tagName == goog.dom.TagName.FORM) {
@@ -177,7 +177,7 @@ goog.dom.forms.setDisabled = function(el, disabled) {
   }
 };
 /**
- @param {Element} el
+ * @param {Element} el
  */
 goog.dom.forms.focusAndSelect = function(el) {
   el.focus();
@@ -186,25 +186,25 @@ goog.dom.forms.focusAndSelect = function(el) {
   }
 };
 /**
- @param {Element} el
- @return {boolean}
+ * @param {Element} el
+ * @return {boolean}
  */
 goog.dom.forms.hasValue = function(el) {
   var value = goog.dom.forms.getValue(el);
   return !!value;
 };
 /**
- @param {HTMLFormElement} form
- @param {string} name
- @return {boolean}
+ * @param {HTMLFormElement} form
+ * @param {string} name
+ * @return {boolean}
  */
 goog.dom.forms.hasValueByName = function(form, name) {
   var value = goog.dom.forms.getValueByName(form, name);
   return !!value;
 };
 /**
- @param {Element} el
- @return {(string|Array<string>|null)}
+ * @param {Element} el
+ * @return {(string|Array<string>|null)}
  */
 goog.dom.forms.getValue = function(el) {
   var type = /** @type {!HTMLInputElement} */ (el).type;
@@ -221,9 +221,9 @@ goog.dom.forms.getValue = function(el) {
   }
 };
 /**
- @param {HTMLFormElement} form
- @param {string} name
- @return {(Array<string>|string|null)}
+ * @param {HTMLFormElement} form
+ * @param {string} name
+ * @return {(Array<string>|string|null)}
  */
 goog.dom.forms.getValueByName = function(form, name) {
   var els = form.elements[name];
@@ -242,26 +242,26 @@ goog.dom.forms.getValueByName = function(form, name) {
   return null;
 };
 /**
- @private
- @param {Element} el
- @return {?string}
+ * @private
+ * @param {Element} el
+ * @return {?string}
  */
 goog.dom.forms.getInputChecked_ = function(el) {
   return el.checked ? /** @type {?} */ (el).value : null;
 };
 /**
- @private
- @param {Element} el
- @return {?string}
+ * @private
+ * @param {Element} el
+ * @return {?string}
  */
 goog.dom.forms.getSelectSingle_ = function(el) {
   var selectedIndex = /** @type {!HTMLSelectElement} */ (el).selectedIndex;
   return selectedIndex >= 0 ? /** @type {!HTMLSelectElement} */ (el).options[selectedIndex].value : null;
 };
 /**
- @private
- @param {Element} el
- @return {?Array<string>}
+ * @private
+ * @param {Element} el
+ * @return {?Array<string>}
  */
 goog.dom.forms.getSelectMultiple_ = function(el) {
   var values = [];
@@ -273,8 +273,8 @@ goog.dom.forms.getSelectMultiple_ = function(el) {
   return values.length ? values : null;
 };
 /**
- @param {Element} el
- @param {*=} opt_value
+ * @param {Element} el
+ * @param {*=} opt_value
  */
 goog.dom.forms.setValue = function(el, opt_value) {
   var type = /** @type {!HTMLInputElement} */ (el).type;
@@ -294,17 +294,17 @@ goog.dom.forms.setValue = function(el, opt_value) {
   }
 };
 /**
- @private
- @param {Element} el
- @param {(string|boolean)=} opt_value
+ * @private
+ * @param {Element} el
+ * @param {(string|boolean)=} opt_value
  */
 goog.dom.forms.setInputChecked_ = function(el, opt_value) {
   el.checked = opt_value;
 };
 /**
- @private
- @param {Element} el
- @param {string=} opt_value
+ * @private
+ * @param {Element} el
+ * @param {string=} opt_value
  */
 goog.dom.forms.setSelectSingle_ = function(el, opt_value) {
   el.selectedIndex = -1;
@@ -318,9 +318,9 @@ goog.dom.forms.setSelectSingle_ = function(el, opt_value) {
   }
 };
 /**
- @private
- @param {Element} el
- @param {(Array<string>|string)=} opt_value
+ * @private
+ * @param {Element} el
+ * @param {(Array<string>|string)=} opt_value
  */
 goog.dom.forms.setSelectMultiple_ = function(el, opt_value) {
   if (goog.isString(opt_value)) {

@@ -9,35 +9,35 @@ goog.provide("goog.net.XhrLike");
 /** @type {number} */ goog.net.XhrLike.prototype.status;
 /** @type {string} */ goog.net.XhrLike.prototype.statusText;
 /**
- @param {string} method
- @param {string} url
- @param {?boolean=} opt_async
- @param {?string=} opt_user
- @param {?string=} opt_password
+ * @param {string} method
+ * @param {string} url
+ * @param {?boolean=} opt_async
+ * @param {?string=} opt_user
+ * @param {?string=} opt_password
  */
 goog.net.XhrLike.prototype.open = function(method, url, opt_async, opt_user, opt_password) {
 };
 /**
- @param {(ArrayBuffer|ArrayBufferView|Blob|Document|FormData|string)=} opt_data
+ * @param {(ArrayBuffer|ArrayBufferView|Blob|Document|FormData|string)=} opt_data
  */
 goog.net.XhrLike.prototype.send = function(opt_data) {
 };
 goog.net.XhrLike.prototype.abort = function() {
 };
 /**
- @param {string} header
- @param {string} value
+ * @param {string} header
+ * @param {string} value
  */
 goog.net.XhrLike.prototype.setRequestHeader = function(header, value) {
 };
 /**
- @param {string} header
- @return {string}
+ * @param {string} header
+ * @return {string}
  */
 goog.net.XhrLike.prototype.getResponseHeader = function(header) {
 };
 /**
- @return {string}
+ * @return {string}
  */
 goog.net.XhrLike.prototype.getAllResponseHeaders = function() {
 };
