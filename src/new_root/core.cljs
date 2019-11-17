@@ -1,18 +1,27 @@
 (ns new_root.core
   (:require
    [reagent.core :as reagent :refer [atom]]
-   [re-frame.core :as rf]
    [reitit.frontend :as rfe]
    [reitit.frontend.easy :as rfee]
-   [new-root.paint-snake.core :as ps]))
+   [new-root.paint-snake.core :as ps]
+   [new-root.paint-snake-two.core :as ps-two]))
+
+(def post-3
+  {:title "Another riff on that game"
+   :release :beta
+   :preview (fn []
+              [:div "This is a riff on the "
+               [:a {:href (rfee/href ::post {:id 3})} "game"]
+               " I'm working on"])
+   :content ps-two/view})
 
 (def post-2
-  {:title "It's a project in a project!"
+  {:title "Getting started with a realtime game."
    :release :beta
    :preview (fn []
               [:div "This is a "
                [:a {:href (rfee/href ::post {:id 2})} "game"]
-               " I'm working on"])
+               " I'm getting started on."])
    :content ps/view})
 
 (def post-1
@@ -29,13 +38,14 @@
                [:h1 "I'm here, and im post 0."]
                [:p "Here's " [:a {:href (rfee/href ::post {:id 1})} "post 1"] "."]])})
 
-(def posts [post-0 post-1 post-2])
+(def posts [post-0
+            post-1
+            post-2
+            post-3])
 
 ;; define your app data so that it doesn't get over-written on reload
 
 (defonce app-state (atom {}))
-
-#_[:button {:type "button" :on-click #(rfee/push-state ::post {:id 3})} "Item 3"]
 
 (defn nav []
   [:div.nav
@@ -51,11 +61,14 @@
 
 (defn blog [page]
   [:div.container
+   [:hr]
    [:div.row [nav]]
+   [:hr]
    [:div.row page]])
 
 (defn teaser [{:as _ :keys [title preview content]}]
-  [:div.card
+  [:div.card {:style {:border-radius "10px"
+                      :margin "20px"}}
    [:h3.small {:style {:color "#d24c53"}} title]
    [:div.row (cond preview [preview]
                    content (content)
@@ -63,7 +76,7 @@
 
 (defn home [_]
   [:div
-   [:h1 "Bryan Zone"]
+   [:h1 "Escherize Zone"]
    [blog
     (into [:div]
           (for [p (reverse posts)] (teaser p)))]])
@@ -112,6 +125,7 @@
    ;; set to false to enable HistoryAPI
    {:use-fragment true})
   (ps/init)
+  (ps-two/init)
   (start))
 
 (defn stop []

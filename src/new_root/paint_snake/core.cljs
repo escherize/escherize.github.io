@@ -30,20 +30,22 @@
                      :background-color "#e1eaf1"}
              :view-box (str "0 0" width " " height)}
        ;; player
-       [:circle {:fill "#1e150e"
-                 :r 30
+       #_[:circle {:fill "#1e150e"
+                 :stroke-width "5"
+                 :stroke "grey"
+                 :r 15
                  :cx (:x player)
                  :cy (:y player)}]]
       ;;real fancy curves
       (for [[[p1 p2] r] (map vector
                              (partition 2 1 (:trail player))
-                             (step 30 0 (:length player)))]
+                             (step 15 0 (:length player)))]
         (let [{x1 :x y1 :y dx1 :dx dy1 :dy} p1
               {x2 :x y2 :y dx2 :dx dy2 :dy} p2
-              s 3]
+              s 5]
           [:path {:d (str "M " x1 " " y1
-                          "C " (+ x1 (* s dx1)) " " (+ y1 (* s dy1)) ", "
-                          (- x2 (* s dx2)) " " (- y2 (* s dy2))
+                          ;; "C " (+ x1 (* s dx1)) " " (+ y1 (* s dy1)) ", "
+                          ;; (+ x2 (* s dx2)) " " (+ y2 (* s dy2))
                           ", " x2 " " y2)
                   :stroke-width (* 2 r)
                   :stroke-linecap "round"
@@ -63,8 +65,8 @@
      #_[:div (pr-str (:loop db))]
      [:p "thanks for playing @escherize"]]))
 
-(def speed 0.8)
-(def damp 0.95)
+(def speed 1)
+(def damp 0.9)
 (def d-bound 6)
 (defn clamp [low mid high] (-> mid (max low) (min high)))
 

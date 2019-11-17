@@ -1,6 +1,5 @@
 (ns new-root.bash-bros.main
   (:require [reagent.core :as r]
-            [keybind.core :as kb]
             [clojure.pprint :as pp]))
 
 (def width 600)
@@ -18,12 +17,6 @@
    (if (:debug/on? @state)
      [:pre (with-out-str (pp/pprint @state))]
      "*")])
-
-(defonce do-bindings
-  [(kb/bind! "w" :w-trigger #(swap! state update :player/y (fn [x] (- x 10))))
-   (kb/bind! "a" :a-trigger #(swap! state update :player/x (fn [x] (- x 10))))
-   (kb/bind! "s" :s-trigger #(swap! state update :player/y (fn [x] (+ x 10))))
-   (kb/bind! "d" :d-trigger #(swap! state update :player/x (fn [x] (+ x 10))))])
 
 (defn draw-game [state]
   [:svg
