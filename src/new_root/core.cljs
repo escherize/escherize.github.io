@@ -7,7 +7,7 @@
    [new-root.paint-snake-two.core :as ps-two]))
 
 (def post-3
-  {:title "Another riff on that game"
+  {:title "Another game riff"
    :release :beta
    :preview (fn []
               [:div "This is a riff on the "
@@ -17,7 +17,6 @@
 
 (def post-2
   {:title "Getting started with a realtime game."
-   :release :beta
    :preview (fn []
               [:div "This is a "
                [:a {:href (rfee/href ::post {:id 2})} "game"]
@@ -38,10 +37,8 @@
                [:h1 "I'm here, and im post 0."]
                [:p "Here's " [:a {:href (rfee/href ::post {:id 1})} "post 1"] "."]])})
 
-(def posts [post-0
-            post-1
-            post-2
-            post-3])
+(def posts
+  [post-0 post-1 post-2 post-3])
 
 ;; define your app data so that it doesn't get over-written on reload
 
@@ -56,9 +53,6 @@
     " | "
     [:span [:a {:href (rfee/href ::post {:id (dec (count posts))})} "Last Post"]]]])
 
-(defn red-box []
-  [:div {:style {:background-color "#d24c53" :width "100px" :height "100px"}}])
-
 (defn blog [page]
   [:div.container
    [:hr]
@@ -66,13 +60,15 @@
    [:hr]
    [:div.row page]])
 
-(defn teaser [{:as _ :keys [title preview content]}]
-  [:div.card {:style {:border-radius "10px"
-                      :margin "20px"}}
-   [:h3.small {:style {:color "#d24c53"}} title]
-   [:div.row (cond preview [preview]
-                   content (content)
-                   :else nil)]])
+(defn teaser [{:as _ :keys [title preview content release]}]
+  (when (not= :beta release)
+    [:div.card {:style {:border-radius "10px"
+                        :padding "10px"
+                        :margin "20px"}}
+     [:h3.small {:style {:color "#d24c53"}} title]
+     [:div.row (cond preview [preview]
+                     content (content)
+                     :else nil)]]))
 
 (defn home [_]
   [:div

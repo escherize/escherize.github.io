@@ -7,60 +7,72 @@
 (def width 1000)
 (def height 800)
 
-(defonce db (atom {:pressed-keys #{}
-                   :loop {:time 0 :delta 0}
-                   :player {:dx 0
-                            :dy 0
-                            :x 50
-                            :y 50
-                            :length 120
-                            :trail '()}}))
+(def initial-db {:pressed-keys #{}
+                 :game-over? false
+                 :loop {:time 0 :delta 0}
+                 :candy {:x 100 :y 100 :r 10}
+                 :player {:dx 0
+                          :dy 0
+                          :r 20
+                          :x 50
+                          :y 50
+                          :length 0
+                          :trail '()}})
 
-(defn step [start stop n]
+(defonce db (atom initial-db))
+
+(defn steps [start stop n]
   (let [d (- stop start)
         step-size (/ d n)]
     (range start stop step-size)))
 
 (defn view []
-  (let [{:keys [player] :as db} @db]
+  (let [{:keys [player candy game-over?]} @db
+        {:keys [length trail]} player]
     [:div
-     (into
-      [:svg {:style {:width width
-                     :height height
-                     :background-color "#e1eaf1"}
-             :view-box (str "0 0" width " " height)}
-       ;; player
-       [:circle {:fill "#1e150e"
-                 :stroke-width "5"
-                 :stroke "grey"
-                 :r 20
-                 :cx (:x player)
-                 :cy (:y player)}]]
-      ;;real fancy curves
-      (for [[[p1 p2] r] (map vector
-                             (partition 2 1 (:trail player))
-                             (step 15 0 (:length player)))]
-        (let [{x1 :x y1 :y dx1 :dx dy1 :dy} p1
-              {x2 :x y2 :y dx2 :dx dy2 :dy} p2
-              s 5]
-          [:path {:d (str "M " x1 " " y1
-                          ;; "C " (+ x1 (* s dx1)) " " (+ y1 (* s dy1)) ", "
-                          ;; (+ x2 (* s dx2)) " " (+ y2 (* s dy2))
-                          ", " x2 " " y2)
-                  :stroke-width (* 2 r)
-                  :stroke-linecap "round"
-                  ;; "M 150 100 C 200 200, 400 200, 500 100"
-                  :stroke (if (< r 5) "red" "#1e150e")
-                  :fill "transparent"}]))
-      ;; circles
-      #_(for [[{:keys [x y]} r] (map vector
-                                     (:trail player)
-                                     (step 30 0 (:length player)))]
+     ;; [:pre (pr-str candy)]
+     ;; [:pre (pr-str player)]
+     (if game-over?
+       [:div "game over"
+        [:div "Score: " (:length player)]
+        [:button {:on-click #(reset! db initial-db)}
+         "play again"]]
+       (into
+        [:svg {:style {:width width
+                       :height height
+                       :background-color "#e1eaf1"}
+               :view-box (str "0 0" width " " height)}
+         ;; player
+         [:circle {:fill "#1e150e"
+                   :stroke-width "5"
+                   :stroke "grey"
+                   :r (:r player)
+                   :cx (:x player)
+                   :cy (:y player)}]
+         ;; candy
+         [:circle {:fill "green"
+                   :r (:r candy)
+                   :cx (:x candy)
+                   :cy (:y candy)}]]
+        ;;lines
+        (for [[[p1 p2] r i] (map vector
+                                 (partition 2 1 trail)
+                                 (steps 20 0 length)
+                                 (range))]
 
-          [:circle {:fill (if (< r 5) "red" "#1e150e") ;;(if (> 20 r) "red" "#1e150e")
-                    :r r
-                    :cx x
-                    :cy y}]))
+          (let [{x1 :x y1 :y dx1 :dx dy1 :dy} p1
+                {x2 :x y2 :y dx2 :dx dy2 :dy} p2]
+            (if (> i 30)
+              [:path {:d (str "M " x1 " " y1 ", " x2 " " y2)
+                      :stroke-width (* 2 r)
+                      :stroke-linecap "round"
+                      :stroke "red"
+                      :fill "transparent"}]
+              [:path {:d (str "M " x1 " " y1 ", " x2 " " y2)
+                      :stroke-width (* 2 r)
+                      :stroke-linecap "round"
+                      :stroke "#4e453e"
+                      :fill "transparent"}])))))
      #_[:div (pr-str ((juxt :x :y) player))]
      #_[:div (pr-str (:loop db))]
      [:p "thanks for playing @escherize"]]))
@@ -79,6 +91,27 @@
       :up    (swap! db update-in [:player :dy] (fn [dd] (- dd (* d speed))))
       :down  (swap! db update-in [:player :dy] (fn [dd] (+ dd (* d speed)))))))
 
+(defn sq [base] (Math/pow base 2))
+
+(defn collision? [{x1 :x y1 :y r1 :r}
+                  {x2 :x y2 :y r2 :r}]
+  (> (sq (+ r1 r2))
+     (+ (sq (Math/abs (- x1 x2)))
+        (sq (Math/abs (- y1 y2))))))
+
+(defn eat-candy! []
+  (let [new-candy {:x (clamp 50 (rand-int width) (- width 50))
+                   :y (clamp 50 (rand-int height) (- width 50))}]
+    (swap! db (fn [db]
+                (-> db
+                    (update :candy merge new-candy)
+                    (update-in [:player :length] #(-> % (+ 10) (* 1.1) int)))))))
+
+(defn update-candy [d]
+  (let [{:keys [player candy]} @db]
+    (when (collision? player candy)
+      (eat-candy!))))
+
 (defn update-player [d]
   (swap! db update :player
          (fn [{:keys [dx x dy y length] :as p}]
@@ -89,10 +122,16 @@
                (assoc :y (clamp 0 (+ y (* d dy)) height))
                (update :trail (fn [t] (take length (conj t {:x x :y y :dx dx :dy dy}))))))))
 
+(defn update-death [d]
+  ;; todo
+  )
+
 (defn handle-updates [pressed-keys delta]
   (let [d (/ delta update-interval)]
     (update-dd pressed-keys d)
-    (update-player d)))
+    (update-player d)
+    (update-candy d)
+    (update-death d)))
 
 (defn game-loop []
   (js/window.requestAnimationFrame game-loop)
@@ -101,9 +140,7 @@
         _ (swap! db assoc-in [:loop :delta] delta)]
     (when (> delta update-interval)
       (swap! db assoc-in [:loop :time] current-time)
-      (handle-updates
-       (:pressed-keys @db)
-       delta))))
+      (handle-updates (:pressed-keys @db) delta))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; hook keypresses
@@ -117,8 +154,8 @@
       (when (= k :space) (.preventDefault event))
       (swap! db update :pressed-keys edit-fn k))))
 
-(def kd-hook (fn [e] (handle-key conj e)))
-(def ku-hook (fn [e] (handle-key disj e)))
+(defonce kd-hook (fn [e] (handle-key conj e)))
+(defonce ku-hook (fn [e] (handle-key disj e)))
 
 (defn hook-pressed-keys [db]
   (js/window.addEventListener "keydown" kd-hook false)
