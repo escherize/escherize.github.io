@@ -6,39 +6,45 @@
    [new-root.paint-snake.core :as ps]
    [new-root.paint-snake-two.core :as ps-two]))
 
+(def posts (atom nil))
+
 (def post-3
-  {:title "Another game riff"
-   :release :beta
+  {:title "Game 2. Adding some goals"
    :preview (fn []
-              [:div "This is a riff on the "
-               [:a {:href (rfee/href ::post {:id 3})} "game"]
-               " I'm working on"])
+              [:div
+               [:div "This is a riff on the "
+                [:a {:href (rfee/href ::post {:id 3})} "game"]
+                " I'm working on"]
+               [:div "While it's still impossible to die, there are green apples for the player to eat."]])
    :content ps-two/view})
 
 (def post-2
-  {:title "Getting started with a realtime game."
+  {:title "Game 1. Getting started"
    :preview (fn []
               [:div "This is a "
                [:a {:href (rfee/href ::post {:id 2})} "game"]
                " I'm getting started on."])
    :content ps/view})
 
-(def post-1
-  {:title "Hello Again"
-   :content (fn []
-              [:div
-               [:h1 "I'm post 1."]
-               [:p "Here's " [:a {:href (rfee/href ::post {:id 0})} "post 0"] "."]])})
-
 (def post-0
   {:title "Hello World"
+   :preview (fn []
+              [:div
+               [:p "Welcome to my blog!"]
+               [:p "It's built as a single page app using
+               clojurescript reagent, which means the entire thing is
+               completely programmable."]
+               [:p "so we can do all kinds of things."]
+               [:hr]
+               "Such as "
+               [:button {:on-click #(swap! posts shuffle)} "shuffle"]
+               "the order of the posts on this page!"])
    :content (fn []
               [:div
                [:h1 "I'm here, and im post 0."]
                [:p "Here's " [:a {:href (rfee/href ::post {:id 1})} "post 1"] "."]])})
 
-(def posts
-  [post-0 post-1 post-2 post-3])
+
 
 ;; define your app data so that it doesn't get over-written on reload
 
@@ -51,7 +57,7 @@
     " | "
     [:span [:a {:href (rfee/href ::projects)} "Projects"]]
     " | "
-    [:span [:a {:href (rfee/href ::post {:id (dec (count posts))})} "Last Post"]]]])
+    [:span [:a {:href (rfee/href ::post {:id (dec (count @posts))})} "Last Post"]]]])
 
 (defn blog [page]
   [:div.container
@@ -75,7 +81,7 @@
    [:h1 "Escherize Zone"]
    [blog
     (into [:div]
-          (for [p (reverse posts)] (teaser p)))]])
+          (for [p (reverse @posts)] (teaser p)))]])
 
 (defn projects []
   [:div
@@ -83,13 +89,13 @@
 
 (defn post [match]
   (if-let [id (-> match :parameters :path :id)]
-    (let [post (get posts (js/parseInt id))]
+    (let [post (get @posts (js/parseInt id))]
       [:div
        [:div.row
         [:p [:span "[" [:a {:href (rfee/href ::home)} "Home"] "]"]]
         [:h1 (:title post)]]
        [:hr]
-       ((:content (get posts (js/parseInt id))))])
+       ((:content (get @posts (js/parseInt id))))])
     [:pre (pr-str match)]))
 
 (def routes
@@ -115,6 +121,7 @@
   ;; init is called ONCE when the page loads
   ;; this is called in the index.html and must be exported
   ;; so it is available even in :advanced release builds
+  (reset! posts [post-0 post-2 post-3])
   (rfee/start!
    (rfe/router routes)
    (fn [m] (swap! app-state assoc :match m))

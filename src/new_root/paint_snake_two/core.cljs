@@ -16,7 +16,7 @@
                           :r 20
                           :x 50
                           :y 50
-                          :length 0
+                          :length 29
                           :trail '()}})
 
 (defonce db (atom initial-db))
@@ -30,8 +30,6 @@
   (let [{:keys [player candy game-over?]} @db
         {:keys [length trail]} player]
     [:div
-     ;; [:pre (pr-str candy)]
-     ;; [:pre (pr-str player)]
      (if game-over?
        [:div "game over"
         [:div "Score: " (:length player)]
@@ -60,8 +58,8 @@
                                  (steps 20 0 length)
                                  (range))]
 
-          (let [{x1 :x y1 :y dx1 :dx dy1 :dy} p1
-                {x2 :x y2 :y dx2 :dx dy2 :dy} p2]
+          (let [{x1 :x y1 :y} p1
+                {x2 :x y2 :y} p2]
             (if (> i 30)
               [:path {:d (str "M " x1 " " y1 ", " x2 " " y2)
                       :stroke-width (* 2 r)
@@ -71,7 +69,7 @@
               [:path {:d (str "M " x1 " " y1 ", " x2 " " y2)
                       :stroke-width (* 2 r)
                       :stroke-linecap "round"
-                      :stroke "#4e453e"
+                      :stroke "#1e150e"
                       :fill "transparent"}])))))
      #_[:div (pr-str ((juxt :x :y) player))]
      #_[:div (pr-str (:loop db))]
@@ -105,7 +103,7 @@
     (swap! db (fn [db]
                 (-> db
                     (update :candy merge new-candy)
-                    (update-in [:player :length] #(-> % (+ 10) (* 1.1) int)))))))
+                    (update-in [:player :length] #(-> % (+ 3) (* 1.1) int)))))))
 
 (defn update-candy [d]
   (let [{:keys [player candy]} @db]
@@ -120,11 +118,22 @@
                (update :dy (fn [dd] (clamp (* -1 d-bound) (* damp dd) d-bound)))
                (assoc :x (clamp 0 (+ x (* d dx)) width))
                (assoc :y (clamp 0 (+ y (* d dy)) height))
-               (update :trail (fn [t] (take length (conj t {:x x :y y :dx dx :dy dy}))))))))
+               (update :trail (fn [t] (take length (conj t {:x x :y y}))))))))
 
 (defn update-death [d]
-  ;; todo
-  )
+  (let [{:keys [player]} @db
+        {:keys [trail]} player
+        trail-length (count trail)]
+    (when (< 30 trail-length)
+      (let [killers (drop 30 trail)
+            killer-rs (drop 30 (steps 20 0 trail-length))
+            colliding (keep (fn [[k kr]]
+                              (when (collision? player (assoc k :r kr)) true))
+                            (map vector
+                                 killers
+                                 killer-rs))]
+        (when-not (empty? colliding)
+          (swap! db assoc :game-over? true))))))
 
 (defn handle-updates [pressed-keys delta]
   (let [d (/ delta update-interval)]

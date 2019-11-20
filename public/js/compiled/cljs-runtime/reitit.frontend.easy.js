@@ -26,8 +26,8 @@ return reitit.frontend.history.start_BANG_.cljs$core$IFn$_invoke$arity$3(router,
 }));
 });
 reitit.frontend.easy.href = (function reitit$frontend$easy$href(var_args){
-var G__40880 = arguments.length;
-switch (G__40880) {
+var G__38439 = arguments.length;
+switch (G__38439) {
 case 1:
 return reitit.frontend.easy.href.cljs$core$IFn$_invoke$arity$1((arguments[(0)]));
 
@@ -64,8 +64,8 @@ reitit.frontend.easy.href.cljs$lang$maxFixedArity = 3;
  * Sets the new route, leaving previous route in history.
  */
 reitit.frontend.easy.push_state = (function reitit$frontend$easy$push_state(var_args){
-var G__40882 = arguments.length;
-switch (G__40882) {
+var G__38443 = arguments.length;
+switch (G__38443) {
 case 1:
 return reitit.frontend.easy.push_state.cljs$core$IFn$_invoke$arity$1((arguments[(0)]));
 
@@ -102,8 +102,8 @@ reitit.frontend.easy.push_state.cljs$lang$maxFixedArity = 3;
  * Replaces current route. I.e. current route is not left on history.
  */
 reitit.frontend.easy.replace_state = (function reitit$frontend$easy$replace_state(var_args){
-var G__40885 = arguments.length;
-switch (G__40885) {
+var G__38450 = arguments.length;
+switch (G__38450) {
 case 1:
 return reitit.frontend.easy.replace_state.cljs$core$IFn$_invoke$arity$1((arguments[(0)]));
 
