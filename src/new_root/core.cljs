@@ -6,6 +6,7 @@
    [new-root.paint-snake.core :as ps]
    [new-root.paint-snake-two.core :as ps-two]))
 
+
 (def post-3
   {:title "Game 2. Adding some goals"
    :preview (fn []
@@ -78,7 +79,8 @@
 
 (defn projects []
   [:div
-   "This is the projects component"])
+   [:h3 "This is the projects component"]
+   [:pre "todo: fill in my projects ha"]])
 
 (defn post [match]
   (if-let [id (-> match :parameters :path :id)]
