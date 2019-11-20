@@ -10,13 +10,13 @@
 (def initial-db {:pressed-keys #{}
                  :game-over? false
                  :loop {:time 0 :delta 0}
-                 :candy {:x 100 :y 100 :r 10}
+                 :candy {:x 300 :y 200 :r 10}
                  :player {:dx 0
                           :dy 0
                           :r 20
                           :x 50
                           :y 50
-                          :length 29
+                          :length 0
                           :trail '()}})
 
 (defonce db (atom initial-db))
@@ -30,16 +30,20 @@
   (let [{:keys [player candy game-over?]} @db
         {:keys [length trail]} player]
     [:div
+     [:p "Use wasd to move around, and collect green apples while avoiding your poisonous red tail! The longer you get the higher your score."]
+     [:div "Score: " (:length player)]
      (if game-over?
-       [:div "game over"
-        [:div "Score: " (:length player)]
-        [:button {:on-click #(reset! db initial-db)}
-         "play again"]]
+       [:div {:style {:margin-top "50px"}}
+        [:h1 "Game Over"
+         [:div "Score: " (:length player)]
+         [:button {:on-click #(reset! db initial-db)}
+          "play again"]]]
        (into
         [:svg {:style {:width width
                        :height height
                        :background-color "#e1eaf1"}
                :view-box (str "0 0" width " " height)}
+
          ;; player
          [:circle {:fill "#1e150e"
                    :stroke-width "5"
@@ -47,15 +51,17 @@
                    :r (:r player)
                    :cx (:x player)
                    :cy (:y player)}]
+
          ;; candy
          [:circle {:fill "green"
                    :r (:r candy)
                    :cx (:x candy)
                    :cy (:y candy)}]]
+
         ;;lines
         (for [[[p1 p2] r i] (map vector
                                  (partition 2 1 trail)
-                                 (steps 20 0 length)
+                                 (steps (:r player) 0 length)
                                  (range))]
 
           (let [{x1 :x y1 :y} p1
@@ -112,21 +118,21 @@
 
 (defn update-player [d]
   (swap! db update :player
-         (fn [{:keys [dx x dy y length] :as p}]
+         (fn [{:keys [dx x dy y length r] :as p}]
            (-> p
                (update :dx (fn [dd] (clamp (* -1 d-bound) (* damp dd) d-bound)))
                (update :dy (fn [dd] (clamp (* -1 d-bound) (* damp dd) d-bound)))
-               (assoc :x (clamp 0 (+ x (* d dx)) width))
-               (assoc :y (clamp 0 (+ y (* d dy)) height))
+               (assoc :x (clamp r (+ x (* d dx)) (- width r)))
+               (assoc :y (clamp r (+ y (* d dy)) (- height r)))
                (update :trail (fn [t] (take length (conj t {:x x :y y}))))))))
 
 (defn update-death [d]
   (let [{:keys [player]} @db
-        {:keys [trail]} player
+        {:keys [trail r]} player
         trail-length (count trail)]
     (when (< 30 trail-length)
       (let [killers (drop 30 trail)
-            killer-rs (drop 30 (steps 20 0 trail-length))
+            killer-rs (drop 30 (steps r 0 trail-length))
             colliding (keep (fn [[k kr]]
                               (when (collision? player (assoc k :r kr)) true))
                             (map vector

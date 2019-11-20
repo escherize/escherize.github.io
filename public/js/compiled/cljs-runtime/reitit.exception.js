@@ -2,8 +2,8 @@ goog.provide('reitit.exception');
 goog.require('cljs.core');
 goog.require('clojure.string');
 reitit.exception.fail_BANG_ = (function reitit$exception$fail_BANG_(var_args){
-var G__33859 = arguments.length;
-switch (G__33859) {
+var G__42520 = arguments.length;
+switch (G__42520) {
 case 1:
 return reitit.exception.fail_BANG_.cljs$core$IFn$_invoke$arity$1((arguments[(0)]));
 
@@ -37,8 +37,8 @@ reitit.exception.format_exception = (function (){var method_table__4613__auto__ 
 var prefer_table__4614__auto__ = cljs.core.atom.cljs$core$IFn$_invoke$arity$1(cljs.core.PersistentArrayMap.EMPTY);
 var method_cache__4615__auto__ = cljs.core.atom.cljs$core$IFn$_invoke$arity$1(cljs.core.PersistentArrayMap.EMPTY);
 var cached_hierarchy__4616__auto__ = cljs.core.atom.cljs$core$IFn$_invoke$arity$1(cljs.core.PersistentArrayMap.EMPTY);
-var hierarchy__4617__auto__ = cljs.core.get.cljs$core$IFn$_invoke$arity$3(cljs.core.PersistentArrayMap.EMPTY,new cljs.core.Keyword(null,"hierarchy","hierarchy",-1053470341),(function (){var fexpr__33870 = cljs.core.get_global_hierarchy;
-return (fexpr__33870.cljs$core$IFn$_invoke$arity$0 ? fexpr__33870.cljs$core$IFn$_invoke$arity$0() : fexpr__33870.call(null));
+var hierarchy__4617__auto__ = cljs.core.get.cljs$core$IFn$_invoke$arity$3(cljs.core.PersistentArrayMap.EMPTY,new cljs.core.Keyword(null,"hierarchy","hierarchy",-1053470341),(function (){var fexpr__42530 = cljs.core.get_global_hierarchy;
+return (fexpr__42530.cljs$core$IFn$_invoke$arity$0 ? fexpr__42530.cljs$core$IFn$_invoke$arity$0() : fexpr__42530.call(null));
 })());
 return (new cljs.core.MultiFn(cljs.core.symbol.cljs$core$IFn$_invoke$arity$2("reitit.exception","format-exception"),((function (method_table__4613__auto__,prefer_table__4614__auto__,method_cache__4615__auto__,cached_hierarchy__4616__auto__,hierarchy__4617__auto__){
 return (function (type,_,___$1){
@@ -49,10 +49,10 @@ return type;
 }
 reitit.exception.exception = (function reitit$exception$exception(e){
 var data = cljs.core.ex_data(e);
-var message = (function (){var G__33879 = new cljs.core.Keyword(null,"type","type",1174270348).cljs$core$IFn$_invoke$arity$1(data);
-var G__33880 = reitit.exception.get_message(e);
-var G__33881 = new cljs.core.Keyword(null,"data","data",-232669377).cljs$core$IFn$_invoke$arity$1(data);
-return (reitit.exception.format_exception.cljs$core$IFn$_invoke$arity$3 ? reitit.exception.format_exception.cljs$core$IFn$_invoke$arity$3(G__33879,G__33880,G__33881) : reitit.exception.format_exception.call(null,G__33879,G__33880,G__33881));
+var message = (function (){var G__42534 = new cljs.core.Keyword(null,"type","type",1174270348).cljs$core$IFn$_invoke$arity$1(data);
+var G__42535 = reitit.exception.get_message(e);
+var G__42536 = new cljs.core.Keyword(null,"data","data",-232669377).cljs$core$IFn$_invoke$arity$1(data);
+return (reitit.exception.format_exception.cljs$core$IFn$_invoke$arity$3 ? reitit.exception.format_exception.cljs$core$IFn$_invoke$arity$3(G__42534,G__42535,G__42536) : reitit.exception.format_exception.call(null,G__42534,G__42535,G__42536));
 })();
 return cljs.core.ex_info.cljs$core$IFn$_invoke$arity$2(message,cljs.core.assoc.cljs$core$IFn$_invoke$arity$3((function (){var or__4131__auto__ = data;
 if(cljs.core.truth_(or__4131__auto__)){
@@ -66,19 +66,19 @@ reitit.exception.format_exception.cljs$core$IMultiFn$_add_method$arity$3(null,ne
 return [cljs.core.str.cljs$core$IFn$_invoke$arity$1(message),(cljs.core.truth_(data)?["\n\n",cljs.core.pr_str.cljs$core$IFn$_invoke$arity$variadic(cljs.core.prim_seq.cljs$core$IFn$_invoke$arity$2([data], 0))].join(''):null)].join('');
 }));
 reitit.exception.format_exception.cljs$core$IMultiFn$_add_method$arity$3(null,new cljs.core.Keyword(null,"path-conflicts","path-conflicts",-1238675313),(function (_,___$1,conflicts){
-return cljs.core.apply.cljs$core$IFn$_invoke$arity$3(cljs.core.str,"Router contains conflicting route paths:\n\n",cljs.core.mapv.cljs$core$IFn$_invoke$arity$2((function (p__33913){
-var vec__33916 = p__33913;
-var vec__33919 = cljs.core.nth.cljs$core$IFn$_invoke$arity$3(vec__33916,(0),null);
-var path = cljs.core.nth.cljs$core$IFn$_invoke$arity$3(vec__33919,(0),null);
-var vals = cljs.core.nth.cljs$core$IFn$_invoke$arity$3(vec__33916,(1),null);
+return cljs.core.apply.cljs$core$IFn$_invoke$arity$3(cljs.core.str,"Router contains conflicting route paths:\n\n",cljs.core.mapv.cljs$core$IFn$_invoke$arity$2((function (p__42542){
+var vec__42543 = p__42542;
+var vec__42546 = cljs.core.nth.cljs$core$IFn$_invoke$arity$3(vec__42543,(0),null);
+var path = cljs.core.nth.cljs$core$IFn$_invoke$arity$3(vec__42546,(0),null);
+var vals = cljs.core.nth.cljs$core$IFn$_invoke$arity$3(vec__42543,(1),null);
 return ["   ",cljs.core.str.cljs$core$IFn$_invoke$arity$1(path),"\n-> ",cljs.core.str.cljs$core$IFn$_invoke$arity$1(clojure.string.join.cljs$core$IFn$_invoke$arity$2("\n-> ",cljs.core.mapv.cljs$core$IFn$_invoke$arity$2(cljs.core.first,vals))),"\n\n"].join('');
 }),conflicts));
 }));
 reitit.exception.format_exception.cljs$core$IMultiFn$_add_method$arity$3(null,new cljs.core.Keyword(null,"name-conflicts","name-conflicts",-2016386444),(function (_,___$1,conflicts){
-return cljs.core.apply.cljs$core$IFn$_invoke$arity$3(cljs.core.str,"Router contains conflicting route names:\n\n",cljs.core.mapv.cljs$core$IFn$_invoke$arity$2((function (p__33925){
-var vec__33926 = p__33925;
-var name = cljs.core.nth.cljs$core$IFn$_invoke$arity$3(vec__33926,(0),null);
-var vals = cljs.core.nth.cljs$core$IFn$_invoke$arity$3(vec__33926,(1),null);
+return cljs.core.apply.cljs$core$IFn$_invoke$arity$3(cljs.core.str,"Router contains conflicting route names:\n\n",cljs.core.mapv.cljs$core$IFn$_invoke$arity$2((function (p__42551){
+var vec__42552 = p__42551;
+var name = cljs.core.nth.cljs$core$IFn$_invoke$arity$3(vec__42552,(0),null);
+var vals = cljs.core.nth.cljs$core$IFn$_invoke$arity$3(vec__42552,(1),null);
 return [cljs.core.str.cljs$core$IFn$_invoke$arity$1(name),"\n-> ",cljs.core.str.cljs$core$IFn$_invoke$arity$1(clojure.string.join.cljs$core$IFn$_invoke$arity$2("\n-> ",cljs.core.mapv.cljs$core$IFn$_invoke$arity$2(cljs.core.first,vals))),"\n"].join('');
 }),conflicts));
 }));
