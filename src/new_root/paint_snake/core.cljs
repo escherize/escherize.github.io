@@ -24,13 +24,14 @@
 (defn view []
   (let [{:keys [player] :as db} @db]
     [:div
+     [:pre (pr-str (:pressed-keys db))]
      (into
       [:svg {:style {:width width
                      :height height
                      :background-color "#e1eaf1"}
              :view-box (str "0 0" width " " height)}
        ;; player
-       #_[:circle {:fill "#1e150e"
+       [:circle {:fill "#1e150e"
                  :stroke-width "5"
                  :stroke "grey"
                  :r 15
@@ -44,8 +45,6 @@
               {x2 :x y2 :y dx2 :dx dy2 :dy} p2
               s 5]
           [:path {:d (str "M " x1 " " y1
-                          ;; "C " (+ x1 (* s dx1)) " " (+ y1 (* s dy1)) ", "
-                          ;; (+ x2 (* s dx2)) " " (+ y2 (* s dy2))
                           ", " x2 " " y2)
                   :stroke-width (* 2 r)
                   :stroke-linecap "round"
@@ -109,27 +108,38 @@
 ;; hook keypresses
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(def code->key {68 :right 65 :left 87 :up 83 :down 32 :space})
+(def code->key {32 :space
+                68 :right
+                65 :left
+                87 :up
+                83 :down ;;wasd
+                39 :right
+                37 :left
+                38 :up
+                40 :down ;; arrows
+                })
 
 (defn handle-key [edit-fn event]
+  (.preventDefault event)
   (let [kc (.-keyCode event)]
+    (js/console.log kc)
     (when-let [k (code->key kc)]
-      (when (= k :space) (.preventDefault event))
+      (js/console.log (pr-str))
       (swap! db update :pressed-keys edit-fn k))))
 
 (def kd-hook (fn [e] (handle-key conj e)))
 (def ku-hook (fn [e] (handle-key disj e)))
 
-(defn hook-pressed-keys [db]
+(defn hook-pressed-keys! []
   (js/window.addEventListener "keydown" kd-hook false)
   (js/window.addEventListener "keyup" ku-hook false))
 
-(defn unhook-pressed-keys [db]
+(defn unhook-pressed-keys! []
   (js/window.removeEventListener "keydown" kd-hook false)
   (js/window.removeEventListener "keyup" ku-hook false))
 
 (defn ^:export init []
-  (hook-pressed-keys db)
+  (hook-pressed-keys!)
   (game-loop))
 
-(defn stop [] (unhook-pressed-keys db))
+(defn stop [] (unhook-pressed-keys!))

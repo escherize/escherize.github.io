@@ -79,7 +79,10 @@
                       :stroke-linecap "round"
                       :stroke "#1e150e"
                       :fill "transparent"}])))))
-     [:p "thanks for playing @escherize"]]))
+     [:p "thanks for playing @escherize"]
+     [:p "Open Source at "
+      [:a {:href "https://github.com/escherize/escherize.github.io/blob/master/src/new_root/paint_snake_two/core.cljs"} "github"]
+      "."]]))
 
 (def speed 1)
 (def damp 0.9)
@@ -161,7 +164,17 @@
 ;; hook keypresses
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(def code->key {68 :right 65 :left 87 :up 83 :down 32 :space})
+(def code->key
+  {32 :space
+   68 :right
+   65 :left
+   87 :up
+   83 :down ;;wasd
+   39 :right
+   37 :left
+   38 :up
+   40 :down ;; arrows
+   })
 
 (defn handle-key [edit-fn event]
   (let [kc (.-keyCode event)]
