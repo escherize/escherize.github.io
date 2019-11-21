@@ -7,14 +7,15 @@
    [new-root.paint-snake-two.core :as ps-two]))
 
 
+
 (def post-3
-  {:title "Game 2. Adding some goals"
+  {:title "Game 2. Adding goals and a way to die"
    :preview (fn []
               [:div
-               [:div "This is a riff on the "
+               [:div "This is some further work on the "
                 [:a {:href (rfee/href ::post {:id 2})} "game"]
                 " I'm working on"]
-               [:div "While it's still impossible to die, there are green apples for the player to eat."]])
+               [:div "It's now still possible to die, there are green apples for the player to eat, and you can see your score."]])
    :content ps-two/view})
 
 (def post-2

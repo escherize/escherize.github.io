@@ -1,13 +1,17 @@
 ;; shadow-cljs configuration
 {:source-paths ["src"]
 
- :dependencies [[binaryage/devtools "0.9.7"]
+ :dependencies [[refactor-nrepl "2.4.0-SNAPSHOT"]
+                [cider/cider-nrepl "0.22.4"]
+
+                [binaryage/devtools "0.9.7"]
+
                 [reagent "0.8.1"]
                 [re-frame "0.10.9"]
                 [metosin/reitit "0.3.9"]]
 
- ;; set an nrepl port for connection to a REPL.
- :nrepl {:port 8777}
+ :nrepl {:port 8777
+         :middleware [refactor-nrepl.middleware/wrap-refactor]}
 
  :builds
  {:app {:target     :browser

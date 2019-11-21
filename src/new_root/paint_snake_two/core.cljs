@@ -19,6 +19,8 @@
                           :length 0
                           :trail '()}})
 
+(def killer-len 20)
+
 (defonce db (atom initial-db))
 
 (defn steps [start stop n]
@@ -66,7 +68,7 @@
 
           (let [{x1 :x y1 :y} p1
                 {x2 :x y2 :y} p2]
-            (if (> i 30)
+            (if (> i killer-len)
               [:path {:d (str "M " x1 " " y1 ", " x2 " " y2)
                       :stroke-width (* 2 r)
                       :stroke-linecap "round"
@@ -77,8 +79,6 @@
                       :stroke-linecap "round"
                       :stroke "#1e150e"
                       :fill "transparent"}])))))
-     #_[:div (pr-str ((juxt :x :y) player))]
-     #_[:div (pr-str (:loop db))]
      [:p "thanks for playing @escherize"]]))
 
 (def speed 1)
@@ -109,7 +109,7 @@
     (swap! db (fn [db]
                 (-> db
                     (update :candy merge new-candy)
-                    (update-in [:player :length] #(-> % (+ 3) (* 1.1) int)))))))
+                    (update-in [:player :length] #(-> % (+ 5) (* 1.05) int)))))))
 
 (defn update-candy [d]
   (let [{:keys [player candy]} @db]
@@ -130,9 +130,9 @@
   (let [{:keys [player]} @db
         {:keys [trail r]} player
         trail-length (count trail)]
-    (when (< 30 trail-length)
-      (let [killers (drop 30 trail)
-            killer-rs (drop 30 (steps r 0 trail-length))
+    (when (< killer-len trail-length)
+      (let [killers (drop killer-len trail)
+            killer-rs (drop killer-len (steps r 0 trail-length))
             colliding (keep (fn [[k kr]]
                               (when (collision? player (assoc k :r kr)) true))
                             (map vector
@@ -180,7 +180,7 @@
   (js/window.removeEventListener "keydown" kd-hook false)
   (js/window.removeEventListener "keyup" ku-hook false))
 
-(defn ^:export init []
+(defn init []
   (hook-pressed-keys db)
   (game-loop))
 
