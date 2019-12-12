@@ -109,15 +109,8 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (def code->key {32 :space
-                68 :right
-                65 :left
-                87 :up
-                83 :down ;;wasd
-                39 :right
-                37 :left
-                38 :up
-                40 :down ;; arrows
-                })
+                68 :right 65 :left 87 :up 83 :down
+                39 :right 37 :left 38 :up 40 :down})
 
 (defn handle-key [edit-fn event]
   (.preventDefault event)

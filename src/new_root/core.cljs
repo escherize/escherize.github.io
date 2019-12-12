@@ -3,43 +3,37 @@
    [reagent.core :as reagent :refer [atom]]
    [reitit.frontend :as rfe]
    [reitit.frontend.easy :as rfee]
-   [new-root.paint-snake.core :as ps]
-   [new-root.paint-snake-two.core :as ps-two]))
+   [new-root.paint-snake-two.core :as ps-two]
+   [new-root.mindustry :as mind]))
 
-
-
-(def post-3
-  {:title "Game 2. Adding goals and a way to die"
-   :preview (fn []
-              [:div
-               [:div "This is some further work on the "
-                [:a {:href (rfee/href ::post {:id 2})} "game"]
-                " I'm working on"]
-               [:div "It's now still possible to die, there are green apples for the player to eat, and you can see your score."]])
-   :content ps-two/view})
-
-(def post-2
-  {:title "Game 1. Getting started"
-   :preview (fn []
-              [:div "This is a "
-               [:a {:href (rfee/href ::post {:id 1})} "game"]
-               " I'm getting started on."])
-   :content ps/view})
-
-(def post-0
-  {:title "Hello World"
-   :preview (fn []
-              [:div
-               [:p "Welcome to my blog!"]
-               [:p "It's built as a single page app using
+(def posts [{:title "Hello World"
+             :preview (fn []
+                        [:div
+                         [:p "Welcome to my blog!"]
+                         [:p "It's built as a single page app using
                Clojurescript and reagent, which means the entire thing is
                completely ~programmable~."]])
-   :content (fn []
-              [:div
-               [:h1 "I'm here, and im post 0."]
-               [:p "Here's " [:a {:href (rfee/href ::post {:id 0})} "post 1"] "."]])})
+             :content (fn []
+                        [:div
+                         [:h1 "I'm here, and im post 0."]
+                         [:p "Here's " [:a {:href (rfee/href ::post {:id 0})} "post 1"] "."]])}
 
-(def posts [post-0 post-2 post-3])
+            {:title "Adding goals and a way to die"
+             :preview (fn []
+                        [:div
+                         [:div "This is some further work on the "
+                          [:a {:href (rfee/href ::post {:id 2})} "game"]
+                          " I'm working on"]
+                         [:div "It's now still possible to die, there
+                         are green apples for the player to eat, and
+                         you can see your score."]])
+             :content ps-two/view}
+
+            {:title "Force Directed Graph"
+             :preview (fn [] [:div
+                              [:div "A slick updatable force directed graph"]
+                              [:a {:href (rfee/href ::post {:id 2})} "see it"]])
+             :content mind/view}])
 
 ;; define your app data so that it doesn't get over-written on reload
 
@@ -68,7 +62,7 @@
                         :margin "20px"}}
      [:h3.small {:style {:color "#d24c53"}} title]
      [:div.row (cond preview [preview]
-                     content (content)
+                     content [content]
                      :else nil)]]))
 
 (defn home [_]
@@ -91,7 +85,7 @@
         [:p [:span "[" [:a {:href (rfee/href ::home)} "Home"] "]"]]
         [:h1 (:title post)]]
        [:hr]
-       ((:content (get posts (js/parseInt id))))])
+       [(:content (get posts (js/parseInt id)))]])
     [:pre (pr-str match)]))
 
 (def routes
@@ -122,7 +116,7 @@
    (fn [m] (swap! app-state assoc :match m))
    ;; set to false to enable HistoryAPI
    {:use-fragment true})
-  (ps/init)
+  ;;(ps/init)
   (ps-two/init)
   (start))
 
