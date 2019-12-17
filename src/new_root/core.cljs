@@ -6,71 +6,97 @@
    [new-root.paint-snake-two.core :as ps-two]
    [new-root.mindustry :as mind]))
 
-(def posts [{:title "Hello World"
-             :preview (fn []
-                        [:div
-                         [:p "Welcome to my blog!"]
-                         [:p "It's built as a single page app using
-               Clojurescript and reagent, which means the entire thing is
-               completely ~programmable~."]])
-             :content (fn []
-                        [:div
-                         [:h1 "I'm here, and im post 0."]
-                         [:p "Here's " [:a {:href (rfee/href ::post {:id 0})} "post 1"] "."]])}
+(defonce app-state (atom {:thingies 1}))
 
-            {:title "Adding goals and a way to die"
-             :preview (fn []
-                        [:div
-                         [:div "This is some further work on the "
-                          [:a {:href (rfee/href ::post {:id 2})} "game"]
-                          " I'm working on"]
-                         [:div "It's now still possible to die, there
+(defn link [id text]
+  [:a {:href (rfee/href ::post {:id id})} text])
+
+(def post-0
+  {:id 0
+   :title "Hello World"
+   :preview (fn []
+              [:div
+               [:p "Welcome to my blog!"]
+               [:p "It's built as a single page app using
+               Clojurescript and reagent, which means the entire thing is
+               completely programmable. Visit my contents " (link 0 "here.")]
+               [:button
+                {:style {:cursor :pointer}
+                 :on-click (fn [] (swap! app-state update :thingies #(int (inc (* 1.5 %)))))}
+                "Click here to see stuff happen"]])
+   :content (fn []
+              [:div
+               [:h1 "I'm here, and im post 0."]
+               [:p "Here's "
+                [:a {:href (rfee/href ::post {:id 1})} "Post 1"] "."]
+               [:p "Its a game I'm working on!"]])})
+(def post-1
+  {:id 1
+   :title "Adding goals and a way to die"
+   :preview (fn []
+              [:div
+               [:div "This is some further work on the "
+                [:a {:href (rfee/href ::post {:id 1})} "game"]
+                " I'm working on"]
+               [:div "It's now still possible to die, there
                          are green apples for the player to eat, and
                          you can see your score."]])
-             :content ps-two/view}
+   :content ps-two/view})
 
-            {:title "Force Directed Graph"
-             :preview (fn [] [:div
-                              [:div "A slick updatable force directed graph"]
-                              [:a {:href (rfee/href ::post {:id 2})} "see it"]])
-             :content mind/view}])
+(def post-2
+  {:id 2
+   :title "Force Directed Graph"
+   :preview (fn [] [:div
+                    [:div "A slick updatable force directed graph"]
+                    [:a {:href (rfee/href ::post {:id 2})} "see it"]])
+   :content mind/view})
 
-;; define your app data so that it doesn't get over-written on reload
-
-(defonce app-state (atom {}))
+(def posts
+  {0 post-0
+   1 post-1
+   2 post-2})
 
 (defn nav []
   [:div.nav
-   [:span
-    [:span [:a {:href (rfee/href ::home)} "Home"]]
-    " | "
-    [:span [:a {:href (rfee/href ::projects)} "Projects"]]
-    " | "
-    [:span [:a {:href (rfee/href ::post {:id (dec (count posts))})} "Last Post"]]]])
+   (into
+    [:span
+     [:span [:a {:href (rfee/href ::home)} "Home"]]
+     " | "
+     [:span [:a {:href (rfee/href ::projects)} "Projects"]]
+     " | "
+     [:span [:a {:href (rfee/href ::post {:id (dec (count posts))})} "Last Post"]]]
+    (repeat (:thingies @app-state) "  |  "))])
 
 (defn blog [page]
-  [:div.container
-   [:hr]
-   [:div.row [nav]]
-   [:hr]
-   [:div.row page]])
+  (into
+   [:div.container
+    (into [:div] (repeat (:thingies @app-state) [:hr]))
+    [:div.row [nav]]
+    [:div.row page]]))
 
 (defn teaser [{:as _ :keys [title preview content release]}]
-  (when (not= :beta release)
-    [:div.card {:style {:border-radius "10px"
-                        :padding "10px"
-                        :margin "20px"}}
-     [:h3.small {:style {:color "#d24c53"}} title]
-     [:div.row (cond preview [preview]
-                     content [content]
-                     :else nil)]]))
+  [:div.card {:style {:border "10px #89c solid"
+                      :border-radius "20px"
+                      :padding "20px"
+                      :margin "20px 40px"}}
+   [:h3 title]
+   [:div.row (cond preview [preview]
+                   content [content]
+                   :else [:h2 title])]])
+
+(defn footer []
+  [:<>
+   [:hr]
+   [:p "Copyright Bryan Maass 2019"]])
 
 (defn home [_]
   [:div
    [:h1 "Escherize Zone"]
    [blog
     (into [:div]
-          (for [p (reverse posts)] (teaser p)))]])
+          (for [p (sort-by :id (vals posts))]
+            (teaser p)))]
+   [footer]])
 
 (defn projects []
   [:div

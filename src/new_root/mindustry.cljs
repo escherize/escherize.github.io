@@ -13,38 +13,42 @@
       (.force "link" (-> (d3/forceLink) (.id #(.-index %))))
       (.force "charge" (d3/forceManyBody))
       (.force "center" (d3/forceCenter (/ width 2) (/ height 2)))
-      (.on "tick" (fn tick []
-                    (when-let [s (:links-sel @d3-vars)]
-                      (rid3-> s
-                              {:x1 #(.. % -source -x)
-                               :y1 #(.. % -source -y)
-                               :x2 #(.. % -target -x)
-                               :y2 #(.. % -target -y)}))
-                    (when-let [s (:nodes-sel @d3-vars)]
-                      (rid3-> s
-                              {:cx #(.-x %)}
-                              {:cy #(.-y %)})))))))
+      (.on "tick"
+           (fn tick []
+             (when-let [s (:links-sel @d3-vars)]
+               (rid3-> s
+                       {:x1 #(.. % -source -x)
+                        :y1 #(.. % -source -y)
+                        :x2 #(.. % -target -x)
+                        :y2 #(.. % -target -y)}))
+             (when-let [s (:nodes-sel @d3-vars)]
+               (rid3-> s
+                       {:cx #(.-x %)}
+                       {:cy #(.-y %)})))))))
 
 (defn create-drag
   [sim]
   (-> (d3/drag)
-      (.on "start" (fn started
-                     [_d _ _]
-                     (if (-> js/d3 .-event .-active zero?)
-                       (doto sim
-                         (.alphaTarget 0.3)
-                         (.restart)))))
-      (.on "drag" (fn dragged
-                    [d _ _]
-                    (let [event (.-event js/d3)]
-                      (set! (.-fx d) (.-x event))
-                      (set! (.-fy d) (.-y event)))))
-      (.on "end" (fn ended
-                   [d _ _]
-                   (if (-> js/d3 .-event .-active zero?)
-                     (.alphaTarget sim 0))
-                   (set! (.-fx d) nil)
-                   (set! (.-fy d) nil)))))
+      (.on "start"
+           (fn started
+             [_d _ _]
+             (if (-> js/d3 .-event .-active zero?)
+               (doto sim
+                 (.alphaTarget 0.3)
+                 (.restart)))))
+      (.on "drag"
+           (fn dragged
+             [d _ _]
+             (let [event (.-event js/d3)]
+               (set! (.-fx d) (.-x event))
+               (set! (.-fy d) (.-y event)))))
+      (.on "end"
+           (fn ended
+             [d _ _]
+             (if (-> js/d3 .-event .-active zero?)
+               (.alphaTarget sim 0))
+             (set! (.-fx d) nil)
+             (set! (.-fy d) nil)))))
 
 (defn merge-nodes
   [orig new id]
@@ -123,11 +127,12 @@
       (update :links clj->js)))
 
 (defn miserables-rand-links []
-  (update miserables :links #(->> % shuffle (take 100))))
+  (update miserables :links #(->> % shuffle (take (rand-int (dec (count %)))))))
 
 (defn view
   []
   [:div
-   [:button {:on-click #(reset! app-state (miserables-rand-links))}
+   [:button
+    {:on-click #(reset! app-state (miserables-rand-links))}
     "Randomize links"]
    [viz (reagent/track prechew app-state)]])

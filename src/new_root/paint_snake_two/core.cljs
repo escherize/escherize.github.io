@@ -1,11 +1,13 @@
 (ns new-root.paint-snake-two.core
-  (:require [reagent.core :as reagent :refer [atom]]))
+  (:require
+   [new-root.util :as u]
+   [reagent.core :as reagent :refer [atom]]))
 
 (let [fps 60]
   (def update-interval (/ 1000 fps)))
 
-(def width 1000)
-(def height 800)
+(def width 800)
+(def height 600)
 
 (def initial-db {:pressed-keys #{}
                  :game-over? false
@@ -16,6 +18,7 @@
                           :r 20
                           :x 50
                           :y 50
+                          :d-bound 5
                           :length 0
                           :trail '()}})
 
@@ -55,38 +58,31 @@
                    :cy (:y player)}]
 
          ;; candy
-         [:circle {:fill "green"
+         [:circle {:fill "violet"
                    :r (:r candy)
                    :cx (:x candy)
                    :cy (:y candy)}]]
 
         ;;lines
-        (for [[[p1 p2] r i] (map vector
-                                 (partition 2 1 trail)
-                                 (steps (:r player) 0 length)
-                                 (range))]
+        (remove nil?
+                (for [[[p1 p2] r i] (map vector
+                                         (partition 2 1 trail)
+                                         (steps (/ (:r player) 2) 0 length)
+                                         (range))]
 
-          (let [{x1 :x y1 :y} p1
-                {x2 :x y2 :y} p2]
-            (if (> i killer-len)
-              [:path {:d (str "M " x1 " " y1 ", " x2 " " y2)
-                      :stroke-width (* 2 r)
-                      :stroke-linecap "round"
-                      :stroke "red"
-                      :fill "transparent"}]
-              [:path {:d (str "M " x1 " " y1 ", " x2 " " y2)
-                      :stroke-width (* 2 r)
-                      :stroke-linecap "round"
-                      :stroke "#1e150e"
-                      :fill "transparent"}])))))
-     [:p "thanks for playing @escherize"]
-     [:p "Open Source at "
-      [:a {:href "https://github.com/escherize/escherize.github.io/blob/master/src/new_root/paint_snake_two/core.cljs"} "github"]
-      "."]]))
+                  (let [{x1 :x y1 :y} p1
+                        {x2 :x y2 :y} p2]
+                    (when
+                      (> i killer-len)
+                      [:path {:d (str "M " x1 " " y1 ", " x2 " " y2)
+                              :stroke-width (* 2 r)
+                              :stroke-linecap "round"
+                              :stroke "red"
+                              :fill "transparent"}]))))))
+     (u/source-link ::hi)]))
 
 (def speed 1)
 (def damp 0.9)
-(def d-bound 6)
 (defn clamp [low mid high] (-> mid (max low) (min high)))
 
 (defn update-dd [pressed-keys d]
@@ -112,7 +108,8 @@
     (swap! db (fn [db]
                 (-> db
                     (update :candy merge new-candy)
-                    (update-in [:player :length] #(-> % (+ 5) (* 1.05) int)))))))
+                    (update-in [:player :length] #(-> % (+ 5) (* 1.05) int))
+                    (update-in [:player :d-bound] + 0.5))))))
 
 (defn update-candy [d]
   (let [{:keys [player candy]} @db]
@@ -121,7 +118,7 @@
 
 (defn update-player [d]
   (swap! db update :player
-         (fn [{:keys [dx x dy y length r] :as p}]
+         (fn [{:keys [dx x dy y length r d-bound] :as p}]
            (-> p
                (update :dx (fn [dd] (clamp (* -1 d-bound) (* damp dd) d-bound)))
                (update :dy (fn [dd] (clamp (* -1 d-bound) (* damp dd) d-bound)))
