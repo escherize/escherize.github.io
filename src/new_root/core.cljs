@@ -78,7 +78,6 @@
 (defn blog [page]
   (into
    [:div.container
-    (into [:div] (repeat (:thingies @app-state) [:hr]))
     [:div.row [nav]]
     [:div.row page]]))
 
@@ -102,7 +101,7 @@
    [:h1 "Escherize Zone"]
    [blog
     (into [:div]
-          (for [p (sort-by :id (vals posts))]
+          (for [p (reverse (sort-by :id (vals posts)))]
             (teaser p)))]
    [footer]])
 
