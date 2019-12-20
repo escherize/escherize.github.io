@@ -4,11 +4,12 @@
    [reitit.frontend :as rfe]
    [reitit.frontend.easy :as rfee]
    [new-root.paint-snake-two.core :as ps-two]
+   [new-root.paint :as paint]
    [new-root.mindustry :as mind]))
 
 (defonce app-state (atom {:thingies 1}))
 
-(defn link [id text]
+(defn link [text id]
   [:a {:href (rfee/href ::post {:id id})} text])
 
 (def post-0
@@ -19,7 +20,7 @@
                [:p "Welcome to my blog!"]
                [:p "It's built as a single page app using
                Clojurescript and reagent, which means the entire thing is
-               completely programmable. Visit my contents " (link 0 "here.")]
+               completely programmable. Visit my contents " (link "here." 0)]
                [:button
                 {:style {:cursor :pointer}
                  :on-click (fn [] (swap! app-state update :thingies #(int (inc (* 1.5 %)))))}
@@ -27,34 +28,41 @@
    :content (fn []
               [:div
                [:h1 "I'm here, and im post 0."]
-               [:p "Here's "
-                [:a {:href (rfee/href ::post {:id 1})} "Post 1"] "."]
+               [:p "Here's " (link "Post 1" 1) "."]
                [:p "Its a game I'm working on!"]])})
 (def post-1
   {:id 1
    :title "Adding goals and a way to die"
    :preview (fn []
               [:div
-               [:div "This is some further work on the "
-                [:a {:href (rfee/href ::post {:id 1})} "game"]
-                " I'm working on"]
-               [:div "It's now still possible to die, there
-                         are green apples for the player to eat, and
-                         you can see your score."]])
+               [:div "This is some further work on the " (link "game" 1) " I'm working on"]
+               [:div "It's possible to die, there are apples for the
+                         player to eat, and you can see your
+                         score."]])
    :content ps-two/view})
 
 (def post-2
   {:id 2
    :title "Force Directed Graph"
    :preview (fn [] [:div
-                    [:div "A slick updatable force directed graph"]
-                    [:a {:href (rfee/href ::post {:id 2})} "see it"]])
+                    [:div "An updatable d3 Force Directed Graph built with cljs. "]
+                    (link "see it" 2)])
    :content mind/view})
 
+(def post-3
+  {:id 3
+   :title "Paint fill game"
+   :preview (fn []
+              [:div
+               [:div "Inspired by a python game I found on my raspberry pi"]
+               [:div (link "Check it out" 3)]])
+   :content paint/view})
+
 (def posts
-  {0 post-0
-   1 post-1
-   2 post-2})
+  {0 post-0,
+   1 post-1,
+   2 post-2,
+   3 post-3})
 
 (defn nav []
   [:div.nav
@@ -108,8 +116,8 @@
     (let [post (get posts (js/parseInt id))]
       [:div
        [:div.row
-        [:p [:span "[" [:a {:href (rfee/href ::home)} "Home"] "]"]]
-        [:h1 (:title post)]]
+        [:div [:span "[" [:a {:href (rfee/href ::home)} "Home"] "]"]]
+        [:div [:h1 (:title post)]]]
        [:hr]
        [(:content (get posts (js/parseInt id)))]])
     [:pre (pr-str match)]))
