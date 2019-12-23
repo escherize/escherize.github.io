@@ -1,0 +1,8 @@
+{
+"version":3,
+"file":"goog.math.irect.js",
+"lineCount":8,
+"mappings":"AAmBAA,IAAAC,QAAA,CAAa,iBAAb,CAAA;AASA,eAAAD,IAAAE,KAAAC,MAAA,GAAkBC,QAAQ,EAAG;CAA7B;AAIA,sBAAAJ,IAAAE,KAAAC,MAAAE,UAAAC,KAAA;AAIA,sBAAAN,IAAAE,KAAAC,MAAAE,UAAAE,IAAA;AAIA,sBAAAP,IAAAE,KAAAC,MAAAE,UAAAG,MAAA;AAIA,sBAAAR,IAAAE,KAAAC,MAAAE,UAAAI,OAAA;;",
+"sources":["goog/math/irect.js"],
+"names":["goog","provide","math","IRect","goog.math.IRect","prototype","left","top","width","height"]
+}

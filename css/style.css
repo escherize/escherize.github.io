@@ -1,0 +1,10 @@
+/* some style */
+
+div.contain {
+    display: grid;
+}
+
+.nav {
+    color: #d24c53;
+    font-size: 20px;
+}
