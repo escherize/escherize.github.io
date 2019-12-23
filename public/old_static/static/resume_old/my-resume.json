@@ -1,0 +1,191 @@
+{
+  "basics": {
+    "name": "Bryan Maass",
+    "label": "Software Engineer",
+    "summary": "Before contracting as a Sr. Data Engineer, Bryan's previous venture was co-founding Fetchh.io, an on-demand logistics company which was sold to Zoom2U PTY LTD. in March 2016. While his work experience spans many areas of technology, he prefers to add business value by leveraging Open Source Software.",
+    "website": "http://escherize.com",
+    "phone": "+61 477 890 850",
+    "email": "bryan.maass@gmail.com",
+    "picture": "bryan.png",
+    "location": {
+      "address": "Bryan Maass 2707/10 Atchison St.",
+      "postalCode": "2065",
+      "city": "St. Leonards",
+      "countryCode": "AU",
+      "region": "NSW"
+    },
+    "profiles": [
+      {
+        "network": "Twitter",
+        "username": "escherize",
+        "url": "https://twitter.com/escherize"
+      },
+      {
+        "network": "GitHub",
+        "username": "escherize",
+        "url": "https://github.com/escherize"
+      },
+      {
+        "network": "GitLab",
+        "username": "escherize",
+        "url": "https://gitlab.com/escherize"
+      }
+    ]
+  },
+  "work": [
+    {
+      "company": "ROKT",
+      "website": "https://ROKT.com",
+      "position": "Senior Data Engineer Contractor",
+      "startDate": "2016-05-01",
+      "endDate": "present",
+      "summary": "",
+      "highlights": [
+        "Mentored junior (and occasionally other senior) developers about Clojure best practices, style, and team culture",
+        "Implemented and maintained self-serve UI for Advertiser APIs which lead to 80% fewer API support requests",
+        "Taught multiple workshops ranging from Emacs to Higher Order Functions to Re-Frame",
+        "Championed the introduction of a new ClojureScript frontend framework (Re-frame)"
+      ]
+    },
+    {
+      "company": "Fetchh.io",
+      "website": "https://Fetchh.io",
+      "position": "Technical Co-Founder",
+      "startDate": "2015-03-01",
+      "endDate": "2016-04-01",
+      "summary": "Fetchh is an on-demand logistics service and the easiest way to pack and post items.",
+      "highlights": [
+        "Conceptualized, designed, developed, and deployed entire SPA, Clojure server, and Postgresql infrastructure",
+        "Built an analytics platform to measure user behavior (sql queries + Google Analytics + Intercom.io)",
+        "Programatically registered 1000+ parcel shipments with logistics carriers who would not provide API Keys via reverse engineering",
+        "Architected a system to track parcels and automatically inform customers about the status of 1000+ items",
+        "Sent 2,500 highly customized marketing materials through Etsy's in-app messaging protocol",
+        "Pitched Fetchh value proposition to persuade V.C. firms to commit $250k+ investment"
+      ]
+    },
+    {
+      "company": "Staples Inc. (Staples SparX)",
+      "website": "https://Staples.com",
+      "position": "Software Engineer",
+      "startDate": "2014-03-01",
+      "endDate": "2015-02-15",
+      "summary": "Staples SparX (previously Runa Inc.) is an applied machine-learning branch of Staples Inc.",
+      "highlights": [
+        "Promoted to lead developer for the SparX reporting platform",
+        "Implemented key features of a simulation testing framework for SparX's A/B testing platform",
+        "Gained experience from working with 15 other Clojurians teaching and learning best practices"
+      ]
+    },
+    {
+      "company": "Oxygen Cloud Inc.",
+      "website": "https://oxygencloud.com",
+      "position": "Software Engineer",
+      "startDate": "2013-08-20",
+      "endDate": "2014-02-01",
+      "summary": "Dropbox as a commercial application, behind your firewall.",
+      "highlights": [
+        "Engineered a compatibility layer which linked ftp into the Oxygen Cloud file system",
+        "Mentored 3 new team-mates to successfully build compatibility layers for WebDAV, SFTP, and Samba"
+      ]
+    },
+    {
+      "company": "Livefyre Inc.",
+      "website": "https://livefyre.com",
+      "position": "Software Engineering Intern",
+      "startDate": "2013-04-01",
+      "endDate": "2013-08-15",
+      "summary": "Livefyre is an online engagement platform, aka a fully featured comment section as a service",
+      "highlights": [
+        "Wrote HTML, JS, and CSS to implement the 'featured content' feature, giving admins the ability to _pin_ interesting items"
+      ]
+    },
+    {
+      "company": "FactSet Inc.",
+      "website": "https://FactSet.com",
+      "position": "Software Engineering Intern",
+      "startDate": "2012-05-01",
+      "endDate": "2012-08-15",
+      "summary": "Project to create a GUI explorer to investigate the occasionally corrupt on-site cache used for the product",
+      "highlights": []
+    }
+  ],
+  "education": [
+    {
+      "institution": "University of California at Davis",
+      "startDate": "2009-06-01",
+      "endDate": "2013-03-01"
+    }
+  ],
+  "skills": [
+    {
+      "name": "Backend Development",
+      "level": "Master",
+      "keywords": [
+        "Clojure,",
+        "Postgres,",
+        "RethinkDB,",
+        "lein,",
+        "boot,",
+        "Ubuntu,",
+        "nginx,",
+        "Bash,",
+        "zsh,",
+        "oh-my-zsh,",
+        "shell,",
+        "SSL,",
+        "ring,",
+        "prismatic/schema",
+        "hiccup"
+      ]
+    },
+    {
+      "name": "Frontend Development",
+      "level": "Advanced",
+      "keywords": [
+        "ClojureScript,",
+        "Reagent,",
+        "Re-Frame,",
+        "Semantic UI,",
+        "HTML,",
+        "CSS,",
+        "JS,",
+        "boot-cljs,",
+        "Figwheel,",
+        "S3"
+      ]
+    },
+    {
+      "name": "Dev Ops",
+      "level": "Advanced",
+      "keywords": [
+        "Ubuntu,",
+        "ssh,",
+        "lein,",
+        "nrepl,",
+        "boot,",
+        "rsync,",
+        "bash"
+      ]
+    },
+    {
+      "name": "Emacs",
+      "level": "Master",
+      "keywords": [
+        "magit,",
+        "cider,",
+        "org-mode,",
+        "paredit,",
+        "projectile,",
+        "helm"
+      ]
+    }
+  ],
+  "interests": [],
+  "references": [
+    {
+      "name": "Will Jensen",
+      "reference": "My time working with Bryan to build, grow, and sell Fetchh has given me great insight into his abilities as a leader and thinker. Bryan has an ability to develop lean strategies that develop and grow products fast. His ability to iterate makes him an asset to any company and I would jump at the opportunity to work with him again."
+    }
+  ],
+  "languages": []
+}
