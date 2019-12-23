@@ -1,0 +1,17 @@
+.gray{
+  color: #888;
+}
+
+.center-text{
+  text-align: center;
+}
+
+#green-outline{
+  border: 2px green dashed;
+  text-align: right;
+}
+
+.rounded{
+  border-radius: 40px;
+  padding: 20px;
+}
