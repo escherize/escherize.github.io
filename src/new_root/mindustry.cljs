@@ -126,12 +126,30 @@
       (update :nodes clj->js)
       (update :links clj->js)))
 
+(defn rand-str [] (apply str (take 3 (shuffle "qwertyuioplkjhgfdsazxcvbnm"))))
+
+(defn rand-nodes [& [n]]
+  (mapv #(hash-map :name (str %) :group 1) (range 1 100)))
+
+(defn rand-links [nodes & [n]]
+  (let [idxs (if n
+               (take n (cycle (range (count nodes))))
+               (range (count nodes)))]
+    (map
+     (fn [idx1 idx2]
+       (hash-map :source idx1 :target idx2 :value (inc (rand-int 5))))
+     idxs
+     (map (fn [] (rand-nth idxs)) (range)))))
+
 (defn miserables-rand-links []
-  (update miserables :links #(->> % shuffle (take (rand-int (dec (count %)))))))
+  (let [nodes (rand-nodes 5)
+        links (rand-links nodes 1000)]
+    {:nodes nodes :links links}))
 
 (defn view
   []
   [:div
+   [:pre (pr-str @app-state)]
    [:button
     {:on-click #(reset! app-state (miserables-rand-links))}
     "Randomize links"]
