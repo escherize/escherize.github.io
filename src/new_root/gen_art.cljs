@@ -66,24 +66,34 @@
 (defonce running? (r/atom false))
 
 (defn view []
-  [:div
+  [:div {:style {:width "800px" :margin "auto"}}
    [:h3 "Circles Demo"]
    [:div>button
     {:on-click #(swap! running? not)}
     (if @running? "stop" "start")]
    (when @running? [canvas])
-   [:h3 "Current Pallet " (pr-str @pallet-title)]
-   (for [[title pallet] pallets]
-     [:div {:style {:margin 20
-                    :cursor :pointer
-                    :border-radius "3px"
-                    :border (if (= title @pallet-title) "5px black solid" "none")}
-            :on-click #(reset! pallet-title title)}
-      (name title) " => "
-      (for [[description color] pallet]
-        [:<> [:span {:style {:background-color color
-                             :padding 5
-                             :margin 2
-                             :width "10px"
-                             :height "10px"}}
-              description]])])])
+   [:h3 "Select a Pallet"]
+   (doall
+    (for [[title pallet] pallets]
+      [:div {:key title
+             :style (merge {:margin 10
+                            :background-color "#fafaff"
+                            :cursor :pointer
+                            :border-radius "10px"}
+                           (if (= title @pallet-title)
+                             {:border "3px black solid"
+                              :padding "7px"}
+                             {:padding "10px"}))
+             :on-click #(reset! pallet-title title)}
+       [:span {:style {:font-size "20px"}}(name title)]
+       [:br]
+       (doall
+        (for [[description color] pallet]
+          [:<> {:key color}
+           [:span {:style {:background-color color
+                           :padding 5
+                           :white-space "nowrap"
+                           :margin 2
+                           :width "10px"
+                           :height "10px"}}
+            description]]))]))])
