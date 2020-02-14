@@ -13,7 +13,7 @@ goog.string.internal.startsWith = function(str, prefix) {
  * @return {boolean}
  */
 goog.string.internal.endsWith = function(str, suffix) {
-  var l = str.length - suffix.length;
+  /** @const */ var l = str.length - suffix.length;
   return l >= 0 && str.indexOf(suffix, l) == l;
 };
 /**
@@ -62,8 +62,8 @@ goog.string.internal.trim = goog.TRUSTED_SITE && String.prototype.trim ? functio
  * @return {number}
  */
 goog.string.internal.caseInsensitiveCompare = function(str1, str2) {
-  var test1 = String(str1).toLowerCase();
-  var test2 = String(str2).toLowerCase();
+  /** @const */ var test1 = String(str1).toLowerCase();
+  /** @const */ var test2 = String(str2).toLowerCase();
   if (test1 < test2) {
     return -1;
   } else {
@@ -154,20 +154,20 @@ goog.string.internal.caseInsensitiveContains = function(str, subString) {
  */
 goog.string.internal.compareVersions = function(version1, version2) {
   var order = 0;
-  var v1Subs = goog.string.internal.trim(String(version1)).split(".");
-  var v2Subs = goog.string.internal.trim(String(version2)).split(".");
-  var subCount = Math.max(v1Subs.length, v2Subs.length);
+  /** @const */ var v1Subs = goog.string.internal.trim(String(version1)).split(".");
+  /** @const */ var v2Subs = goog.string.internal.trim(String(version2)).split(".");
+  /** @const */ var subCount = Math.max(v1Subs.length, v2Subs.length);
   for (var subIdx = 0; order == 0 && subIdx < subCount; subIdx++) {
     var v1Sub = v1Subs[subIdx] || "";
     var v2Sub = v2Subs[subIdx] || "";
     do {
-      var v1Comp = /(\d*)(\D*)(.*)/.exec(v1Sub) || ["", "", "", ""];
-      var v2Comp = /(\d*)(\D*)(.*)/.exec(v2Sub) || ["", "", "", ""];
+      /** @const */ var v1Comp = /(\d*)(\D*)(.*)/.exec(v1Sub) || ["", "", "", ""];
+      /** @const */ var v2Comp = /(\d*)(\D*)(.*)/.exec(v2Sub) || ["", "", "", ""];
       if (v1Comp[0].length == 0 && v2Comp[0].length == 0) {
         break;
       }
-      var v1CompNum = v1Comp[1].length == 0 ? 0 : parseInt(v1Comp[1], 10);
-      var v2CompNum = v2Comp[1].length == 0 ? 0 : parseInt(v2Comp[1], 10);
+      /** @const */ var v1CompNum = v1Comp[1].length == 0 ? 0 : parseInt(v1Comp[1], 10);
+      /** @const */ var v2CompNum = v2Comp[1].length == 0 ? 0 : parseInt(v2Comp[1], 10);
       order = goog.string.internal.compareElements_(v1CompNum, v2CompNum) || goog.string.internal.compareElements_(v1Comp[2].length == 0, v2Comp[2].length == 0) || goog.string.internal.compareElements_(v1Comp[2], v2Comp[2]);
       v1Sub = v1Comp[3];
       v2Sub = v2Comp[3];

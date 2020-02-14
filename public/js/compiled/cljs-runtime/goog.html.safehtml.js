@@ -8,6 +8,7 @@ goog.require("goog.html.SafeStyle");
 goog.require("goog.html.SafeStyleSheet");
 goog.require("goog.html.SafeUrl");
 goog.require("goog.html.TrustedResourceUrl");
+goog.require("goog.html.trustedtypes");
 goog.require("goog.i18n.bidi.Dir");
 goog.require("goog.i18n.bidi.DirectionalString");
 goog.require("goog.labs.userAgent.browser");
@@ -23,17 +24,19 @@ goog.require("goog.string.internal");
  * @implements {goog.string.TypedString}
  */
 goog.html.SafeHtml = function() {
-  /** @private @type {string} */ this.privateDoNotAccessOrElseSafeHtmlWrappedValue_ = "";
+  /** @private @type {(!TrustedHTML|string)} */ this.privateDoNotAccessOrElseSafeHtmlWrappedValue_ = "";
   /** @private @const @type {!Object} */ this.SAFE_HTML_TYPE_MARKER_GOOG_HTML_SECURITY_PRIVATE_ = goog.html.SafeHtml.TYPE_MARKER_GOOG_HTML_SECURITY_PRIVATE_;
   /** @private @type {?goog.i18n.bidi.Dir} */ this.dir_ = null;
 };
+/** @define {boolean} */ goog.html.SafeHtml.ENABLE_ERROR_MESSAGES = goog.define("goog.html.SafeHtml.ENABLE_ERROR_MESSAGES", goog.DEBUG);
+/** @define {boolean} */ goog.html.SafeHtml.SUPPORT_STYLE_ATTRIBUTE = goog.define("goog.html.SafeHtml.SUPPORT_STYLE_ATTRIBUTE", true);
 /** @const @override */ goog.html.SafeHtml.prototype.implementsGoogI18nBidiDirectionalString = true;
 /** @override */ goog.html.SafeHtml.prototype.getDirection = function() {
   return this.dir_;
 };
 /** @const @override */ goog.html.SafeHtml.prototype.implementsGoogStringTypedString = true;
 /** @override */ goog.html.SafeHtml.prototype.getTypedStringValue = function() {
-  return this.privateDoNotAccessOrElseSafeHtmlWrappedValue_;
+  return this.privateDoNotAccessOrElseSafeHtmlWrappedValue_.toString();
 };
 if (goog.DEBUG) {
   /** @override */ goog.html.SafeHtml.prototype.toString = function() {
@@ -45,6 +48,13 @@ if (goog.DEBUG) {
  * @return {string}
  */
 goog.html.SafeHtml.unwrap = function(safeHtml) {
+  return goog.html.SafeHtml.unwrapTrustedHTML(safeHtml).toString();
+};
+/**
+ * @param {!goog.html.SafeHtml} safeHtml
+ * @return {(!TrustedHTML|string)}
+ */
+goog.html.SafeHtml.unwrapTrustedHTML = function(safeHtml) {
   if (safeHtml instanceof goog.html.SafeHtml && safeHtml.constructor === goog.html.SafeHtml && safeHtml.SAFE_HTML_TYPE_MARKER_GOOG_HTML_SECURITY_PRIVATE_ === goog.html.SafeHtml.TYPE_MARKER_GOOG_HTML_SECURITY_PRIVATE_) {
     return safeHtml.privateDoNotAccessOrElseSafeHtmlWrappedValue_;
   } else {
@@ -124,10 +134,10 @@ goog.html.SafeHtml.create = function(tagName, opt_attributes, opt_content) {
  */
 goog.html.SafeHtml.verifyTagName = function(tagName) {
   if (!goog.html.SafeHtml.VALID_NAMES_IN_TAG_.test(tagName)) {
-    throw new Error("Invalid tag name \x3c" + tagName + "\x3e.");
+    throw new Error(goog.html.SafeHtml.ENABLE_ERROR_MESSAGES ? "Invalid tag name \x3c" + tagName + "\x3e." : "");
   }
   if (tagName.toUpperCase() in goog.html.SafeHtml.NOT_ALLOWED_TAG_NAMES_) {
-    throw new Error("Tag name \x3c" + tagName + "\x3e is not allowed for SafeHtml.");
+    throw new Error(goog.html.SafeHtml.ENABLE_ERROR_MESSAGES ? "Tag name \x3c" + tagName + "\x3e is not allowed for SafeHtml." : "");
   }
 };
 /**
@@ -159,7 +169,7 @@ goog.html.SafeHtml.createIframe = function(opt_src, opt_srcdoc, opt_attributes, 
  */
 goog.html.SafeHtml.createSandboxIframe = function(opt_src, opt_srcdoc, opt_attributes, opt_content) {
   if (!goog.html.SafeHtml.canUseSandboxIframe()) {
-    throw new Error("The browser does not support sandboxed iframes.");
+    throw new Error(goog.html.SafeHtml.ENABLE_ERROR_MESSAGES ? "The browser does not support sandboxed iframes." : "");
   }
   var fixedAttributes = {};
   if (opt_src) {
@@ -201,7 +211,7 @@ goog.html.SafeHtml.createScript = function(script, opt_attributes) {
   for (var attr in opt_attributes) {
     var attrLower = attr.toLowerCase();
     if (attrLower == "language" || attrLower == "src" || attrLower == "text" || attrLower == "type") {
-      throw new Error('Cannot set "' + attrLower + '" attribute');
+      throw new Error(goog.html.SafeHtml.ENABLE_ERROR_MESSAGES ? 'Cannot set "' + attrLower + '" attribute' : "");
     }
   }
   var content = "";
@@ -258,10 +268,14 @@ goog.html.SafeHtml.getAttrNameAndValue_ = function(tagName, name, value) {
     value = goog.string.Const.unwrap(value);
   } else {
     if (name.toLowerCase() == "style") {
-      value = goog.html.SafeHtml.getStyleValue_(value);
+      if (goog.html.SafeHtml.SUPPORT_STYLE_ATTRIBUTE) {
+        value = goog.html.SafeHtml.getStyleValue_(value);
+      } else {
+        throw new Error(goog.html.SafeHtml.ENABLE_ERROR_MESSAGES ? 'Attribute "style" not supported.' : "");
+      }
     } else {
       if (/^on/i.test(name)) {
-        throw new Error('Attribute "' + name + '" requires goog.string.Const value, "' + value + '" given.');
+        throw new Error(goog.html.SafeHtml.ENABLE_ERROR_MESSAGES ? 'Attribute "' + name + '" requires goog.string.Const value, "' + value + '" given.' : "");
       } else {
         if (name.toLowerCase() in goog.html.SafeHtml.URL_ATTRIBUTES_) {
           if (value instanceof goog.html.TrustedResourceUrl) {
@@ -270,10 +284,10 @@ goog.html.SafeHtml.getAttrNameAndValue_ = function(tagName, name, value) {
             if (value instanceof goog.html.SafeUrl) {
               value = goog.html.SafeUrl.unwrap(value);
             } else {
-              if (goog.isString(value)) {
+              if (typeof value === "string") {
                 value = goog.html.SafeUrl.sanitize(value).getTypedStringValue();
               } else {
-                throw new Error('Attribute "' + name + '" on tag "' + tagName + '" requires goog.html.SafeUrl, goog.string.Const, or string,' + ' value "' + value + '" given.');
+                throw new Error(goog.html.SafeHtml.ENABLE_ERROR_MESSAGES ? 'Attribute "' + name + '" on tag "' + tagName + '" requires goog.html.SafeUrl, goog.string.Const, or' + ' string, value "' + value + '" given.' : "");
               }
             }
           }
@@ -284,7 +298,7 @@ goog.html.SafeHtml.getAttrNameAndValue_ = function(tagName, name, value) {
   if (value.implementsGoogStringTypedString) {
     value = /** @type {!goog.string.TypedString} */ (value).getTypedStringValue();
   }
-  goog.asserts.assert(goog.isString(value) || goog.isNumber(value), "String or number value expected, got " + typeof value + " with value: " + value);
+  goog.asserts.assert(typeof value === "string" || typeof value === "number", "String or number value expected, got " + typeof value + " with value: " + value);
   return name + '\x3d"' + goog.string.internal.htmlEscape(String(value)) + '"';
 };
 /**
@@ -295,7 +309,7 @@ goog.html.SafeHtml.getAttrNameAndValue_ = function(tagName, name, value) {
  */
 goog.html.SafeHtml.getStyleValue_ = function(value) {
   if (!goog.isObject(value)) {
-    throw new Error('The "style" attribute requires goog.html.SafeStyle or map ' + "of style properties, " + typeof value + " given: " + value);
+    throw new Error(goog.html.SafeHtml.ENABLE_ERROR_MESSAGES ? 'The "style" attribute requires goog.html.SafeStyle or map ' + "of style properties, " + typeof value + " given: " + value : "");
   }
   if (!(value instanceof goog.html.SafeStyle)) {
     value = goog.html.SafeStyle.create(value);
@@ -315,12 +329,14 @@ goog.html.SafeHtml.createWithDir = function(dir, tagName, opt_attributes, opt_co
   return html;
 };
 /**
- * @param {...(!goog.html.SafeHtml.TextOrHtml_|!Array<!goog.html.SafeHtml.TextOrHtml_>)} var_args
+ * @param {!goog.html.SafeHtml.TextOrHtml_} separator
+ * @param {!Array<(!goog.html.SafeHtml.TextOrHtml_|!Array<!goog.html.SafeHtml.TextOrHtml_>)>} parts
  * @return {!goog.html.SafeHtml}
  */
-goog.html.SafeHtml.concat = function(var_args) {
-  var dir = goog.i18n.bidi.Dir.NEUTRAL;
-  var content = "";
+goog.html.SafeHtml.join = function(separator, parts) {
+  var separatorHtml = goog.html.SafeHtml.htmlEscape(separator);
+  var dir = separatorHtml.getDirection();
+  var content = [];
   /**
    * @param {(!goog.html.SafeHtml.TextOrHtml_|!Array<!goog.html.SafeHtml.TextOrHtml_>)} argument
    */
@@ -329,7 +345,7 @@ goog.html.SafeHtml.concat = function(var_args) {
       goog.array.forEach(argument, addArgument);
     } else {
       var html = goog.html.SafeHtml.htmlEscape(argument);
-      content += goog.html.SafeHtml.unwrap(html);
+      content.push(goog.html.SafeHtml.unwrap(html));
       var htmlDir = html.getDirection();
       if (dir == goog.i18n.bidi.Dir.NEUTRAL) {
         dir = htmlDir;
@@ -340,8 +356,15 @@ goog.html.SafeHtml.concat = function(var_args) {
       }
     }
   };
-  goog.array.forEach(arguments, addArgument);
-  return goog.html.SafeHtml.createSafeHtmlSecurityPrivateDoNotAccessOrElse(content, dir);
+  goog.array.forEach(parts, addArgument);
+  return goog.html.SafeHtml.createSafeHtmlSecurityPrivateDoNotAccessOrElse(content.join(goog.html.SafeHtml.unwrap(separatorHtml)), dir);
+};
+/**
+ * @param {...(!goog.html.SafeHtml.TextOrHtml_|!Array<!goog.html.SafeHtml.TextOrHtml_>)} var_args
+ * @return {!goog.html.SafeHtml}
+ */
+goog.html.SafeHtml.concat = function(var_args) {
+  return goog.html.SafeHtml.join(goog.html.SafeHtml.EMPTY, Array.prototype.slice.call(arguments));
 };
 /**
  * @param {!goog.i18n.bidi.Dir} dir
@@ -370,7 +393,7 @@ goog.html.SafeHtml.createSafeHtmlSecurityPrivateDoNotAccessOrElse = function(htm
  * @return {!goog.html.SafeHtml}
  */
 goog.html.SafeHtml.prototype.initSecurityPrivateDoNotAccessOrElse_ = function(html, dir) {
-  this.privateDoNotAccessOrElseSafeHtmlWrappedValue_ = html;
+  this.privateDoNotAccessOrElseSafeHtmlWrappedValue_ = goog.html.trustedtypes.PRIVATE_DO_NOT_ACCESS_OR_ELSE_POLICY ? goog.html.trustedtypes.PRIVATE_DO_NOT_ACCESS_OR_ELSE_POLICY.createHTML(html) : html;
   this.dir_ = dir;
   return this;
 };
@@ -387,7 +410,7 @@ goog.html.SafeHtml.createSafeHtmlTagSecurityPrivateDoNotAccessOrElse = function(
   var result = "\x3c" + tagName;
   result += goog.html.SafeHtml.stringifyAttributes(tagName, opt_attributes);
   var content = opt_content;
-  if (!goog.isDefAndNotNull(content)) {
+  if (content == null) {
     content = [];
   } else {
     if (!goog.isArray(content)) {
@@ -424,10 +447,10 @@ goog.html.SafeHtml.stringifyAttributes = function(tagName, opt_attributes) {
   if (opt_attributes) {
     for (var name in opt_attributes) {
       if (!goog.html.SafeHtml.VALID_NAMES_IN_TAG_.test(name)) {
-        throw new Error('Invalid attribute name "' + name + '".');
+        throw new Error(goog.html.SafeHtml.ENABLE_ERROR_MESSAGES ? 'Invalid attribute name "' + name + '".' : "");
       }
       var value = opt_attributes[name];
-      if (!goog.isDefAndNotNull(value)) {
+      if (value == null) {
         continue;
       }
       result += " " + goog.html.SafeHtml.getAttrNameAndValue_(tagName, name, value);
@@ -454,15 +477,17 @@ goog.html.SafeHtml.combineAttributes = function(fixedAttributes, defaultAttribut
     goog.asserts.assert(name.toLowerCase() == name, "Must be lower case");
     combinedAttributes[name] = defaultAttributes[name];
   }
-  for (name in opt_attributes) {
-    var nameLower = name.toLowerCase();
-    if (nameLower in fixedAttributes) {
-      throw new Error('Cannot override "' + nameLower + '" attribute, got "' + name + '" with value "' + opt_attributes[name] + '"');
+  if (opt_attributes) {
+    for (name in opt_attributes) {
+      var nameLower = name.toLowerCase();
+      if (nameLower in fixedAttributes) {
+        throw new Error(goog.html.SafeHtml.ENABLE_ERROR_MESSAGES ? 'Cannot override "' + nameLower + '" attribute, got "' + name + '" with value "' + opt_attributes[name] + '"' : "");
+      }
+      if (nameLower in defaultAttributes) {
+        delete combinedAttributes[nameLower];
+      }
+      combinedAttributes[name] = opt_attributes[name];
     }
-    if (nameLower in defaultAttributes) {
-      delete combinedAttributes[nameLower];
-    }
-    combinedAttributes[name] = opt_attributes[name];
   }
   return combinedAttributes;
 };

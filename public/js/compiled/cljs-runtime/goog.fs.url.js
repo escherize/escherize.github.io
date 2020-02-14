@@ -18,7 +18,7 @@ goog.fs.url.revokeObjectUrl = function(url) {
  * @return {goog.fs.url.UrlObject_}
  */
 goog.fs.url.getUrlObject_ = function() {
-  var urlObject = goog.fs.url.findUrlObject_();
+  /** @const */ var urlObject = goog.fs.url.findUrlObject_();
   if (urlObject != null) {
     return urlObject;
   } else {
@@ -30,13 +30,13 @@ goog.fs.url.getUrlObject_ = function() {
  * @return {?goog.fs.url.UrlObject_}
  */
 goog.fs.url.findUrlObject_ = function() {
-  if (goog.isDef(goog.global.URL) && goog.isDef(goog.global.URL.createObjectURL)) {
+  if (goog.global.URL !== undefined && goog.global.URL.createObjectURL !== undefined) {
     return (/** @type {goog.fs.url.UrlObject_} */ (goog.global.URL));
   } else {
-    if (goog.isDef(goog.global.webkitURL) && goog.isDef(goog.global.webkitURL.createObjectURL)) {
+    if (goog.global.webkitURL !== undefined && goog.global.webkitURL.createObjectURL !== undefined) {
       return (/** @type {goog.fs.url.UrlObject_} */ (goog.global.webkitURL));
     } else {
-      if (goog.isDef(goog.global.createObjectURL)) {
+      if (goog.global.createObjectURL !== undefined) {
         return (/** @type {goog.fs.url.UrlObject_} */ (goog.global));
       } else {
         return null;

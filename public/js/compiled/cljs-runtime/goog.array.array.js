@@ -1,7 +1,7 @@
 goog.provide("goog.array");
 goog.require("goog.asserts");
-/** @define {boolean} */ goog.define("goog.NATIVE_ARRAY_PROTOTYPES", goog.TRUSTED_SITE);
-/** @define {boolean} */ goog.define("goog.array.ASSUME_NATIVE_FUNCTIONS", false);
+/** @define {boolean} */ goog.NATIVE_ARRAY_PROTOTYPES = goog.define("goog.NATIVE_ARRAY_PROTOTYPES", goog.TRUSTED_SITE);
+/** @define {boolean} */ goog.array.ASSUME_NATIVE_FUNCTIONS = goog.define("goog.array.ASSUME_NATIVE_FUNCTIONS", goog.FEATURESET_YEAR > 2012);
 /**
  * @param {(IArrayLike<T>|string)} array
  * @return {T}
@@ -28,8 +28,8 @@ goog.array.indexOf = goog.NATIVE_ARRAY_PROTOTYPES && (goog.array.ASSUME_NATIVE_F
   return Array.prototype.indexOf.call(arr, obj, opt_fromIndex);
 } : function(arr, obj, opt_fromIndex) {
   var fromIndex = opt_fromIndex == null ? 0 : opt_fromIndex < 0 ? Math.max(0, arr.length + opt_fromIndex) : opt_fromIndex;
-  if (goog.isString(arr)) {
-    if (!goog.isString(obj) || obj.length != 1) {
+  if (typeof arr === "string") {
+    if (typeof obj !== "string" || obj.length != 1) {
       return -1;
     }
     return arr.indexOf(obj, fromIndex);
@@ -57,8 +57,8 @@ goog.array.lastIndexOf = goog.NATIVE_ARRAY_PROTOTYPES && (goog.array.ASSUME_NATI
   if (fromIndex < 0) {
     fromIndex = Math.max(0, arr.length + fromIndex);
   }
-  if (goog.isString(arr)) {
-    if (!goog.isString(obj) || obj.length != 1) {
+  if (typeof arr === "string") {
+    if (typeof obj !== "string" || obj.length != 1) {
       return -1;
     }
     return arr.lastIndexOf(obj, fromIndex);
@@ -74,14 +74,15 @@ goog.array.lastIndexOf = goog.NATIVE_ARRAY_PROTOTYPES && (goog.array.ASSUME_NATI
  * @param {(IArrayLike<T>|string)} arr
  * @param {?function(this:S,T,number,?):?} f
  * @param {S=} opt_obj
- * @template T, S
+ * @template T
+ * @template S
  */
 goog.array.forEach = goog.NATIVE_ARRAY_PROTOTYPES && (goog.array.ASSUME_NATIVE_FUNCTIONS || Array.prototype.forEach) ? function(arr, f, opt_obj) {
   goog.asserts.assert(arr.length != null);
   Array.prototype.forEach.call(arr, f, opt_obj);
 } : function(arr, f, opt_obj) {
   var l = arr.length;
-  var arr2 = goog.isString(arr) ? arr.split("") : arr;
+  var arr2 = typeof arr === "string" ? arr.split("") : arr;
   for (var i = 0; i < l; i++) {
     if (i in arr2) {
       f.call(/** @type {?} */ (opt_obj), arr2[i], i, arr);
@@ -92,11 +93,12 @@ goog.array.forEach = goog.NATIVE_ARRAY_PROTOTYPES && (goog.array.ASSUME_NATIVE_F
  * @param {(IArrayLike<T>|string)} arr
  * @param {?function(this:S,T,number,?):?} f
  * @param {S=} opt_obj
- * @template T, S
+ * @template T
+ * @template S
  */
 goog.array.forEachRight = function(arr, f, opt_obj) {
   var l = arr.length;
-  var arr2 = goog.isString(arr) ? arr.split("") : arr;
+  var arr2 = typeof arr === "string" ? arr.split("") : arr;
   for (var i = l - 1; i >= 0; --i) {
     if (i in arr2) {
       f.call(/** @type {?} */ (opt_obj), arr2[i], i, arr);
@@ -108,7 +110,8 @@ goog.array.forEachRight = function(arr, f, opt_obj) {
  * @param {?function(this:S,T,number,?):boolean} f
  * @param {S=} opt_obj
  * @return {!Array<T>}
- * @template T, S
+ * @template T
+ * @template S
  */
 goog.array.filter = goog.NATIVE_ARRAY_PROTOTYPES && (goog.array.ASSUME_NATIVE_FUNCTIONS || Array.prototype.filter) ? function(arr, f, opt_obj) {
   goog.asserts.assert(arr.length != null);
@@ -117,7 +120,7 @@ goog.array.filter = goog.NATIVE_ARRAY_PROTOTYPES && (goog.array.ASSUME_NATIVE_FU
   var l = arr.length;
   var res = [];
   var resLength = 0;
-  var arr2 = goog.isString(arr) ? arr.split("") : arr;
+  var arr2 = typeof arr === "string" ? arr.split("") : arr;
   for (var i = 0; i < l; i++) {
     if (i in arr2) {
       var val = arr2[i];
@@ -133,7 +136,9 @@ goog.array.filter = goog.NATIVE_ARRAY_PROTOTYPES && (goog.array.ASSUME_NATIVE_FU
  * @param {function(this:THIS,VALUE,number,?):RESULT} f
  * @param {THIS=} opt_obj
  * @return {!Array<RESULT>}
- * @template THIS, VALUE, RESULT
+ * @template THIS
+ * @template VALUE
+ * @template RESULT
  */
 goog.array.map = goog.NATIVE_ARRAY_PROTOTYPES && (goog.array.ASSUME_NATIVE_FUNCTIONS || Array.prototype.map) ? function(arr, f, opt_obj) {
   goog.asserts.assert(arr.length != null);
@@ -141,7 +146,7 @@ goog.array.map = goog.NATIVE_ARRAY_PROTOTYPES && (goog.array.ASSUME_NATIVE_FUNCT
 } : function(arr, f, opt_obj) {
   var l = arr.length;
   var res = new Array(l);
-  var arr2 = goog.isString(arr) ? arr.split("") : arr;
+  var arr2 = typeof arr === "string" ? arr.split("") : arr;
   for (var i = 0; i < l; i++) {
     if (i in arr2) {
       res[i] = f.call(/** @type {?} */ (opt_obj), arr2[i], i, arr);
@@ -155,7 +160,9 @@ goog.array.map = goog.NATIVE_ARRAY_PROTOTYPES && (goog.array.ASSUME_NATIVE_FUNCT
  * @param {?} val
  * @param {S=} opt_obj
  * @return {R}
- * @template T, S, R
+ * @template T
+ * @template S
+ * @template R
  */
 goog.array.reduce = goog.NATIVE_ARRAY_PROTOTYPES && (goog.array.ASSUME_NATIVE_FUNCTIONS || Array.prototype.reduce) ? function(arr, f, val, opt_obj) {
   goog.asserts.assert(arr.length != null);
@@ -176,7 +183,9 @@ goog.array.reduce = goog.NATIVE_ARRAY_PROTOTYPES && (goog.array.ASSUME_NATIVE_FU
  * @param {?} val
  * @param {S=} opt_obj
  * @return {R}
- * @template T, S, R
+ * @template T
+ * @template S
+ * @template R
  */
 goog.array.reduceRight = goog.NATIVE_ARRAY_PROTOTYPES && (goog.array.ASSUME_NATIVE_FUNCTIONS || Array.prototype.reduceRight) ? function(arr, f, val, opt_obj) {
   goog.asserts.assert(arr.length != null);
@@ -197,14 +206,15 @@ goog.array.reduceRight = goog.NATIVE_ARRAY_PROTOTYPES && (goog.array.ASSUME_NATI
  * @param {?function(this:S,T,number,?):boolean} f
  * @param {S=} opt_obj
  * @return {boolean}
- * @template T, S
+ * @template T
+ * @template S
  */
 goog.array.some = goog.NATIVE_ARRAY_PROTOTYPES && (goog.array.ASSUME_NATIVE_FUNCTIONS || Array.prototype.some) ? function(arr, f, opt_obj) {
   goog.asserts.assert(arr.length != null);
   return Array.prototype.some.call(arr, f, opt_obj);
 } : function(arr, f, opt_obj) {
   var l = arr.length;
-  var arr2 = goog.isString(arr) ? arr.split("") : arr;
+  var arr2 = typeof arr === "string" ? arr.split("") : arr;
   for (var i = 0; i < l; i++) {
     if (i in arr2 && f.call(/** @type {?} */ (opt_obj), arr2[i], i, arr)) {
       return true;
@@ -217,14 +227,15 @@ goog.array.some = goog.NATIVE_ARRAY_PROTOTYPES && (goog.array.ASSUME_NATIVE_FUNC
  * @param {?function(this:S,T,number,?):boolean} f
  * @param {S=} opt_obj
  * @return {boolean}
- * @template T, S
+ * @template T
+ * @template S
  */
 goog.array.every = goog.NATIVE_ARRAY_PROTOTYPES && (goog.array.ASSUME_NATIVE_FUNCTIONS || Array.prototype.every) ? function(arr, f, opt_obj) {
   goog.asserts.assert(arr.length != null);
   return Array.prototype.every.call(arr, f, opt_obj);
 } : function(arr, f, opt_obj) {
   var l = arr.length;
-  var arr2 = goog.isString(arr) ? arr.split("") : arr;
+  var arr2 = typeof arr === "string" ? arr.split("") : arr;
   for (var i = 0; i < l; i++) {
     if (i in arr2 && !f.call(/** @type {?} */ (opt_obj), arr2[i], i, arr)) {
       return false;
@@ -237,7 +248,8 @@ goog.array.every = goog.NATIVE_ARRAY_PROTOTYPES && (goog.array.ASSUME_NATIVE_FUN
  * @param {function(this:S,T,number,?):boolean} f
  * @param {S=} opt_obj
  * @return {number}
- * @template T, S
+ * @template T
+ * @template S
  */
 goog.array.count = function(arr, f, opt_obj) {
   var count = 0;
@@ -253,22 +265,24 @@ goog.array.count = function(arr, f, opt_obj) {
  * @param {?function(this:S,T,number,?):boolean} f
  * @param {S=} opt_obj
  * @return {(T|null)}
- * @template T, S
+ * @template T
+ * @template S
  */
 goog.array.find = function(arr, f, opt_obj) {
   var i = goog.array.findIndex(arr, f, opt_obj);
-  return i < 0 ? null : goog.isString(arr) ? arr.charAt(i) : arr[i];
+  return i < 0 ? null : typeof arr === "string" ? arr.charAt(i) : arr[i];
 };
 /**
  * @param {(IArrayLike<T>|string)} arr
  * @param {?function(this:S,T,number,?):boolean} f
  * @param {S=} opt_obj
  * @return {number}
- * @template T, S
+ * @template T
+ * @template S
  */
 goog.array.findIndex = function(arr, f, opt_obj) {
   var l = arr.length;
-  var arr2 = goog.isString(arr) ? arr.split("") : arr;
+  var arr2 = typeof arr === "string" ? arr.split("") : arr;
   for (var i = 0; i < l; i++) {
     if (i in arr2 && f.call(/** @type {?} */ (opt_obj), arr2[i], i, arr)) {
       return i;
@@ -281,22 +295,24 @@ goog.array.findIndex = function(arr, f, opt_obj) {
  * @param {?function(this:S,T,number,?):boolean} f
  * @param {S=} opt_obj
  * @return {(T|null)}
- * @template T, S
+ * @template T
+ * @template S
  */
 goog.array.findRight = function(arr, f, opt_obj) {
   var i = goog.array.findIndexRight(arr, f, opt_obj);
-  return i < 0 ? null : goog.isString(arr) ? arr.charAt(i) : arr[i];
+  return i < 0 ? null : typeof arr === "string" ? arr.charAt(i) : arr[i];
 };
 /**
  * @param {(IArrayLike<T>|string)} arr
  * @param {?function(this:S,T,number,?):boolean} f
  * @param {S=} opt_obj
  * @return {number}
- * @template T, S
+ * @template T
+ * @template S
  */
 goog.array.findIndexRight = function(arr, f, opt_obj) {
   var l = arr.length;
-  var arr2 = goog.isString(arr) ? arr.split("") : arr;
+  var arr2 = typeof arr === "string" ? arr.split("") : arr;
   for (var i = l - 1; i >= 0; i--) {
     if (i in arr2 && f.call(/** @type {?} */ (opt_obj), arr2[i], i, arr)) {
       return i;
@@ -412,7 +428,8 @@ goog.array.removeAt = function(arr, i) {
  * @param {?function(this:S,T,number,?):boolean} f
  * @param {S=} opt_obj
  * @return {boolean}
- * @template T, S
+ * @template T
+ * @template S
  */
 goog.array.removeIf = function(arr, f, opt_obj) {
   var i = goog.array.findIndex(arr, f, opt_obj);
@@ -427,7 +444,8 @@ goog.array.removeIf = function(arr, f, opt_obj) {
  * @param {?function(this:S,T,number,?):boolean} f
  * @param {S=} opt_obj
  * @return {number}
- * @template T, S
+ * @template T
+ * @template S
  */
 goog.array.removeAllIf = function(arr, f, opt_obj) {
   var removedCount = 0;
@@ -552,7 +570,8 @@ goog.array.removeDuplicates = function(arr, opt_rv, opt_hashFn) {
  * @param {TARGET} target
  * @param {function(TARGET,VALUE):number=} opt_compareFn
  * @return {number}
- * @template TARGET, VALUE
+ * @template TARGET
+ * @template VALUE
  */
 goog.array.binarySearch = function(arr, target, opt_compareFn) {
   return goog.array.binarySearch_(arr, opt_compareFn || goog.array.defaultCompare, false, target);
@@ -562,7 +581,8 @@ goog.array.binarySearch = function(arr, target, opt_compareFn) {
  * @param {function(this:THIS,VALUE,number,?):number} evaluator
  * @param {THIS=} opt_obj
  * @return {number}
- * @template THIS, VALUE
+ * @template THIS
+ * @template VALUE
  */
 goog.array.binarySelect = function(arr, evaluator, opt_obj) {
   return goog.array.binarySearch_(arr, evaluator, true, undefined, opt_obj);
@@ -581,7 +601,7 @@ goog.array.binarySearch_ = function(arr, compareFn, isEvaluator, opt_target, opt
   var right = arr.length;
   var found;
   while (left < right) {
-    var middle = left + right >> 1;
+    var middle = left + (right - left >>> 1);
     var compareResult;
     if (isEvaluator) {
       compareResult = compareFn.call(opt_selfObj, arr[middle], middle, arr);
@@ -595,7 +615,7 @@ goog.array.binarySearch_ = function(arr, compareFn, isEvaluator, opt_target, opt
       found = !compareResult;
     }
   }
-  return found ? left : ~left;
+  return found ? left : -left - 1;
 };
 /**
  * @param {Array<T>} arr
@@ -628,7 +648,8 @@ goog.array.stableSort = function(arr, opt_compareFn) {
  * @param {Array<T>} arr
  * @param {function(T):K} keyFn
  * @param {?function(K,K):number=} opt_compareFn
- * @template T, K
+ * @template T
+ * @template K
  */
 goog.array.sortByKey = function(arr, keyFn, opt_compareFn) {
   var keyCompareFn = opt_compareFn || goog.array.defaultCompare;
@@ -757,14 +778,15 @@ goog.array.binaryRemove = function(array, value, opt_compareFn) {
  * @param {function(this:S,T,number,!IArrayLike<T>):?} sorter
  * @param {S=} opt_obj
  * @return {!Object<?,!Array<T>>}
- * @template T, S
+ * @template T
+ * @template S
  */
 goog.array.bucket = function(array, sorter, opt_obj) {
   var buckets = {};
   for (var i = 0; i < array.length; i++) {
     var value = array[i];
     var key = sorter.call(/** @type {?} */ (opt_obj), value, i, array);
-    if (goog.isDef(key)) {
+    if (key !== undefined) {
       var bucket = buckets[key] || (buckets[key] = []);
       bucket.push(value);
     }
@@ -776,7 +798,8 @@ goog.array.bucket = function(array, sorter, opt_obj) {
  * @param {?function(this:S,T,number,?):string} keyFunc
  * @param {S=} opt_obj
  * @return {!Object<?,T>}
- * @template T, S
+ * @template T
+ * @template S
  */
 goog.array.toObject = function(arr, keyFunc, opt_obj) {
   var ret = {};
@@ -936,7 +959,9 @@ goog.array.copyByIndex = function(arr, index_arr) {
  * @param {function(this:THIS,VALUE,number,?):!Array<RESULT>} f
  * @param {THIS=} opt_obj
  * @return {!Array<RESULT>}
- * @template THIS, VALUE, RESULT
+ * @template THIS
+ * @template VALUE
+ * @template RESULT
  */
 goog.array.concatMap = function(arr, f, opt_obj) {
   return goog.array.concat.apply([], goog.array.map(arr, f, opt_obj));

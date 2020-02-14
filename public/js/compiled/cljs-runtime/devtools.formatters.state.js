@@ -16,43 +16,43 @@ throw (new Error("Assert failed: (valid-current-state?)"));
 return devtools.formatters.state._STAR_current_state_STAR_;
 });
 devtools.formatters.state.update_current_state_BANG_ = (function devtools$formatters$state$update_current_state_BANG_(var_args){
-var args__4736__auto__ = [];
-var len__4730__auto___32241 = arguments.length;
-var i__4731__auto___32242 = (0);
+var args__4795__auto__ = [];
+var len__4789__auto___32653 = arguments.length;
+var i__4790__auto___32654 = (0);
 while(true){
-if((i__4731__auto___32242 < len__4730__auto___32241)){
-args__4736__auto__.push((arguments[i__4731__auto___32242]));
+if((i__4790__auto___32654 < len__4789__auto___32653)){
+args__4795__auto__.push((arguments[i__4790__auto___32654]));
 
-var G__32243 = (i__4731__auto___32242 + (1));
-i__4731__auto___32242 = G__32243;
+var G__32655 = (i__4790__auto___32654 + (1));
+i__4790__auto___32654 = G__32655;
 continue;
 } else {
 }
 break;
 }
 
-var argseq__4737__auto__ = ((((1) < args__4736__auto__.length))?(new cljs.core.IndexedSeq(args__4736__auto__.slice((1)),(0),null)):null);
-return devtools.formatters.state.update_current_state_BANG_.cljs$core$IFn$_invoke$arity$variadic((arguments[(0)]),argseq__4737__auto__);
+var argseq__4796__auto__ = ((((1) < args__4795__auto__.length))?(new cljs.core.IndexedSeq(args__4795__auto__.slice((1)),(0),null)):null);
+return devtools.formatters.state.update_current_state_BANG_.cljs$core$IFn$_invoke$arity$variadic((arguments[(0)]),argseq__4796__auto__);
 });
 
-devtools.formatters.state.update_current_state_BANG_.cljs$core$IFn$_invoke$arity$variadic = (function (f,args){
+(devtools.formatters.state.update_current_state_BANG_.cljs$core$IFn$_invoke$arity$variadic = (function (f,args){
 if(devtools.formatters.state.valid_current_state_QMARK_()){
 } else {
 throw (new Error("Assert failed: (valid-current-state?)"));
 }
 
-return devtools.formatters.state._STAR_current_state_STAR_ = cljs.core.apply.cljs$core$IFn$_invoke$arity$3(f,devtools.formatters.state._STAR_current_state_STAR_,args);
-});
+return (devtools.formatters.state._STAR_current_state_STAR_ = cljs.core.apply.cljs$core$IFn$_invoke$arity$3(f,devtools.formatters.state._STAR_current_state_STAR_,args));
+}));
 
-devtools.formatters.state.update_current_state_BANG_.cljs$lang$maxFixedArity = (1);
+(devtools.formatters.state.update_current_state_BANG_.cljs$lang$maxFixedArity = (1));
 
 /** @this {Function} */
-devtools.formatters.state.update_current_state_BANG_.cljs$lang$applyTo = (function (seq32227){
-var G__32228 = cljs.core.first(seq32227);
-var seq32227__$1 = cljs.core.next(seq32227);
-var self__4717__auto__ = this;
-return self__4717__auto__.cljs$core$IFn$_invoke$arity$variadic(G__32228,seq32227__$1);
-});
+(devtools.formatters.state.update_current_state_BANG_.cljs$lang$applyTo = (function (seq32645){
+var G__32646 = cljs.core.first(seq32645);
+var seq32645__$1 = cljs.core.next(seq32645);
+var self__4776__auto__ = this;
+return self__4776__auto__.cljs$core$IFn$_invoke$arity$variadic(G__32646,seq32645__$1);
+}));
 
 devtools.formatters.state.push_object_to_current_history_BANG_ = (function devtools$formatters$state$push_object_to_current_history_BANG_(object){
 return devtools.formatters.state.update_current_state_BANG_.cljs$core$IFn$_invoke$arity$variadic(cljs.core.update,cljs.core.prim_seq.cljs$core$IFn$_invoke$arity$2([new cljs.core.Keyword(null,"history","history",-247395220),cljs.core.conj,object], 0));
@@ -62,11 +62,9 @@ return new cljs.core.Keyword(null,"history","history",-247395220).cljs$core$IFn$
 });
 devtools.formatters.state.is_circular_QMARK_ = (function devtools$formatters$state$is_circular_QMARK_(object){
 var history = devtools.formatters.state.get_current_history();
-return cljs.core.some(((function (history){
-return (function (p1__32231_SHARP_){
-return (p1__32231_SHARP_ === object);
-});})(history))
-,history);
+return cljs.core.some((function (p1__32650_SHARP_){
+return (p1__32650_SHARP_ === object);
+}),history);
 });
 devtools.formatters.state.prevent_recursion_QMARK_ = (function devtools$formatters$state$prevent_recursion_QMARK_(){
 return cljs.core.boolean$(new cljs.core.Keyword(null,"prevent-recursion","prevent-recursion",-1498371606).cljs$core$IFn$_invoke$arity$1(devtools.formatters.state.get_current_state()));

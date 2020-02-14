@@ -1,10 +1,15 @@
 goog.provide("goog.async.nextTick");
 goog.provide("goog.async.throwException");
 goog.require("goog.debug.entryPointRegistry");
+goog.require("goog.dom");
 goog.require("goog.dom.TagName");
+goog.require("goog.dom.safe");
 goog.require("goog.functions");
+goog.require("goog.html.SafeHtml");
+goog.require("goog.html.TrustedResourceUrl");
 goog.require("goog.labs.userAgent.browser");
 goog.require("goog.labs.userAgent.engine");
+goog.require("goog.string.Const");
 /**
  * @param {*} exception
  */
@@ -57,14 +62,14 @@ goog.async.nextTick.getSetImmediateEmulator_ = function() {
   /** @type {(!Function|undefined)} */ var Channel = goog.global["MessageChannel"];
   if (typeof Channel === "undefined" && typeof window !== "undefined" && window.postMessage && window.addEventListener && !goog.labs.userAgent.engine.isPresto()) {
     /** @constructor */ Channel = function() {
-      var iframe = /** @type {!HTMLIFrameElement} */ (document.createElement(String(goog.dom.TagName.IFRAME)));
+      var iframe = goog.dom.createElement(goog.dom.TagName.IFRAME);
       iframe.style.display = "none";
-      iframe.src = "";
+      goog.dom.safe.setIframeSrc(iframe, goog.html.TrustedResourceUrl.fromConstant(goog.string.Const.EMPTY));
       document.documentElement.appendChild(iframe);
       var win = iframe.contentWindow;
       var doc = win.document;
       doc.open();
-      doc.write("");
+      goog.dom.safe.documentWrite(doc, goog.html.SafeHtml.EMPTY);
       doc.close();
       var message = "callImmediate" + Math.random();
       var origin = win.location.protocol == "file:" ? "*" : win.location.protocol + "//" + win.location.host;
@@ -86,7 +91,7 @@ goog.async.nextTick.getSetImmediateEmulator_ = function() {
     var head = {};
     var tail = head;
     channel["port1"].onmessage = function() {
-      if (goog.isDef(head.next)) {
+      if (head.next !== undefined) {
         head = head.next;
         var cb = head.cb;
         head.cb = null;
@@ -99,9 +104,9 @@ goog.async.nextTick.getSetImmediateEmulator_ = function() {
       channel["port2"].postMessage(0);
     };
   }
-  if (typeof document !== "undefined" && "onreadystatechange" in document.createElement(String(goog.dom.TagName.SCRIPT))) {
+  if (typeof document !== "undefined" && "onreadystatechange" in goog.dom.createElement(goog.dom.TagName.SCRIPT)) {
     return function(cb) {
-      var script = /** @type {!HTMLScriptElement} */ (document.createElement(String(goog.dom.TagName.SCRIPT)));
+      var script = goog.dom.createElement(goog.dom.TagName.SCRIPT);
       script.onreadystatechange = function() {
         script.onreadystatechange = null;
         script.parentNode.removeChild(script);

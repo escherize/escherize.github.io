@@ -13,15 +13,17 @@ goog.require("goog.string.internal");
  * @constructor
  * @implements {goog.i18n.bidi.DirectionalString}
  * @implements {goog.string.TypedString}
+ * @param {!Object=} opt_token
+ * @param {string=} opt_content
  */
-goog.html.SafeUrl = function() {
-  /** @private @type {string} */ this.privateDoNotAccessOrElseSafeUrlWrappedValue_ = "";
+goog.html.SafeUrl = function(opt_token, opt_content) {
+  /** @private @type {string} */ this.privateDoNotAccessOrElseSafeUrlWrappedValue_ = opt_token === goog.html.SafeUrl.CONSTRUCTOR_TOKEN_PRIVATE_ && opt_content || "";
   /** @private @const @type {!Object} */ this.SAFE_URL_TYPE_MARKER_GOOG_HTML_SECURITY_PRIVATE_ = goog.html.SafeUrl.TYPE_MARKER_GOOG_HTML_SECURITY_PRIVATE_;
 };
 /** @const @type {string} */ goog.html.SafeUrl.INNOCUOUS_STRING = "about:invalid#zClosurez";
 /** @const @override */ goog.html.SafeUrl.prototype.implementsGoogStringTypedString = true;
 /** @override */ goog.html.SafeUrl.prototype.getTypedStringValue = function() {
-  return this.privateDoNotAccessOrElseSafeUrlWrappedValue_;
+  return this.privateDoNotAccessOrElseSafeUrlWrappedValue_.toString();
 };
 /** @const @override */ goog.html.SafeUrl.prototype.implementsGoogI18nBidiDirectionalString = true;
 /** @override */ goog.html.SafeUrl.prototype.getDirection = function() {
@@ -51,7 +53,14 @@ goog.html.SafeUrl.unwrap = function(safeUrl) {
 goog.html.SafeUrl.fromConstant = function(url) {
   return goog.html.SafeUrl.createSafeUrlSecurityPrivateDoNotAccessOrElse(goog.string.Const.unwrap(url));
 };
-/** @private @const */ goog.html.SAFE_MIME_TYPE_PATTERN_ = new RegExp("^(?:audio/(?:3gpp2|3gpp|aac|L16|midi|mp3|mp4|mpeg|oga|ogg|opus|x-m4a|x-wav|wav|webm)|" + "image/(?:bmp|gif|jpeg|jpg|png|tiff|webp|x-icon)|" + "text/csv|" + "video/(?:mpeg|mp4|ogg|webm|quicktime))$", "i");
+/** @private @const */ goog.html.SAFE_MIME_TYPE_PATTERN_ = new RegExp("^(?:audio/(?:3gpp2|3gpp|aac|L16|midi|mp3|mp4|mpeg|oga|ogg|opus|x-m4a|x-wav|wav|webm)|" + "image/(?:bmp|gif|jpeg|jpg|png|tiff|webp|x-icon)|" + "text/csv|" + "video/(?:mpeg|mp4|ogg|webm|quicktime))" + '(?:;\\w+\x3d(?:\\w+|"[\\w;\x3d]+"))*$', "i");
+/**
+ * @param {string} mimeType
+ * @return {boolean}
+ */
+goog.html.SafeUrl.isSafeMimeType = function(mimeType) {
+  return goog.html.SAFE_MIME_TYPE_PATTERN_.test(mimeType);
+};
 /**
  * @param {!Blob} blob
  * @return {!goog.html.SafeUrl}
@@ -60,7 +69,7 @@ goog.html.SafeUrl.fromBlob = function(blob) {
   var url = goog.html.SAFE_MIME_TYPE_PATTERN_.test(blob.type) ? goog.fs.url.createObjectUrl(blob) : goog.html.SafeUrl.INNOCUOUS_STRING;
   return goog.html.SafeUrl.createSafeUrlSecurityPrivateDoNotAccessOrElse(url);
 };
-/** @private @const */ goog.html.DATA_URL_PATTERN_ = /^data:([^;,]*);base64,[a-z0-9+\/]+=*$/i;
+/** @private @const */ goog.html.DATA_URL_PATTERN_ = /^data:([^,]*);base64,[a-z0-9+\/]+=*$/i;
 /**
  * @param {string} dataUrl
  * @return {!goog.html.SafeUrl}
@@ -101,6 +110,16 @@ goog.html.SafeUrl.fromFacebookMessengerUrl = function(facebookMessengerUrl) {
     facebookMessengerUrl = goog.html.SafeUrl.INNOCUOUS_STRING;
   }
   return goog.html.SafeUrl.createSafeUrlSecurityPrivateDoNotAccessOrElse(facebookMessengerUrl);
+};
+/**
+ * @param {string} whatsAppUrl
+ * @return {!goog.html.SafeUrl}
+ */
+goog.html.SafeUrl.fromWhatsAppUrl = function(whatsAppUrl) {
+  if (!goog.string.internal.caseInsensitiveStartsWith(whatsAppUrl, "whatsapp://send")) {
+    whatsAppUrl = goog.html.SafeUrl.INNOCUOUS_STRING;
+  }
+  return goog.html.SafeUrl.createSafeUrlSecurityPrivateDoNotAccessOrElse(whatsAppUrl);
 };
 /**
  * @param {string} smsUrl
@@ -262,10 +281,9 @@ goog.html.SafeUrl.sanitizeAssertUnchanged = function(url, opt_allowDataUrl) {
  * @return {!goog.html.SafeUrl}
  */
 goog.html.SafeUrl.createSafeUrlSecurityPrivateDoNotAccessOrElse = function(url) {
-  var safeUrl = new goog.html.SafeUrl;
-  safeUrl.privateDoNotAccessOrElseSafeUrlWrappedValue_ = url;
-  return safeUrl;
+  return new goog.html.SafeUrl(goog.html.SafeUrl.CONSTRUCTOR_TOKEN_PRIVATE_, url);
 };
 /** @const @type {!goog.html.SafeUrl} */ goog.html.SafeUrl.ABOUT_BLANK = goog.html.SafeUrl.createSafeUrlSecurityPrivateDoNotAccessOrElse("about:blank");
+/** @private @const @type {!Object} */ goog.html.SafeUrl.CONSTRUCTOR_TOKEN_PRIVATE_ = {};
 
 //# sourceMappingURL=goog.html.safeurl.js.map

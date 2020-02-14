@@ -16,7 +16,7 @@ goog.debug.LogRecord = function(level, msg, loggerName, opt_time, opt_sequenceNu
 /** @private @type {string} */ goog.debug.LogRecord.prototype.loggerName_;
 /** @private @type {number} */ goog.debug.LogRecord.prototype.sequenceNumber_ = 0;
 /** @private @type {?Object} */ goog.debug.LogRecord.prototype.exception_ = null;
-/** @define {boolean} */ goog.define("goog.debug.LogRecord.ENABLE_SEQUENCE_NUMBERS", true);
+/** @define {boolean} */ goog.debug.LogRecord.ENABLE_SEQUENCE_NUMBERS = goog.define("goog.debug.LogRecord.ENABLE_SEQUENCE_NUMBERS", true);
 /** @private @type {number} */ goog.debug.LogRecord.nextSequenceNumber_ = 0;
 /**
  * @param {goog.debug.Logger.Level} level

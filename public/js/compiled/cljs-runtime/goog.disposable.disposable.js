@@ -18,8 +18,8 @@ goog.Disposable = function() {
   this.onDisposeCallbacks_ = this.onDisposeCallbacks_;
 };
 /** @enum {number} */ goog.Disposable.MonitoringMode = {OFF:0, PERMANENT:1, INTERACTIVE:2};
-/** @define {number} */ goog.define("goog.Disposable.MONITORING_MODE", 0);
-/** @define {boolean} */ goog.define("goog.Disposable.INCLUDE_STACK_ON_CREATION", true);
+/** @define {number} */ goog.Disposable.MONITORING_MODE = goog.define("goog.Disposable.MONITORING_MODE", 0);
+/** @define {boolean} */ goog.Disposable.INCLUDE_STACK_ON_CREATION = goog.define("goog.Disposable.INCLUDE_STACK_ON_CREATION", true);
 /** @private @type {!Object<number,!goog.Disposable>} */ goog.Disposable.instances_ = {};
 /**
  * @return {!Array<!goog.Disposable>}
@@ -83,13 +83,13 @@ goog.Disposable.prototype.registerDisposable = function(disposable) {
  */
 goog.Disposable.prototype.addOnDisposeCallback = function(callback, opt_scope) {
   if (this.disposed_) {
-    goog.isDef(opt_scope) ? callback.call(opt_scope) : callback();
+    opt_scope !== undefined ? callback.call(opt_scope) : callback();
     return;
   }
   if (!this.onDisposeCallbacks_) {
     this.onDisposeCallbacks_ = [];
   }
-  this.onDisposeCallbacks_.push(goog.isDef(opt_scope) ? goog.bind(callback, opt_scope) : callback);
+  this.onDisposeCallbacks_.push(opt_scope !== undefined ? goog.bind(callback, opt_scope) : callback);
 };
 /** @protected */ goog.Disposable.prototype.disposeInternal = function() {
   if (this.onDisposeCallbacks_) {

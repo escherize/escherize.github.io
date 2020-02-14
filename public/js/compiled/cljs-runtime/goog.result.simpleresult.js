@@ -16,7 +16,7 @@ goog.result.SimpleResult = function() {
   /** @private @type {*} */ this.error_ = undefined;
 };
 goog.Thenable.addImplementation(goog.result.SimpleResult);
-/** @private @typedef {{callback:function(goog.result.SimpleResult),scope:Object}} */ goog.result.SimpleResult.HandlerEntry_;
+/** @private @typedef {{callback:function(!goog.result.SimpleResult),scope:Object}} */ goog.result.SimpleResult.HandlerEntry_;
 /**
  * @final
  * @constructor

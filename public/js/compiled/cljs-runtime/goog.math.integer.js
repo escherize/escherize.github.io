@@ -1,4 +1,5 @@
 goog.provide("goog.math.Integer");
+goog.require("goog.reflect");
 /**
  * @final
  * @struct
@@ -7,34 +8,30 @@ goog.provide("goog.math.Integer");
  * @param {number} sign
  */
 goog.math.Integer = function(bits, sign) {
-  /** @private @type {!Array<number>} */ this.bits_ = [];
   /** @private @type {number} */ this.sign_ = sign;
+  var localBits = [];
   var top = true;
   for (var i = bits.length - 1; i >= 0; i--) {
     var val = bits[i] | 0;
     if (!top || val != sign) {
-      this.bits_[i] = val;
+      localBits[i] = val;
       top = false;
     }
   }
+  /** @private @const @type {!Array<number>} */ this.bits_ = localBits;
 };
-/** @private @type {!Object} */ goog.math.Integer.IntCache_ = {};
+/** @private @type {!Object<number,!goog.math.Integer>} */ goog.math.Integer.IntCache_ = {};
 /**
  * @param {number} value
  * @return {!goog.math.Integer}
  */
 goog.math.Integer.fromInt = function(value) {
   if (-128 <= value && value < 128) {
-    var cachedObj = goog.math.Integer.IntCache_[value];
-    if (cachedObj) {
-      return cachedObj;
-    }
+    return goog.reflect.cache(goog.math.Integer.IntCache_, value, function(val) {
+      return new goog.math.Integer([val | 0], val < 0 ? -1 : 0);
+    });
   }
-  var obj = new goog.math.Integer([value | 0], value < 0 ? -1 : 0);
-  if (-128 <= value && value < 128) {
-    goog.math.Integer.IntCache_[value] = obj;
-  }
-  return obj;
+  return new goog.math.Integer([value | 0], value < 0 ? -1 : 0);
 };
 /**
  * @param {number} value
@@ -103,7 +100,7 @@ goog.math.Integer.fromString = function(str, opt_radix) {
 /** @private @type {number} */ goog.math.Integer.TWO_PWR_32_DBL_ = (1 << 16) * (1 << 16);
 /** @type {!goog.math.Integer} */ goog.math.Integer.ZERO = goog.math.Integer.fromInt(0);
 /** @type {!goog.math.Integer} */ goog.math.Integer.ONE = goog.math.Integer.fromInt(1);
-/** @private @type {!goog.math.Integer} */ goog.math.Integer.TWO_PWR_24_ = goog.math.Integer.fromInt(1 << 24);
+/** @private @const @type {!goog.math.Integer} */ goog.math.Integer.TWO_PWR_24_ = goog.math.Integer.fromInt(1 << 24);
 /**
  * @return {number}
  */
@@ -312,6 +309,12 @@ goog.math.Integer.prototype.negate = function() {
   return this.not().add(goog.math.Integer.ONE);
 };
 /**
+ * @return {!goog.math.Integer}
+ */
+goog.math.Integer.prototype.abs = function() {
+  return this.isNegative() ? this.negate() : this;
+};
+/**
  * @param {goog.math.Integer} other
  * @return {!goog.math.Integer}
  */
@@ -410,7 +413,7 @@ goog.math.Integer.carry16_ = function(bits, index) {
 /**
  * @private
  * @param {!goog.math.Integer} other
- * @return {!goog.math.Integer}
+ * @return {!goog.math.Integer.DivisionResult}
  */
 goog.math.Integer.prototype.slowDivide_ = function(other) {
   if (this.isNegative() || other.isNegative()) {
@@ -436,29 +439,46 @@ goog.math.Integer.prototype.slowDivide_ = function(other) {
     multiple = multiple.shiftRight(1);
     twoPower = twoPower.shiftRight(1);
   }
-  return res;
+  var remainder = this.subtract(res.multiply(other));
+  return new goog.math.Integer.DivisionResult(res, remainder);
 };
 /**
  * @param {!goog.math.Integer} other
  * @return {!goog.math.Integer}
  */
 goog.math.Integer.prototype.divide = function(other) {
+  return this.divideAndRemainder(other).quotient;
+};
+/**
+ * @final
+ * @struct
+ * @constructor
+ * @param {!goog.math.Integer} quotient
+ * @param {!goog.math.Integer} remainder
+ */
+goog.math.Integer.DivisionResult = function(quotient, remainder) {
+  /** @const */ this.quotient = quotient;
+  /** @const */ this.remainder = remainder;
+};
+/**
+ * @param {!goog.math.Integer} other
+ * @return {!goog.math.Integer.DivisionResult}
+ */
+goog.math.Integer.prototype.divideAndRemainder = function(other) {
   if (other.isZero()) {
     throw new Error("division by zero");
   } else {
     if (this.isZero()) {
-      return goog.math.Integer.ZERO;
+      return new goog.math.Integer.DivisionResult(goog.math.Integer.ZERO, goog.math.Integer.ZERO);
     }
   }
   if (this.isNegative()) {
-    if (other.isNegative()) {
-      return this.negate().divide(other.negate());
-    } else {
-      return this.negate().divide(other).negate();
-    }
+    var result = this.negate().divideAndRemainder(other);
+    return new goog.math.Integer.DivisionResult(result.quotient.negate(), result.remainder.negate());
   } else {
     if (other.isNegative()) {
-      return this.divide(other.negate()).negate();
+      var result = this.divideAndRemainder(other.negate());
+      return new goog.math.Integer.DivisionResult(result.quotient.negate(), result.remainder);
     }
   }
   if (this.bits_.length > 30) {
@@ -483,14 +503,14 @@ goog.math.Integer.prototype.divide = function(other) {
     res = res.add(approxRes);
     rem = rem.subtract(approxRem);
   }
-  return res;
+  return new goog.math.Integer.DivisionResult(res, rem);
 };
 /**
  * @param {!goog.math.Integer} other
  * @return {!goog.math.Integer}
  */
 goog.math.Integer.prototype.modulo = function(other) {
-  return this.subtract(this.divide(other).multiply(other));
+  return this.divideAndRemainder(other).remainder;
 };
 /**
  * @return {!goog.math.Integer}

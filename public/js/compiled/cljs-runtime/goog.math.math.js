@@ -141,7 +141,8 @@ goog.math.sign = function(x) {
  * @param {Function=} opt_compareFn
  * @param {Function=} opt_collectorFn
  * @return {!Array<(S|T)>}
- * @template S, T
+ * @template S
+ * @template T
  */
 goog.math.longestCommonSubsequence = function(array1, array2, opt_compareFn, opt_collectorFn) {
   var compare = opt_compareFn || function(a, b) {
@@ -263,7 +264,7 @@ goog.math.log10Floor = function(num) {
  * @return {number}
  */
 goog.math.safeFloor = function(num, opt_epsilon) {
-  goog.asserts.assert(!goog.isDef(opt_epsilon) || opt_epsilon > 0);
+  goog.asserts.assert(opt_epsilon === undefined || opt_epsilon > 0);
   return Math.floor(num + (opt_epsilon || 2e-15));
 };
 /**
@@ -272,7 +273,7 @@ goog.math.safeFloor = function(num, opt_epsilon) {
  * @return {number}
  */
 goog.math.safeCeil = function(num, opt_epsilon) {
-  goog.asserts.assert(!goog.isDef(opt_epsilon) || opt_epsilon > 0);
+  goog.asserts.assert(opt_epsilon === undefined || opt_epsilon > 0);
   return Math.ceil(num - (opt_epsilon || 2e-15));
 };
 

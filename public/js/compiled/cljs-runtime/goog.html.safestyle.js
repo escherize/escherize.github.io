@@ -26,17 +26,9 @@ goog.html.SafeStyle.fromConstant = function(style) {
   if (styleString.length === 0) {
     return goog.html.SafeStyle.EMPTY;
   }
-  goog.html.SafeStyle.checkStyle_(styleString);
   goog.asserts.assert(goog.string.internal.endsWith(styleString, ";"), "Last character of style string is not ';': " + styleString);
   goog.asserts.assert(goog.string.internal.contains(styleString, ":"), "Style string must contain at least one ':', to " + 'specify a "name: value" pair: ' + styleString);
   return goog.html.SafeStyle.createSafeStyleSecurityPrivateDoNotAccessOrElse(styleString);
-};
-/**
- * @private
- * @param {string} style
- */
-goog.html.SafeStyle.checkStyle_ = function(style) {
-  goog.asserts.assert(!/[<>]/.test(style), "Forbidden characters in style string: " + style);
 };
 /** @override */ goog.html.SafeStyle.prototype.getTypedStringValue = function() {
   return this.privateDoNotAccessOrElseSafeStyleWrappedValue_;
@@ -104,7 +96,6 @@ goog.html.SafeStyle.create = function(map) {
   if (!style) {
     return goog.html.SafeStyle.EMPTY;
   }
-  goog.html.SafeStyle.checkStyle_(style);
   return goog.html.SafeStyle.createSafeStyleSecurityPrivateDoNotAccessOrElse(style);
 };
 /**
@@ -118,7 +109,9 @@ goog.html.SafeStyle.sanitizePropertyValue_ = function(value) {
     return 'url("' + url.replace(/</g, "%3c").replace(/[\\"]/g, "\\$\x26") + '")';
   }
   var result = value instanceof goog.string.Const ? goog.string.Const.unwrap(value) : goog.html.SafeStyle.sanitizePropertyValueString_(String(value));
-  goog.asserts.assert(!/[{;}]/.test(result), "Value does not allow [{;}].");
+  if (/[{;}]/.test(result)) {
+    throw new goog.asserts.AssertionError("Value does not allow [{;}], got: %s.", [result]);
+  }
   return result;
 };
 /**
@@ -202,7 +195,8 @@ goog.html.SafeStyle.hasBalancedSquareBrackets_ = function(value) {
 /** @private @type {string} */ goog.html.SafeStyle.VALUE_ALLOWED_CHARS_ = "[-,.\"'%_!# a-zA-Z0-9\\[\\]]";
 /** @private @const @type {!RegExp} */ goog.html.SafeStyle.VALUE_RE_ = new RegExp("^" + goog.html.SafeStyle.VALUE_ALLOWED_CHARS_ + "+$");
 /** @private @const @type {!RegExp} */ goog.html.SafeStyle.URL_RE_ = new RegExp("\\b(url\\([ \t\n]*)(" + "'[ -\x26(-\\[\\]-~]*'" + '|"[ !#-\\[\\]-~]*"' + "|[!#-\x26*-\\[\\]-~]*" + ")([ \t\n]*\\))", "g");
-/** @private @const @type {!RegExp} */ goog.html.SafeStyle.FUNCTIONS_RE_ = new RegExp("\\b(hsl|hsla|rgb|rgba|matrix|calc|minmax|fit-content|repeat|" + "(rotate|scale|translate)(X|Y|Z|3d)?)" + "\\([-+*/0-9a-z.%\\[\\], ]+\\)", "g");
+/** @private @const @type {!Array<string>} */ goog.html.SafeStyle.ALLOWED_FUNCTIONS_ = ["calc", "cubic-bezier", "fit-content", "hsl", "hsla", "matrix", "minmax", "repeat", "rgb", "rgba", "(rotate|scale|translate)(X|Y|Z|3d)?"];
+/** @private @const @type {!RegExp} */ goog.html.SafeStyle.FUNCTIONS_RE_ = new RegExp("\\b(" + goog.html.SafeStyle.ALLOWED_FUNCTIONS_.join("|") + ")" + "\\([-+*/0-9a-z.%\\[\\], ]+\\)", "g");
 /** @private @const @type {!RegExp} */ goog.html.SafeStyle.COMMENT_RE_ = /\/\*/;
 /**
  * @private

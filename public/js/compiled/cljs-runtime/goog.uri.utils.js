@@ -367,7 +367,7 @@ goog.uri.utils.appendParamsFromMap = function(uri, map) {
  * @return {string}
  */
 goog.uri.utils.appendParam = function(uri, key, opt_value) {
-  var value = goog.isDefAndNotNull(opt_value) ? "\x3d" + goog.string.urlEncode(opt_value) : "";
+  var value = opt_value != null ? "\x3d" + goog.string.urlEncode(opt_value) : "";
   return goog.uri.utils.appendQueryDataToUri_(uri, key + value);
 };
 /**

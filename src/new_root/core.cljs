@@ -5,7 +5,10 @@
    [reitit.frontend.easy :as rfee]
    [new-root.paint-snake-two.core :as ps-two]
    [new-root.paint :as paint]
-   [new-root.mindustry :as mind]))
+   [new-root.mindustry :as mind]
+   [cljs.pprint :as pp]
+   [clojure.string :as str]
+   [new-root.gen-art :as gen-art]))
 
 (defonce app-state (atom {:thingies 1}))
 
@@ -23,7 +26,7 @@
                completely programmable. Visit my contents " (link "here." 0)]
                [:button
                 {:style {:cursor :pointer}
-                 :on-click (fn [] (swap! app-state update :thingies #(int (inc (* 1.5 %)))))}
+                 :on-click (fn [] (swap! app-state update :thingies #(* 2 %)))}
                 "Click here to see stuff happen"]])
    :content (fn []
               [:div
@@ -52,17 +55,63 @@
 (def post-3
   {:id 3
    :title "Paint fill game"
+   :pure true
    :preview (fn []
               [:div
                [:div "Inspired by a python game I found on my raspberry pi"]
                [:div (link "Check it out" 3)]])
    :content paint/view})
 
+(declare post-4)
+(def post-4
+  {:id 4
+   :title "Adding pure mode"
+   :pure true
+   :preview (fn [] [:div "This is pure mode. " (link "Go Pure" 4)])
+   :content (fn [] [:div {:style {:margin "10px"}}
+                    [:div "Instead of the usual frame you'd see around e.g. the " (link "post two" 2) ", there is only this component."]
+                    [:div "I setup the " (link "Paint Fill Game" 3) " the same way, and it looks great!"]
+                    [:div "This post's entry looks like this: "]
+                    (into
+                     [:div {:style {:margin "20px"
+                                    :padding "10px"
+                                    :border "5px solid grey"}}]
+                     (for [line (str/split-lines
+                                 (with-out-str (pp/pprint
+                                                '(def post-4
+                                                   {:id 4
+                                                    :title "Adding pure mode"
+                                                    :pure true
+                                                    :preview (fn [] [:div "This is pure mode. " (link "Go Pure" 4)])
+                                                    :content (fn []
+                                                               [:div {:style {:margin "10px"}}
+                                                                [:div "Instead of the usual frame you'd see around e.g. the " (link "post two" 2) ", there is only this component."]
+                                                                [:div "I setup the " (link "Paint Fill Game" 3) " the same way, and it looks great!"]
+                                                                [:div "This post's entry looks like this: "]
+                                                                (into
+                                                                 [:div {:style {:margin "20px"
+                                                                                :padding "10px"
+                                                                                :border "5px solid grey"}}]
+                                                                 (for [line (str/split-lines
+                                                                             (with-out-str (pp/pprint post-4)))]
+                                                                   [:pre {:style {:padding "0"
+                                                                                  :margin "-3px auto"
+                                                                                  :border "none"
+                                                                                  :font-family "monospace"}} line]))])}))))]
+                       [:pre {:style {:padding "0"
+                                      :margin "-3px auto"
+                                      :border "none"
+                                      :font-family "monospace"}} line]))])})
+
+(def post-5
+  {:id 5
+   :title "Generative Art noob mode"
+   :pure true
+   :preview (fn [] [:div "Just feeling " (link "things" 5)  " out."])
+   :content gen-art/view})
+
 (def posts
-  {0 post-0,
-   1 post-1,
-   2 post-2,
-   3 post-3})
+  (zipmap (range) [post-0 post-1 post-2 post-3 post-4 post-5]))
 
 (defn nav []
   [:div.nav
@@ -81,19 +130,18 @@
     [:div.row [nav]]
     [:div.row page]]))
 
-(defn teaser [{:as _ :keys [title preview content release]}]
+(defn teaser [{:as _ :keys [id title preview content release]}]
   [:div.card {:style {:border "10px #89c solid"
                       :border-radius "20px"
                       :padding "20px"
                       :margin "20px 40px"}}
-   [:h3 title]
+   [:h3 (link title id)]
    [:div.row (cond preview [preview]
                    content [content]
                    :else [:h2 title])]])
 
 (defn footer []
-  [:<>
-   [:hr]
+  [:div {:style {:float :right}}
    [:p "Copyright Bryan Maass 2019"]])
 
 (defn home [_]
@@ -112,13 +160,16 @@
 
 (defn post [match]
   (if-let [id (-> match :parameters :path :id)]
-    (let [post (get posts (js/parseInt id))]
-      [:div
-       [:div.row
-        [:div [:span "[" [:a {:href (rfee/href ::home)} "Home"] "]"]]
-        [:div [:h1 (:title post)]]]
-       [:hr]
-       [(:content (get posts (js/parseInt id)))]])
+    (let [{:keys [content title] :as post} (get posts (js/parseInt id))
+          pure? (:pure post)]
+      (if pure?
+        [content]
+        [:div
+         [:div.row
+          [:div [:span "[" [:a {:href (rfee/href ::home)} "Home"] "]"]]
+          [:div [:h1 title]]]
+         [:hr]
+         [content]]))
     [:pre (pr-str match)]))
 
 (def routes
@@ -132,8 +183,7 @@
   [:div
    (if (:match @app-state)
      (let [view (:view (:data (:match @app-state)))]
-       [view (:match @app-state)]))
-   #_[:pre (pr-str (:match @app-state))]])
+       [view (:match @app-state)]))])
 
 (defn start []
   (reagent/render-component

@@ -6,7 +6,7 @@ goog.require("goog.debug");
 goog.require("goog.debug.LogManager");
 goog.require("goog.debug.LogRecord");
 goog.require("goog.debug.Logger");
-/** @define {boolean} */ goog.define("goog.log.ENABLED", goog.debug.LOGGING_ENABLED);
+/** @define {boolean} */ goog.log.ENABLED = goog.define("goog.log.ENABLED", goog.debug.LOGGING_ENABLED);
 /** @const @type {string} */ goog.log.ROOT_LOGGER_NAME = goog.debug.Logger.ROOT_LOGGER_NAME;
 /** @final @constructor */ goog.log.Logger = goog.debug.Logger;
 /** @final @constructor */ goog.log.Level = goog.debug.Logger.Level;

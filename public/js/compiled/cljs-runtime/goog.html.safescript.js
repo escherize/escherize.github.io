@@ -1,5 +1,6 @@
 goog.provide("goog.html.SafeScript");
 goog.require("goog.asserts");
+goog.require("goog.html.trustedtypes");
 goog.require("goog.string.Const");
 goog.require("goog.string.TypedString");
 /**
@@ -9,7 +10,7 @@ goog.require("goog.string.TypedString");
  * @implements {goog.string.TypedString}
  */
 goog.html.SafeScript = function() {
-  /** @private @type {string} */ this.privateDoNotAccessOrElseSafeScriptWrappedValue_ = "";
+  /** @private @type {(!TrustedScript|string)} */ this.privateDoNotAccessOrElseSafeScriptWrappedValue_ = "";
   /** @private @const @type {!Object} */ this.SAFE_SCRIPT_TYPE_MARKER_GOOG_HTML_SECURITY_PRIVATE_ = goog.html.SafeScript.TYPE_MARKER_GOOG_HTML_SECURITY_PRIVATE_;
 };
 /** @const @override */ goog.html.SafeScript.prototype.implementsGoogStringTypedString = true;
@@ -45,7 +46,7 @@ goog.html.SafeScript.fromJson = function(val) {
   return goog.html.SafeScript.createSafeScriptSecurityPrivateDoNotAccessOrElse(goog.html.SafeScript.stringify_(val));
 };
 /** @override */ goog.html.SafeScript.prototype.getTypedStringValue = function() {
-  return this.privateDoNotAccessOrElseSafeScriptWrappedValue_;
+  return this.privateDoNotAccessOrElseSafeScriptWrappedValue_.toString();
 };
 if (goog.DEBUG) {
   /** @override */ goog.html.SafeScript.prototype.toString = function() {
@@ -57,6 +58,13 @@ if (goog.DEBUG) {
  * @return {string}
  */
 goog.html.SafeScript.unwrap = function(safeScript) {
+  return goog.html.SafeScript.unwrapTrustedScript(safeScript).toString();
+};
+/**
+ * @param {!goog.html.SafeScript} safeScript
+ * @return {(!TrustedScript|string)}
+ */
+goog.html.SafeScript.unwrapTrustedScript = function(safeScript) {
   if (safeScript instanceof goog.html.SafeScript && safeScript.constructor === goog.html.SafeScript && safeScript.SAFE_SCRIPT_TYPE_MARKER_GOOG_HTML_SECURITY_PRIVATE_ === goog.html.SafeScript.TYPE_MARKER_GOOG_HTML_SECURITY_PRIVATE_) {
     return safeScript.privateDoNotAccessOrElseSafeScriptWrappedValue_;
   } else {
@@ -87,7 +95,7 @@ goog.html.SafeScript.createSafeScriptSecurityPrivateDoNotAccessOrElse = function
  * @return {!goog.html.SafeScript}
  */
 goog.html.SafeScript.prototype.initSecurityPrivateDoNotAccessOrElse_ = function(script) {
-  this.privateDoNotAccessOrElseSafeScriptWrappedValue_ = script;
+  this.privateDoNotAccessOrElseSafeScriptWrappedValue_ = goog.html.trustedtypes.PRIVATE_DO_NOT_ACCESS_OR_ELSE_POLICY ? goog.html.trustedtypes.PRIVATE_DO_NOT_ACCESS_OR_ELSE_POLICY.createScript(script) : script;
   return this;
 };
 /** @const @type {!goog.html.SafeScript} */ goog.html.SafeScript.EMPTY = goog.html.SafeScript.createSafeScriptSecurityPrivateDoNotAccessOrElse("");

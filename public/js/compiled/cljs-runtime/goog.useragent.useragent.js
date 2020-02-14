@@ -5,13 +5,13 @@ goog.require("goog.labs.userAgent.platform");
 goog.require("goog.labs.userAgent.util");
 goog.require("goog.reflect");
 goog.require("goog.string");
-/** @define {boolean} */ goog.define("goog.userAgent.ASSUME_IE", false);
-/** @define {boolean} */ goog.define("goog.userAgent.ASSUME_EDGE", false);
-/** @define {boolean} */ goog.define("goog.userAgent.ASSUME_GECKO", false);
-/** @define {boolean} */ goog.define("goog.userAgent.ASSUME_WEBKIT", false);
-/** @define {boolean} */ goog.define("goog.userAgent.ASSUME_MOBILE_WEBKIT", false);
-/** @define {boolean} */ goog.define("goog.userAgent.ASSUME_OPERA", false);
-/** @define {boolean} */ goog.define("goog.userAgent.ASSUME_ANY_VERSION", false);
+/** @define {boolean} */ goog.userAgent.ASSUME_IE = goog.define("goog.userAgent.ASSUME_IE", false);
+/** @define {boolean} */ goog.userAgent.ASSUME_EDGE = goog.define("goog.userAgent.ASSUME_EDGE", false);
+/** @define {boolean} */ goog.userAgent.ASSUME_GECKO = goog.define("goog.userAgent.ASSUME_GECKO", false);
+/** @define {boolean} */ goog.userAgent.ASSUME_WEBKIT = goog.define("goog.userAgent.ASSUME_WEBKIT", false);
+/** @define {boolean} */ goog.userAgent.ASSUME_MOBILE_WEBKIT = goog.define("goog.userAgent.ASSUME_MOBILE_WEBKIT", false);
+/** @define {boolean} */ goog.userAgent.ASSUME_OPERA = goog.define("goog.userAgent.ASSUME_OPERA", false);
+/** @define {boolean} */ goog.userAgent.ASSUME_ANY_VERSION = goog.define("goog.userAgent.ASSUME_ANY_VERSION", false);
 /** @private @type {boolean} */ goog.userAgent.BROWSER_KNOWN_ = goog.userAgent.ASSUME_IE || goog.userAgent.ASSUME_EDGE || goog.userAgent.ASSUME_GECKO || goog.userAgent.ASSUME_MOBILE_WEBKIT || goog.userAgent.ASSUME_WEBKIT || goog.userAgent.ASSUME_OPERA;
 /**
  * @return {string}
@@ -59,16 +59,16 @@ goog.userAgent.determinePlatform_ = function() {
   return navigator && navigator.platform || "";
 };
 /** @type {string} */ goog.userAgent.PLATFORM = goog.userAgent.determinePlatform_();
-/** @define {boolean} */ goog.define("goog.userAgent.ASSUME_MAC", false);
-/** @define {boolean} */ goog.define("goog.userAgent.ASSUME_WINDOWS", false);
-/** @define {boolean} */ goog.define("goog.userAgent.ASSUME_LINUX", false);
-/** @define {boolean} */ goog.define("goog.userAgent.ASSUME_X11", false);
-/** @define {boolean} */ goog.define("goog.userAgent.ASSUME_ANDROID", false);
-/** @define {boolean} */ goog.define("goog.userAgent.ASSUME_IPHONE", false);
-/** @define {boolean} */ goog.define("goog.userAgent.ASSUME_IPAD", false);
-/** @define {boolean} */ goog.define("goog.userAgent.ASSUME_IPOD", false);
-/** @define {boolean} */ goog.define("goog.userAgent.ASSUME_KAIOS", false);
-/** @define {boolean} */ goog.define("goog.userAgent.ASSUME_GO2PHONE", false);
+/** @define {boolean} */ goog.userAgent.ASSUME_MAC = goog.define("goog.userAgent.ASSUME_MAC", false);
+/** @define {boolean} */ goog.userAgent.ASSUME_WINDOWS = goog.define("goog.userAgent.ASSUME_WINDOWS", false);
+/** @define {boolean} */ goog.userAgent.ASSUME_LINUX = goog.define("goog.userAgent.ASSUME_LINUX", false);
+/** @define {boolean} */ goog.userAgent.ASSUME_X11 = goog.define("goog.userAgent.ASSUME_X11", false);
+/** @define {boolean} */ goog.userAgent.ASSUME_ANDROID = goog.define("goog.userAgent.ASSUME_ANDROID", false);
+/** @define {boolean} */ goog.userAgent.ASSUME_IPHONE = goog.define("goog.userAgent.ASSUME_IPHONE", false);
+/** @define {boolean} */ goog.userAgent.ASSUME_IPAD = goog.define("goog.userAgent.ASSUME_IPAD", false);
+/** @define {boolean} */ goog.userAgent.ASSUME_IPOD = goog.define("goog.userAgent.ASSUME_IPOD", false);
+/** @define {boolean} */ goog.userAgent.ASSUME_KAIOS = goog.define("goog.userAgent.ASSUME_KAIOS", false);
+/** @define {boolean} */ goog.userAgent.ASSUME_GO2PHONE = goog.define("goog.userAgent.ASSUME_GO2PHONE", false);
 /** @private @type {boolean} */ goog.userAgent.PLATFORM_KNOWN_ = goog.userAgent.ASSUME_MAC || goog.userAgent.ASSUME_WINDOWS || goog.userAgent.ASSUME_LINUX || goog.userAgent.ASSUME_X11 || goog.userAgent.ASSUME_ANDROID || goog.userAgent.ASSUME_IPHONE || goog.userAgent.ASSUME_IPAD || goog.userAgent.ASSUME_IPOD;
 /** @type {boolean} */ goog.userAgent.MAC = goog.userAgent.PLATFORM_KNOWN_ ? goog.userAgent.ASSUME_MAC : goog.labs.userAgent.platform.isMacintosh();
 /** @type {boolean} */ goog.userAgent.WINDOWS = goog.userAgent.PLATFORM_KNOWN_ ? goog.userAgent.ASSUME_WINDOWS : goog.labs.userAgent.platform.isWindows();
@@ -94,8 +94,8 @@ goog.userAgent.isX11_ = function() {
 /** @type {boolean} */ goog.userAgent.IPAD = goog.userAgent.PLATFORM_KNOWN_ ? goog.userAgent.ASSUME_IPAD : goog.labs.userAgent.platform.isIpad();
 /** @type {boolean} */ goog.userAgent.IPOD = goog.userAgent.PLATFORM_KNOWN_ ? goog.userAgent.ASSUME_IPOD : goog.labs.userAgent.platform.isIpod();
 /** @type {boolean} */ goog.userAgent.IOS = goog.userAgent.PLATFORM_KNOWN_ ? goog.userAgent.ASSUME_IPHONE || goog.userAgent.ASSUME_IPAD || goog.userAgent.ASSUME_IPOD : goog.labs.userAgent.platform.isIos();
-goog.userAgent.KAIOS = goog.userAgent.PLATFORM_KNOWN_ ? goog.userAgent.ASSUME_KAIOS : goog.labs.userAgent.platform.isKaiOS();
-goog.userAgent.GO2PHONE = goog.userAgent.PLATFORM_KNOWN_ ? goog.userAgent.ASSUME_GO2PHONE : goog.labs.userAgent.platform.isGo2Phone();
+/** @type {boolean} */ goog.userAgent.KAIOS = goog.userAgent.PLATFORM_KNOWN_ ? goog.userAgent.ASSUME_KAIOS : goog.labs.userAgent.platform.isKaiOS();
+/** @type {boolean} */ goog.userAgent.GO2PHONE = goog.userAgent.PLATFORM_KNOWN_ ? goog.userAgent.ASSUME_GO2PHONE : goog.labs.userAgent.platform.isGo2Phone();
 /**
  * @private
  * @return {string}
@@ -186,11 +186,10 @@ goog.userAgent.isDocumentModeOrHigher = function(documentMode) {
 goog.userAgent.isDocumentMode = goog.userAgent.isDocumentModeOrHigher;
 /** @const @type {(number|undefined)} */ goog.userAgent.DOCUMENT_MODE = function() {
   var doc = goog.global["document"];
-  var mode = goog.userAgent.getDocumentMode_();
   if (!doc || !goog.userAgent.IE) {
     return undefined;
   }
-  return mode || (doc["compatMode"] == "CSS1Compat" ? parseInt(goog.userAgent.VERSION, 10) : 5);
+  return goog.userAgent.getDocumentMode_();
 }();
 
 //# sourceMappingURL=goog.useragent.useragent.js.map

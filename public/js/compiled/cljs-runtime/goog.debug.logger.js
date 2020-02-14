@@ -21,8 +21,8 @@ goog.debug.Logger = function(name) {
   /** @private @type {?Array<?Function>} */ this.handlers_ = null;
 };
 /** @const */ goog.debug.Logger.ROOT_LOGGER_NAME = "";
-/** @define {boolean} */ goog.define("goog.debug.Logger.ENABLE_HIERARCHY", true);
-/** @define {boolean} */ goog.define("goog.debug.Logger.ENABLE_PROFILER_LOGGING", false);
+/** @define {boolean} */ goog.debug.Logger.ENABLE_HIERARCHY = goog.define("goog.debug.Logger.ENABLE_HIERARCHY", true);
+/** @define {boolean} */ goog.debug.Logger.ENABLE_PROFILER_LOGGING = goog.define("goog.debug.Logger.ENABLE_PROFILER_LOGGING", false);
 if (!goog.debug.Logger.ENABLE_HIERARCHY) {
   /** @private @type {!Array<Function>} */ goog.debug.Logger.rootHandlers_ = [];
   /** @private @type {goog.debug.Logger.Level} */ goog.debug.Logger.rootLevel_;

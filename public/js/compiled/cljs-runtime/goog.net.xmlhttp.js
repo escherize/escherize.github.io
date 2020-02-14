@@ -12,9 +12,9 @@ goog.require("goog.net.XmlHttpFactory");
 goog.net.XmlHttp = function() {
   return goog.net.XmlHttp.factory_.createInstance();
 };
-/** @define {boolean} */ goog.define("goog.net.XmlHttp.ASSUME_NATIVE_XHR", false);
+/** @define {boolean} */ goog.net.XmlHttp.ASSUME_NATIVE_XHR = goog.define("goog.net.XmlHttp.ASSUME_NATIVE_XHR", false);
 /** @const */ goog.net.XmlHttpDefines = {};
-/** @define {boolean} */ goog.define("goog.net.XmlHttpDefines.ASSUME_NATIVE_XHR", false);
+/** @define {boolean} */ goog.net.XmlHttpDefines.ASSUME_NATIVE_XHR = goog.define("goog.net.XmlHttpDefines.ASSUME_NATIVE_XHR", false);
 /**
  * @return {Object}
  */

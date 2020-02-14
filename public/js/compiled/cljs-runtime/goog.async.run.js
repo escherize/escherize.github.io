@@ -2,7 +2,7 @@ goog.provide("goog.async.run");
 goog.require("goog.async.WorkQueue");
 goog.require("goog.async.nextTick");
 goog.require("goog.async.throwException");
-/** @define {boolean} */ goog.define("goog.ASSUME_NATIVE_PROMISE", false);
+/** @define {boolean} */ goog.ASSUME_NATIVE_PROMISE = goog.define("goog.ASSUME_NATIVE_PROMISE", false);
 /**
  * @param {function(this:THIS)} callback
  * @param {THIS=} opt_context

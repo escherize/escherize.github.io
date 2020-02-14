@@ -9,27 +9,27 @@ if((typeof reagent !== 'undefined') && (typeof reagent.impl !== 'undefined') && 
 reagent.impl.batching.mount_count = (0);
 }
 reagent.impl.batching.next_mount_count = (function reagent$impl$batching$next_mount_count(){
-return reagent.impl.batching.mount_count = (reagent.impl.batching.mount_count + (1));
+return (reagent.impl.batching.mount_count = (reagent.impl.batching.mount_count + (1)));
 });
 reagent.impl.batching.fake_raf = (function reagent$impl$batching$fake_raf(f){
 return setTimeout(f,(16));
 });
 reagent.impl.batching.next_tick = (((!(reagent.impl.util.is_client)))?reagent.impl.batching.fake_raf:(function (){var w = window;
-var or__4131__auto__ = (w["requestAnimationFrame"]);
-if(cljs.core.truth_(or__4131__auto__)){
-return or__4131__auto__;
+var or__4185__auto__ = (w["requestAnimationFrame"]);
+if(cljs.core.truth_(or__4185__auto__)){
+return or__4185__auto__;
 } else {
-var or__4131__auto____$1 = (w["webkitRequestAnimationFrame"]);
-if(cljs.core.truth_(or__4131__auto____$1)){
-return or__4131__auto____$1;
+var or__4185__auto____$1 = (w["webkitRequestAnimationFrame"]);
+if(cljs.core.truth_(or__4185__auto____$1)){
+return or__4185__auto____$1;
 } else {
-var or__4131__auto____$2 = (w["mozRequestAnimationFrame"]);
-if(cljs.core.truth_(or__4131__auto____$2)){
-return or__4131__auto____$2;
+var or__4185__auto____$2 = (w["mozRequestAnimationFrame"]);
+if(cljs.core.truth_(or__4185__auto____$2)){
+return or__4185__auto____$2;
 } else {
-var or__4131__auto____$3 = (w["msRequestAnimationFrame"]);
-if(cljs.core.truth_(or__4131__auto____$3)){
-return or__4131__auto____$3;
+var or__4185__auto____$3 = (w["msRequestAnimationFrame"]);
+if(cljs.core.truth_(or__4185__auto____$3)){
+return or__4185__auto____$3;
 } else {
 return reagent.impl.batching.fake_raf;
 }
@@ -43,18 +43,18 @@ return ((c1["cljsMountOrder"]) - (c2["cljsMountOrder"]));
 reagent.impl.batching.run_queue = (function reagent$impl$batching$run_queue(a){
 a.sort(reagent.impl.batching.compare_mount_order);
 
-var n__4607__auto__ = a.length;
+var n__4666__auto__ = a.length;
 var i = (0);
 while(true){
-if((i < n__4607__auto__)){
-var c_41016 = (a[i]);
-if((c_41016["cljsIsDirty"]) === true){
-(c_41016["forceUpdate"])();
+if((i < n__4666__auto__)){
+var c_42176 = (a[i]);
+if((c_42176["cljsIsDirty"]) === true){
+(c_42176["forceUpdate"])();
 } else {
 }
 
-var G__41021 = (i + (1));
-i = G__41021;
+var G__42177 = (i + (1));
+i = G__42177;
 continue;
 } else {
 return null;
@@ -75,7 +75,7 @@ return null;
 reagent.impl.batching.RenderQueue = (function (scheduled_QMARK_){
 this.scheduled_QMARK_ = scheduled_QMARK_;
 });
-reagent.impl.batching.RenderQueue.prototype.run_funs = (function (k){
+(reagent.impl.batching.RenderQueue.prototype.run_funs = (function (k){
 var self__ = this;
 var this$ = this;
 var temp__5739__auto__ = (this$[k]);
@@ -85,15 +85,15 @@ return null;
 var fs = temp__5739__auto__;
 (this$[k] = null);
 
-var n__4607__auto__ = fs.length;
+var n__4666__auto__ = fs.length;
 var i = (0);
 while(true){
-if((i < n__4607__auto__)){
-var fexpr__40943_41035 = (fs[i]);
-(fexpr__40943_41035.cljs$core$IFn$_invoke$arity$0 ? fexpr__40943_41035.cljs$core$IFn$_invoke$arity$0() : fexpr__40943_41035.call(null));
+if((i < n__4666__auto__)){
+var fexpr__42114_42180 = (fs[i]);
+(fexpr__42114_42180.cljs$core$IFn$_invoke$arity$0 ? fexpr__42114_42180.cljs$core$IFn$_invoke$arity$0() : fexpr__42114_42180.call(null));
 
-var G__41037 = (i + (1));
-i = G__41037;
+var G__42181 = (i + (1));
+i = G__42181;
 continue;
 } else {
 return null;
@@ -101,65 +101,63 @@ return null;
 break;
 }
 }
-});
+}));
 
-reagent.impl.batching.RenderQueue.prototype.flush_after_render = (function (){
+(reagent.impl.batching.RenderQueue.prototype.flush_after_render = (function (){
 var self__ = this;
 var this$ = this;
 return this$.run_funs("afterRender");
-});
+}));
 
-reagent.impl.batching.RenderQueue.prototype.queue_render = (function (c){
+(reagent.impl.batching.RenderQueue.prototype.queue_render = (function (c){
 var self__ = this;
 var this$ = this;
 return this$.enqueue("componentQueue",c);
-});
+}));
 
-reagent.impl.batching.RenderQueue.prototype.schedule = (function (){
+(reagent.impl.batching.RenderQueue.prototype.schedule = (function (){
 var self__ = this;
 var this$ = this;
 if(self__.scheduled_QMARK_){
 return null;
 } else {
-self__.scheduled_QMARK_ = true;
+(self__.scheduled_QMARK_ = true);
 
-var G__40958 = ((function (this$){
-return (function (){
+var G__42124 = (function (){
 return this$.run_queues();
-});})(this$))
-;
-return (reagent.impl.batching.next_tick.cljs$core$IFn$_invoke$arity$1 ? reagent.impl.batching.next_tick.cljs$core$IFn$_invoke$arity$1(G__40958) : reagent.impl.batching.next_tick.call(null,G__40958));
-}
 });
+return (reagent.impl.batching.next_tick.cljs$core$IFn$_invoke$arity$1 ? reagent.impl.batching.next_tick.cljs$core$IFn$_invoke$arity$1(G__42124) : reagent.impl.batching.next_tick.call(null,G__42124));
+}
+}));
 
-reagent.impl.batching.RenderQueue.prototype.flush_queues = (function (){
+(reagent.impl.batching.RenderQueue.prototype.flush_queues = (function (){
 var self__ = this;
 var this$ = this;
 this$.run_funs("beforeFlush");
 
 reagent.impl.batching.ratom_flush();
 
-var temp__5739__auto___41055 = (this$["componentQueue"]);
-if((temp__5739__auto___41055 == null)){
+var temp__5739__auto___42192 = (this$["componentQueue"]);
+if((temp__5739__auto___42192 == null)){
 } else {
-var cs_41057 = temp__5739__auto___41055;
+var cs_42193 = temp__5739__auto___42192;
 (this$["componentQueue"] = null);
 
-reagent.impl.batching.run_queue(cs_41057);
+reagent.impl.batching.run_queue(cs_42193);
 }
 
 return this$.flush_after_render();
-});
+}));
 
-reagent.impl.batching.RenderQueue.prototype.run_queues = (function (){
+(reagent.impl.batching.RenderQueue.prototype.run_queues = (function (){
 var self__ = this;
 var this$ = this;
-self__.scheduled_QMARK_ = false;
+(self__.scheduled_QMARK_ = false);
 
 return this$.flush_queues();
-});
+}));
 
-reagent.impl.batching.RenderQueue.prototype.enqueue = (function (k,f){
+(reagent.impl.batching.RenderQueue.prototype.enqueue = (function (k,f){
 var self__ = this;
 var this$ = this;
 if(cljs.core.truth_(f)){
@@ -175,31 +173,31 @@ if(((this$[k]) == null)){
 (this$[k]).push(f);
 
 return this$.schedule();
-});
+}));
 
-reagent.impl.batching.RenderQueue.prototype.add_before_flush = (function (f){
+(reagent.impl.batching.RenderQueue.prototype.add_before_flush = (function (f){
 var self__ = this;
 var this$ = this;
 return this$.enqueue("beforeFlush",f);
-});
+}));
 
-reagent.impl.batching.RenderQueue.prototype.add_after_render = (function (f){
+(reagent.impl.batching.RenderQueue.prototype.add_after_render = (function (f){
 var self__ = this;
 var this$ = this;
 return this$.enqueue("afterRender",f);
-});
+}));
 
-reagent.impl.batching.RenderQueue.getBasis = (function (){
+(reagent.impl.batching.RenderQueue.getBasis = (function (){
 return new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, [cljs.core.with_meta(new cljs.core.Symbol(null,"scheduled?","scheduled?",579986609,null),new cljs.core.PersistentArrayMap(null, 2, [new cljs.core.Keyword(null,"tag","tag",-1290361223),new cljs.core.Symbol(null,"boolean","boolean",-278886877,null),new cljs.core.Keyword(null,"mutable","mutable",875778266),true], null))], null);
-});
+}));
 
-reagent.impl.batching.RenderQueue.cljs$lang$type = true;
+(reagent.impl.batching.RenderQueue.cljs$lang$type = true);
 
-reagent.impl.batching.RenderQueue.cljs$lang$ctorStr = "reagent.impl.batching/RenderQueue";
+(reagent.impl.batching.RenderQueue.cljs$lang$ctorStr = "reagent.impl.batching/RenderQueue");
 
-reagent.impl.batching.RenderQueue.cljs$lang$ctorPrWriter = (function (this__4374__auto__,writer__4375__auto__,opt__4376__auto__){
-return cljs.core._write(writer__4375__auto__,"reagent.impl.batching/RenderQueue");
-});
+(reagent.impl.batching.RenderQueue.cljs$lang$ctorPrWriter = (function (this__4428__auto__,writer__4429__auto__,opt__4430__auto__){
+return cljs.core._write(writer__4429__auto__,"reagent.impl.batching/RenderQueue");
+}));
 
 /**
  * Positional factory function for reagent.impl.batching/RenderQueue.

@@ -98,15 +98,21 @@ goog.labs.userAgent.platform.getVersion = function() {
         var match = re.exec(userAgentString);
         version = match ? match[1].replace(/_/g, ".") : "10";
       } else {
-        if (goog.labs.userAgent.platform.isAndroid()) {
-          re = /Android\s+([^\);]+)(\)|;)/;
+        if (goog.labs.userAgent.platform.isKaiOS()) {
+          re = /(?:KaiOS)\/(\S+)/i;
           var match = re.exec(userAgentString);
           version = match && match[1];
         } else {
-          if (goog.labs.userAgent.platform.isChromeOS()) {
-            re = /(?:CrOS\s+(?:i686|x86_64)\s+([0-9.]+))/;
+          if (goog.labs.userAgent.platform.isAndroid()) {
+            re = /Android\s+([^\);]+)(\)|;)/;
             var match = re.exec(userAgentString);
             version = match && match[1];
+          } else {
+            if (goog.labs.userAgent.platform.isChromeOS()) {
+              re = /(?:CrOS\s+(?:i686|x86_64)\s+([0-9.]+))/;
+              var match = re.exec(userAgentString);
+              version = match && match[1];
+            }
           }
         }
       }

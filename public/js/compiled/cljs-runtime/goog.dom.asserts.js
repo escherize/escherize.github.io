@@ -7,8 +7,10 @@ goog.require("goog.asserts");
 goog.dom.asserts.assertIsLocation = function(o) {
   if (goog.asserts.ENABLE_ASSERTS) {
     var win = goog.dom.asserts.getWindow_(o);
-    if (typeof win.Location != "undefined" && typeof win.Element != "undefined") {
-      goog.asserts.assert(o && (o instanceof win.Location || !(o instanceof win.Element)), "Argument is not a Location (or a non-Element mock); got: %s", goog.dom.asserts.debugStringForType_(o));
+    if (win) {
+      if (!o || !(o instanceof win.Location) && o instanceof win.Element) {
+        goog.asserts.fail("Argument is not a Location (or a non-Element mock); got: %s", goog.dom.asserts.debugStringForType_(o));
+      }
     }
   }
   return (/** @type {!Location} */ (o));
@@ -22,8 +24,10 @@ goog.dom.asserts.assertIsLocation = function(o) {
 goog.dom.asserts.assertIsElementType_ = function(o, typename) {
   if (goog.asserts.ENABLE_ASSERTS) {
     var win = goog.dom.asserts.getWindow_(o);
-    if (typeof win[typename] != "undefined" && typeof win.Location != "undefined" && typeof win.Element != "undefined") {
-      goog.asserts.assert(o && (o instanceof win[typename] || !(o instanceof win.Location || o instanceof win.Element)), "Argument is not a %s (or a non-Element, non-Location mock); got: %s", typename, goog.dom.asserts.debugStringForType_(o));
+    if (win && typeof win[typename] != "undefined") {
+      if (!o || !(o instanceof win[typename]) && (o instanceof win.Location || o instanceof win.Element)) {
+        goog.asserts.fail("Argument is not a %s (or a non-Element, non-Location mock); " + "got: %s", typename, goog.dom.asserts.debugStringForType_(o));
+      }
     }
   }
   return (/** @type {!Element} */ (o));
@@ -140,7 +144,11 @@ goog.dom.asserts.assertIsHTMLScriptElement = function(o) {
  */
 goog.dom.asserts.debugStringForType_ = function(value) {
   if (goog.isObject(value)) {
-    return value.constructor.displayName || value.constructor.name || Object.prototype.toString.call(value);
+    try {
+      return value.constructor.displayName || value.constructor.name || Object.prototype.toString.call(value);
+    } catch (e) {
+      return "\x3cobject could not be stringified\x3e";
+    }
   } else {
     return value === undefined ? "undefined" : value === null ? "null" : typeof value;
   }
@@ -148,13 +156,20 @@ goog.dom.asserts.debugStringForType_ = function(value) {
 /**
  * @private
  * @param {?Object} o
- * @return {!Window}
+ * @return {?Window}
  * @suppress {strictMissingProperties}
  */
 goog.dom.asserts.getWindow_ = function(o) {
-  var doc = o && o.ownerDocument;
-  var win = doc && (/** @type {?Window} */ (doc.defaultView || doc.parentWindow));
-  return win || /** @type {!Window} */ (goog.global);
+  try {
+    var doc = o && o.ownerDocument;
+    var win = doc && (/** @type {?Window} */ (doc.defaultView || doc.parentWindow));
+    win = win || /** @type {!Window} */ (goog.global);
+    if (win.Element && win.Location) {
+      return win;
+    }
+  } catch (ex) {
+  }
+  return null;
 };
 
 //# sourceMappingURL=goog.dom.asserts.js.map

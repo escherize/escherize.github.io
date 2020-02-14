@@ -1,11 +1,11 @@
 goog.provide("goog.events.Listenable");
 goog.provide("goog.events.ListenableKey");
+goog.forwardDeclare("goog.events.EventLike");
+goog.forwardDeclare("goog.events.EventTarget");
 /**
  * @suppress {extraRequire}
  */
 goog.require("goog.events.EventId");
-goog.forwardDeclare("goog.events.EventLike");
-goog.forwardDeclare("goog.events.EventTarget");
 /** @interface */ goog.events.Listenable = function() {
 };
 /** @const @type {string} */ goog.events.Listenable.IMPLEMENTED_BY_PROP = "closure_listenable_" + (Math.random() * 1e6 | 0);
@@ -28,7 +28,8 @@ goog.events.Listenable.isImplementedBy = function(obj) {
  * @param {boolean=} opt_useCapture
  * @param {SCOPE=} opt_listenerScope
  * @return {!goog.events.ListenableKey}
- * @template SCOPE, EVENTOBJ
+ * @template SCOPE
+ * @template EVENTOBJ
  */
 goog.events.Listenable.prototype.listen;
 /**
@@ -37,7 +38,8 @@ goog.events.Listenable.prototype.listen;
  * @param {boolean=} opt_useCapture
  * @param {SCOPE=} opt_listenerScope
  * @return {!goog.events.ListenableKey}
- * @template SCOPE, EVENTOBJ
+ * @template SCOPE
+ * @template EVENTOBJ
  */
 goog.events.Listenable.prototype.listenOnce;
 /**
@@ -46,7 +48,8 @@ goog.events.Listenable.prototype.listenOnce;
  * @param {boolean=} opt_useCapture
  * @param {SCOPE=} opt_listenerScope
  * @return {boolean}
- * @template SCOPE, EVENTOBJ
+ * @template SCOPE
+ * @template EVENTOBJ
  */
 goog.events.Listenable.prototype.unlisten;
 /**
@@ -89,7 +92,8 @@ goog.events.Listenable.prototype.getListeners;
  * @param {boolean} capture
  * @param {SCOPE=} opt_listenerScope
  * @return {goog.events.ListenableKey}
- * @template SCOPE, EVENTOBJ
+ * @template SCOPE
+ * @template EVENTOBJ
  */
 goog.events.Listenable.prototype.getListener;
 /**
