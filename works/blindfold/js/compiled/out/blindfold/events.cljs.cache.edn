@@ -1,0 +1,1 @@
+{:rename-macros {}, :renames {}, :use-macros {}, :excludes #{}, :name blindfold.events, :imports nil, :requires {re-frame re-frame.core, re-frame.core re-frame.core, db blindfold.db, blindfold.db blindfold.db}, :uses nil, :require-macros nil, :cljs.analyzer/constants {:seen #{:initialize-db :assoc-in}, :order [:initialize-db :assoc-in]}, :doc nil}
