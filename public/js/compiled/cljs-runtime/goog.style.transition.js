@@ -22,12 +22,12 @@ goog.style.transition.set = function(element, properties) {
   }
   goog.asserts.assert(properties.length > 0, "At least one Css3Property should be specified.");
   var values = goog.array.map(properties, function(p) {
-    if (goog.isString(p)) {
+    if (typeof p === "string") {
       return p;
     } else {
       goog.asserts.assertObject(p, "Expected css3 property to be an object.");
       var propString = p.property + " " + p.duration + "s " + p.timing + " " + p.delay + "s";
-      goog.asserts.assert(p.property && goog.isNumber(p.duration) && p.timing && goog.isNumber(p.delay), "Unexpected css3 property value: %s", propString);
+      goog.asserts.assert(p.property && typeof p.duration === "number" && p.timing && typeof p.delay === "number", "Unexpected css3 property value: %s", propString);
       return propString;
     }
   });

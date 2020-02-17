@@ -111,7 +111,7 @@ goog.math.Size.prototype.round = function() {
  * @return {!goog.math.Size}
  */
 goog.math.Size.prototype.scale = function(sx, opt_sy) {
-  var sy = goog.isNumber(opt_sy) ? opt_sy : sx;
+  /** @const */ var sy = typeof opt_sy === "number" ? opt_sy : sx;
   this.width *= sx;
   this.height *= sy;
   return this;
@@ -121,7 +121,7 @@ goog.math.Size.prototype.scale = function(sx, opt_sy) {
  * @return {!goog.math.Size}
  */
 goog.math.Size.prototype.scaleToCover = function(target) {
-  var s = this.aspectRatio() <= target.aspectRatio() ? target.width / this.width : target.height / this.height;
+  /** @const */ var s = this.aspectRatio() <= target.aspectRatio() ? target.width / this.width : target.height / this.height;
   return this.scale(s);
 };
 /**
@@ -129,7 +129,7 @@ goog.math.Size.prototype.scaleToCover = function(target) {
  * @return {!goog.math.Size}
  */
 goog.math.Size.prototype.scaleToFit = function(target) {
-  var s = this.aspectRatio() > target.aspectRatio() ? target.width / this.width : target.height / this.height;
+  /** @const */ var s = this.aspectRatio() > target.aspectRatio() ? target.width / this.width : target.height / this.height;
   return this.scale(s);
 };
 

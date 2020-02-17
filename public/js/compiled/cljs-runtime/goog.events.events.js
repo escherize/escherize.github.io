@@ -2,21 +2,21 @@ goog.provide("goog.events");
 goog.provide("goog.events.CaptureSimulationMode");
 goog.provide("goog.events.Key");
 goog.provide("goog.events.ListenableType");
+goog.forwardDeclare("goog.debug.ErrorHandler");
+goog.forwardDeclare("goog.events.EventWrapper");
 goog.require("goog.asserts");
 goog.require("goog.debug.entryPointRegistry");
 goog.require("goog.events.BrowserEvent");
 goog.require("goog.events.BrowserFeature");
 goog.require("goog.events.Listenable");
 goog.require("goog.events.ListenerMap");
-goog.forwardDeclare("goog.debug.ErrorHandler");
-goog.forwardDeclare("goog.events.EventWrapper");
 /** @typedef {(number|goog.events.ListenableKey)} */ goog.events.Key;
 /** @typedef {(EventTarget|goog.events.Listenable)} */ goog.events.ListenableType;
 /** @private @const @type {string} */ goog.events.LISTENER_MAP_PROP_ = "closure_lm_" + (Math.random() * 1e6 | 0);
 /** @private @const */ goog.events.onString_ = "on";
 /** @private @const @dict */ goog.events.onStringMap_ = {};
 /** @enum {number} */ goog.events.CaptureSimulationMode = {OFF_AND_FAIL:0, OFF_AND_SILENT:1, ON:2};
-/** @define {number} */ goog.define("goog.events.CAPTURE_SIMULATION_MODE", 2);
+/** @define {number} */ goog.events.CAPTURE_SIMULATION_MODE = goog.define("goog.events.CAPTURE_SIMULATION_MODE", 2);
 /** @private @type {number} */ goog.events.listenerCountEstimate_ = 0;
 /**
  * @param {(EventTarget|goog.events.Listenable)} src
@@ -25,7 +25,8 @@ goog.forwardDeclare("goog.events.EventWrapper");
  * @param {(boolean|!AddEventListenerOptions)=} opt_options
  * @param {T=} opt_handler
  * @return {goog.events.Key}
- * @template T, EVENTOBJ
+ * @template T
+ * @template EVENTOBJ
  */
 goog.events.listen = function(src, type, listener, opt_options, opt_handler) {
   if (opt_options && opt_options.once) {
@@ -128,7 +129,8 @@ goog.events.getProxy = function() {
  * @param {(boolean|!AddEventListenerOptions)=} opt_options
  * @param {T=} opt_handler
  * @return {goog.events.Key}
- * @template T, EVENTOBJ
+ * @template T
+ * @template EVENTOBJ
  */
 goog.events.listenOnce = function(src, type, listener, opt_options, opt_handler) {
   if (goog.isArray(type)) {
@@ -194,7 +196,7 @@ goog.events.unlisten = function(src, type, listener, opt_options, opt_handler) {
  * @return {boolean}
  */
 goog.events.unlistenByKey = function(key) {
-  if (goog.isNumber(key)) {
+  if (typeof key === "number") {
     return false;
   }
   var listener = key;

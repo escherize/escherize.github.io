@@ -1,0 +1,1 @@
+(ns new-root.scratch)

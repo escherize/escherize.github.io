@@ -18,8 +18,8 @@ goog.require("goog.object");
 goog.require("goog.string");
 goog.require("goog.string.Unicode");
 goog.require("goog.userAgent");
-/** @define {boolean} */ goog.define("goog.dom.ASSUME_QUIRKS_MODE", false);
-/** @define {boolean} */ goog.define("goog.dom.ASSUME_STANDARDS_MODE", false);
+/** @define {boolean} */ goog.dom.ASSUME_QUIRKS_MODE = goog.define("goog.dom.ASSUME_QUIRKS_MODE", false);
+/** @define {boolean} */ goog.dom.ASSUME_STANDARDS_MODE = goog.define("goog.dom.ASSUME_STANDARDS_MODE", false);
 /** @private @type {boolean} */ goog.dom.COMPAT_MODE_KNOWN_ = goog.dom.ASSUME_QUIRKS_MODE || goog.dom.ASSUME_STANDARDS_MODE;
 /**
  * @param {(Node|Window)=} opt_element
@@ -49,7 +49,7 @@ goog.dom.getElement = function(element) {
  * @return {Element}
  */
 goog.dom.getElementHelper_ = function(doc, element) {
-  return goog.isString(element) ? doc.getElementById(element) : element;
+  return typeof element === "string" ? doc.getElementById(element) : element;
 };
 /**
  * @param {string} id
@@ -426,9 +426,9 @@ goog.dom.createDom_ = function(doc, args) {
     tagNameArr.push("\x3e");
     tagName = tagNameArr.join("");
   }
-  var element = doc.createElement(tagName);
+  var element = goog.dom.createElement_(doc, tagName);
   if (attributes) {
-    if (goog.isString(attributes)) {
+    if (typeof attributes === "string") {
       element.className = attributes;
     } else {
       if (goog.isArray(attributes)) {
@@ -453,7 +453,7 @@ goog.dom.createDom_ = function(doc, args) {
 goog.dom.append_ = function(doc, parent, args, startIndex) {
   function childHandler(child) {
     if (child) {
-      parent.appendChild(goog.isString(child) ? doc.createTextNode(child) : child);
+      parent.appendChild(typeof child === "string" ? doc.createTextNode(child) : child);
     }
   }
   for (var i = startIndex; i < args.length; i++) {
@@ -493,7 +493,11 @@ goog.dom.createElement = function(name) {
  * @template R := cond(isUnknown(T),"Element",T) =:
  */
 goog.dom.createElement_ = function(doc, name) {
-  return doc.createElement(String(name));
+  name = String(name);
+  if (doc.contentType === "application/xhtml+xml") {
+    name = name.toLowerCase();
+  }
+  return doc.createElement(name);
 };
 /**
  * @param {(number|string)} content
@@ -744,7 +748,7 @@ goog.dom.getChildren = function(element) {
  * @return {Element}
  */
 goog.dom.getFirstElementChild = function(node) {
-  if (goog.isDef(node.firstElementChild)) {
+  if (node.firstElementChild !== undefined) {
     return /** @type {!Element} */ (node).firstElementChild;
   }
   return goog.dom.getNextElementNode_(node.firstChild, true);
@@ -754,7 +758,7 @@ goog.dom.getFirstElementChild = function(node) {
  * @return {Element}
  */
 goog.dom.getLastElementChild = function(node) {
-  if (goog.isDef(node.lastElementChild)) {
+  if (node.lastElementChild !== undefined) {
     return /** @type {!Element} */ (node).lastElementChild;
   }
   return goog.dom.getNextElementNode_(node.lastChild, false);
@@ -764,7 +768,7 @@ goog.dom.getLastElementChild = function(node) {
  * @return {Element}
  */
 goog.dom.getNextElementSibling = function(node) {
-  if (goog.isDef(node.nextElementSibling)) {
+  if (node.nextElementSibling !== undefined) {
     return /** @type {!Element} */ (node).nextElementSibling;
   }
   return goog.dom.getNextElementNode_(node.nextSibling, true);
@@ -774,7 +778,7 @@ goog.dom.getNextElementSibling = function(node) {
  * @return {Element}
  */
 goog.dom.getPreviousElementSibling = function(node) {
-  if (goog.isDef(node.previousElementSibling)) {
+  if (node.previousElementSibling !== undefined) {
     return /** @type {!Element} */ (node).previousElementSibling;
   }
   return goog.dom.getNextElementNode_(node.previousSibling, false);
@@ -1003,6 +1007,13 @@ goog.dom.findCommonAncestor = function(var_args) {
   return output;
 };
 /**
+ * @param {!Node} node
+ * @return {boolean}
+ */
+goog.dom.isInDocument = function(node) {
+  return (node.ownerDocument.compareDocumentPosition(node) & 16) == 16;
+};
+/**
  * @param {(Node|Window)} node
  * @return {!Document}
  */
@@ -1114,6 +1125,58 @@ goog.dom.findNodes_ = function(root, p, rv, findOne) {
   }
   return false;
 };
+/**
+ * @param {(!Element|!Document)} root
+ * @param {function(!Element):boolean} pred
+ * @return {?Element}
+ */
+goog.dom.findElement = function(root, pred) {
+  var stack = goog.dom.getChildrenReverse_(root);
+  while (stack.length > 0) {
+    var next = stack.pop();
+    if (pred(next)) {
+      return next;
+    }
+    for (var c = next.lastElementChild; c; c = c.previousElementSibling) {
+      stack.push(c);
+    }
+  }
+  return null;
+};
+/**
+ * @param {(!Element|!Document)} root
+ * @param {function(!Element):boolean} pred
+ * @return {!Array<!Element>}
+ */
+goog.dom.findElements = function(root, pred) {
+  var result = [], stack = goog.dom.getChildrenReverse_(root);
+  while (stack.length > 0) {
+    var next = stack.pop();
+    if (pred(next)) {
+      result.push(next);
+    }
+    for (var c = next.lastElementChild; c; c = c.previousElementSibling) {
+      stack.push(c);
+    }
+  }
+  return result;
+};
+/**
+ * @private
+ * @param {(!Element|!Document)} node
+ * @return {!Array<!Element>}
+ */
+goog.dom.getChildrenReverse_ = function(node) {
+  if (node.nodeType == goog.dom.NodeType.DOCUMENT) {
+    return [node.documentElement];
+  } else {
+    var children = [];
+    for (var c = node.lastElementChild; c; c = c.previousElementSibling) {
+      children.push(c);
+    }
+    return children;
+  }
+};
 /** @private @const @type {!Object<string,number>} */ goog.dom.TAGS_TO_IGNORE_ = {"SCRIPT":1, "STYLE":1, "HEAD":1, "IFRAME":1, "OBJECT":1};
 /** @private @const @type {!Object<string,string>} */ goog.dom.PREDEFINED_TAG_VALUES_ = {"IMG":" ", "BR":"\n"};
 /**
@@ -1156,7 +1219,7 @@ goog.dom.isFocusable = function(element) {
 goog.dom.hasSpecifiedTabIndex_ = function(element) {
   if (goog.userAgent.IE && !goog.userAgent.isVersionOrHigher("9")) {
     var attrNode = element.getAttributeNode("tabindex");
-    return goog.isDefAndNotNull(attrNode) && attrNode.specified;
+    return attrNode != null && attrNode.specified;
   } else {
     return element.hasAttribute("tabindex");
   }
@@ -1168,7 +1231,7 @@ goog.dom.hasSpecifiedTabIndex_ = function(element) {
  */
 goog.dom.isTabIndexFocusable_ = function(element) {
   var index = /** @type {!HTMLElement} */ (element).tabIndex;
-  return goog.isNumber(index) && index >= 0 && index < 32768;
+  return typeof index === "number" && index >= 0 && index < 32768;
 };
 /**
  * @private
@@ -1190,7 +1253,7 @@ goog.dom.hasNonZeroBoundingRect_ = function(element) {
   } else {
     rect = element.getBoundingClientRect();
   }
-  return goog.isDefAndNotNull(rect) && rect.height > 0 && rect.width > 0;
+  return rect != null && rect.height > 0 && rect.width > 0;
 };
 /**
  * @param {Node} node
@@ -1339,7 +1402,7 @@ goog.dom.getAncestorByTagNameAndClass = function(element, opt_tag, opt_class, op
   }
   var tagName = opt_tag ? String(opt_tag).toUpperCase() : null;
   return (/** @type {Element} */ (goog.dom.getAncestor(element, function(node) {
-    return (!tagName || node.nodeName == tagName) && (!opt_class || goog.isString(node.className) && goog.array.contains(node.className.split(/\s+/), opt_class));
+    return (!tagName || node.nodeName == tagName) && (!opt_class || typeof node.className === "string" && goog.array.contains(node.className.split(/\s+/), opt_class));
   }, true, opt_maxSearchSteps)));
 };
 /**
@@ -1390,7 +1453,7 @@ goog.dom.getActiveElement = function(doc) {
  */
 goog.dom.getPixelRatio = function() {
   var win = goog.dom.getWindow();
-  if (goog.isDef(win.devicePixelRatio)) {
+  if (win.devicePixelRatio !== undefined) {
     return win.devicePixelRatio;
   } else {
     if (win.matchMedia) {
@@ -1411,7 +1474,7 @@ goog.dom.matchesPixelRatio_ = function(pixelRatio) {
   return win.matchMedia(query).matches ? pixelRatio : 0;
 };
 /**
- * @param {!HTMLCanvasElement} canvas
+ * @param {(!HTMLCanvasElement|!OffscreenCanvas)} canvas
  * @return {!CanvasRenderingContext2D}
  */
 goog.dom.getCanvasContext2D = function(canvas) {

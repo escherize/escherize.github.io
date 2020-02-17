@@ -26,8 +26,8 @@ return reitit.frontend.history.start_BANG_.cljs$core$IFn$_invoke$arity$3(router,
 }));
 });
 reitit.frontend.easy.href = (function reitit$frontend$easy$href(var_args){
-var G__50136 = arguments.length;
-switch (G__50136) {
+var G__45626 = arguments.length;
+switch (G__45626) {
 case 1:
 return reitit.frontend.easy.href.cljs$core$IFn$_invoke$arity$1((arguments[(0)]));
 
@@ -46,26 +46,26 @@ throw (new Error(["Invalid arity: ",cljs.core.str.cljs$core$IFn$_invoke$arity$1(
 }
 });
 
-reitit.frontend.easy.href.cljs$core$IFn$_invoke$arity$1 = (function (k){
+(reitit.frontend.easy.href.cljs$core$IFn$_invoke$arity$1 = (function (k){
 return reitit.frontend.history.href.cljs$core$IFn$_invoke$arity$4(cljs.core.deref(reitit.frontend.easy.history),k,null,null);
-});
+}));
 
-reitit.frontend.easy.href.cljs$core$IFn$_invoke$arity$2 = (function (k,params){
+(reitit.frontend.easy.href.cljs$core$IFn$_invoke$arity$2 = (function (k,params){
 return reitit.frontend.history.href.cljs$core$IFn$_invoke$arity$4(cljs.core.deref(reitit.frontend.easy.history),k,params,null);
-});
+}));
 
-reitit.frontend.easy.href.cljs$core$IFn$_invoke$arity$3 = (function (k,params,query){
+(reitit.frontend.easy.href.cljs$core$IFn$_invoke$arity$3 = (function (k,params,query){
 return reitit.frontend.history.href.cljs$core$IFn$_invoke$arity$4(cljs.core.deref(reitit.frontend.easy.history),k,params,query);
-});
+}));
 
-reitit.frontend.easy.href.cljs$lang$maxFixedArity = 3;
+(reitit.frontend.easy.href.cljs$lang$maxFixedArity = 3);
 
 /**
  * Sets the new route, leaving previous route in history.
  */
 reitit.frontend.easy.push_state = (function reitit$frontend$easy$push_state(var_args){
-var G__50143 = arguments.length;
-switch (G__50143) {
+var G__45644 = arguments.length;
+switch (G__45644) {
 case 1:
 return reitit.frontend.easy.push_state.cljs$core$IFn$_invoke$arity$1((arguments[(0)]));
 
@@ -84,26 +84,26 @@ throw (new Error(["Invalid arity: ",cljs.core.str.cljs$core$IFn$_invoke$arity$1(
 }
 });
 
-reitit.frontend.easy.push_state.cljs$core$IFn$_invoke$arity$1 = (function (k){
+(reitit.frontend.easy.push_state.cljs$core$IFn$_invoke$arity$1 = (function (k){
 return reitit.frontend.history.push_state.cljs$core$IFn$_invoke$arity$4(cljs.core.deref(reitit.frontend.easy.history),k,null,null);
-});
+}));
 
-reitit.frontend.easy.push_state.cljs$core$IFn$_invoke$arity$2 = (function (k,params){
+(reitit.frontend.easy.push_state.cljs$core$IFn$_invoke$arity$2 = (function (k,params){
 return reitit.frontend.history.push_state.cljs$core$IFn$_invoke$arity$4(cljs.core.deref(reitit.frontend.easy.history),k,params,null);
-});
+}));
 
-reitit.frontend.easy.push_state.cljs$core$IFn$_invoke$arity$3 = (function (k,params,query){
+(reitit.frontend.easy.push_state.cljs$core$IFn$_invoke$arity$3 = (function (k,params,query){
 return reitit.frontend.history.push_state.cljs$core$IFn$_invoke$arity$4(cljs.core.deref(reitit.frontend.easy.history),k,params,query);
-});
+}));
 
-reitit.frontend.easy.push_state.cljs$lang$maxFixedArity = 3;
+(reitit.frontend.easy.push_state.cljs$lang$maxFixedArity = 3);
 
 /**
  * Replaces current route. I.e. current route is not left on history.
  */
 reitit.frontend.easy.replace_state = (function reitit$frontend$easy$replace_state(var_args){
-var G__50147 = arguments.length;
-switch (G__50147) {
+var G__45647 = arguments.length;
+switch (G__45647) {
 case 1:
 return reitit.frontend.easy.replace_state.cljs$core$IFn$_invoke$arity$1((arguments[(0)]));
 
@@ -122,19 +122,19 @@ throw (new Error(["Invalid arity: ",cljs.core.str.cljs$core$IFn$_invoke$arity$1(
 }
 });
 
-reitit.frontend.easy.replace_state.cljs$core$IFn$_invoke$arity$1 = (function (k){
+(reitit.frontend.easy.replace_state.cljs$core$IFn$_invoke$arity$1 = (function (k){
 return reitit.frontend.history.replace_state.cljs$core$IFn$_invoke$arity$4(cljs.core.deref(reitit.frontend.easy.history),k,null,null);
-});
+}));
 
-reitit.frontend.easy.replace_state.cljs$core$IFn$_invoke$arity$2 = (function (k,params){
+(reitit.frontend.easy.replace_state.cljs$core$IFn$_invoke$arity$2 = (function (k,params){
 return reitit.frontend.history.replace_state.cljs$core$IFn$_invoke$arity$4(cljs.core.deref(reitit.frontend.easy.history),k,params,null);
-});
+}));
 
-reitit.frontend.easy.replace_state.cljs$core$IFn$_invoke$arity$3 = (function (k,params,query){
+(reitit.frontend.easy.replace_state.cljs$core$IFn$_invoke$arity$3 = (function (k,params,query){
 return reitit.frontend.history.replace_state.cljs$core$IFn$_invoke$arity$4(cljs.core.deref(reitit.frontend.easy.history),k,params,query);
-});
+}));
 
-reitit.frontend.easy.replace_state.cljs$lang$maxFixedArity = 3;
+(reitit.frontend.easy.replace_state.cljs$lang$maxFixedArity = 3);
 
 
 //# sourceMappingURL=reitit.frontend.easy.js.map

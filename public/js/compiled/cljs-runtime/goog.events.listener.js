@@ -24,7 +24,7 @@ goog.events.Listener = function(listener, proxy, src, type, capture, opt_handler
   /** @type {boolean} */ this.callOnce = false;
   /** @type {boolean} */ this.removed = false;
 };
-/** @define {boolean} */ goog.define("goog.events.Listener.ENABLE_MONITORING", false);
+/** @define {boolean} */ goog.events.Listener.ENABLE_MONITORING = goog.define("goog.events.Listener.ENABLE_MONITORING", false);
 /** @type {string} */ goog.events.Listener.prototype.creationStack;
 goog.events.Listener.prototype.markAsRemoved = function() {
   this.removed = true;

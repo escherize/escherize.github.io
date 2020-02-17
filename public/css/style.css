@@ -12,3 +12,16 @@
 hr {
   color: #d24c53;
 } */
+
+.teaser-card {
+  border-radius: 20px;
+  background: #eceff4;
+  box-shadow:  -14px 14px 20px #c9cbcf, 14px -14px 20px #ffffff;
+  min-width: 150px;
+  min-height: 100px;
+}
+
+.teaser-card:hover {
+  /*   border-radius: 10px; */
+  background: #eff4ec;
+}

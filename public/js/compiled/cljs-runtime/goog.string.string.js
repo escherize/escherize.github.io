@@ -1,8 +1,11 @@
 goog.provide("goog.string");
 goog.provide("goog.string.Unicode");
+goog.require("goog.dom.safe");
+goog.require("goog.html.uncheckedconversions");
+goog.require("goog.string.Const");
 goog.require("goog.string.internal");
-/** @define {boolean} */ goog.define("goog.string.DETECT_DOUBLE_ESCAPING", false);
-/** @define {boolean} */ goog.define("goog.string.FORCE_NON_DOM_HTML_UNESCAPING", false);
+/** @define {boolean} */ goog.string.DETECT_DOUBLE_ESCAPING = goog.define("goog.string.DETECT_DOUBLE_ESCAPING", false);
+/** @define {boolean} */ goog.string.FORCE_NON_DOM_HTML_UNESCAPING = goog.define("goog.string.FORCE_NON_DOM_HTML_UNESCAPING", false);
 /** @enum {string} */ goog.string.Unicode = {NBSP:" "};
 /**
  * @param {string} str
@@ -334,7 +337,7 @@ goog.string.unescapeEntitiesUsingDom_ = function(str, opt_document) {
       }
     }
     if (!value) {
-      div.innerHTML = s + " ";
+      goog.dom.safe.setInnerHtml(div, goog.html.uncheckedconversions.safeHtmlFromStringKnownToSatisfyTypeContract(goog.string.Const.from("Single HTML entity."), s + " "));
       value = div.firstChild.nodeValue.slice(0, -1);
     }
     return seen[s] = value;
@@ -447,7 +450,7 @@ goog.string.truncateMiddle = function(str, chars, opt_protectEscapedCharacters, 
   }
   return str;
 };
-/** @private @type {!Object<string,string>} */ goog.string.specialEscapeChars_ = {"\x00":"\\0", "\b":"\\b", "\f":"\\f", "\n":"\\n", "\r":"\\r", "\t":"\\t", "\x0B":"\\x0B", '"':'\\"', "\\":"\\\\", "\x3c":"\x3c"};
+/** @private @type {!Object<string,string>} */ goog.string.specialEscapeChars_ = {"\x00":"\\0", "\b":"\\b", "\f":"\\f", "\n":"\\n", "\r":"\\r", "\t":"\\t", "\x0B":"\\x0B", '"':'\\"', "\\":"\\\\", "\x3c":"\\u003C"};
 /** @private @type {!Object<string,string>} */ goog.string.jsEscapeCache_ = {"'":"\\'"};
 /**
  * @param {string} s
@@ -590,7 +593,7 @@ goog.string.repeat = String.prototype.repeat ? function(string, length) {
  * @return {string}
  */
 goog.string.padNumber = function(num, length, opt_precision) {
-  var s = goog.isDef(opt_precision) ? num.toFixed(opt_precision) : String(num);
+  var s = opt_precision !== undefined ? num.toFixed(opt_precision) : String(num);
   var index = s.indexOf(".");
   if (index == -1) {
     index = s.length;
@@ -689,7 +692,7 @@ goog.string.toSelectorCase = function(str) {
  * @return {string}
  */
 goog.string.toTitleCase = function(str, opt_delimiters) {
-  var delimiters = goog.isString(opt_delimiters) ? goog.string.regExpEscape(opt_delimiters) : "\\s";
+  var delimiters = typeof opt_delimiters === "string" ? goog.string.regExpEscape(opt_delimiters) : "\\s";
   delimiters = delimiters ? "|[" + delimiters + "]+" : "";
   var regexp = new RegExp("(^" + delimiters + ")([a-z])", "g");
   return str.replace(regexp, function(all, p1, p2) {
@@ -711,7 +714,7 @@ goog.string.parseInt = function(value) {
   if (isFinite(value)) {
     value = String(value);
   }
-  if (goog.isString(value)) {
+  if (typeof value === "string") {
     return /^\s*-?0x/i.test(value) ? parseInt(value, 16) : parseInt(value, 10);
   }
   return NaN;

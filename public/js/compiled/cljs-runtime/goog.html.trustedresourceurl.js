@@ -1,5 +1,6 @@
 goog.provide("goog.html.TrustedResourceUrl");
 goog.require("goog.asserts");
+goog.require("goog.html.trustedtypes");
 goog.require("goog.i18n.bidi.Dir");
 goog.require("goog.i18n.bidi.DirectionalString");
 goog.require("goog.string.Const");
@@ -10,14 +11,16 @@ goog.require("goog.string.TypedString");
  * @constructor
  * @implements {goog.i18n.bidi.DirectionalString}
  * @implements {goog.string.TypedString}
+ * @param {!Object=} opt_token
+ * @param {(!TrustedScriptURL|string)=} opt_content
  */
-goog.html.TrustedResourceUrl = function() {
-  /** @private @type {string} */ this.privateDoNotAccessOrElseTrustedResourceUrlWrappedValue_ = "";
+goog.html.TrustedResourceUrl = function(opt_token, opt_content) {
+  /** @private @const @type {(!TrustedScriptURL|string)} */ this.privateDoNotAccessOrElseTrustedResourceUrlWrappedValue_ = opt_token === goog.html.TrustedResourceUrl.CONSTRUCTOR_TOKEN_PRIVATE_ && opt_content || "";
   /** @private @const @type {!Object} */ this.TRUSTED_RESOURCE_URL_TYPE_MARKER_GOOG_HTML_SECURITY_PRIVATE_ = goog.html.TrustedResourceUrl.TYPE_MARKER_GOOG_HTML_SECURITY_PRIVATE_;
 };
 /** @const @override */ goog.html.TrustedResourceUrl.prototype.implementsGoogStringTypedString = true;
 /** @override */ goog.html.TrustedResourceUrl.prototype.getTypedStringValue = function() {
-  return this.privateDoNotAccessOrElseTrustedResourceUrlWrappedValue_;
+  return this.privateDoNotAccessOrElseTrustedResourceUrlWrappedValue_.toString();
 };
 /** @const @override */ goog.html.TrustedResourceUrl.prototype.implementsGoogI18nBidiDirectionalString = true;
 /** @override */ goog.html.TrustedResourceUrl.prototype.getDirection = function() {
@@ -46,6 +49,13 @@ if (goog.DEBUG) {
  * @return {string}
  */
 goog.html.TrustedResourceUrl.unwrap = function(trustedResourceUrl) {
+  return goog.html.TrustedResourceUrl.unwrapTrustedScriptURL(trustedResourceUrl).toString();
+};
+/**
+ * @param {!goog.html.TrustedResourceUrl} trustedResourceUrl
+ * @return {(!TrustedScriptURL|string)}
+ */
+goog.html.TrustedResourceUrl.unwrapTrustedScriptURL = function(trustedResourceUrl) {
   if (trustedResourceUrl instanceof goog.html.TrustedResourceUrl && trustedResourceUrl.constructor === goog.html.TrustedResourceUrl && trustedResourceUrl.TRUSTED_RESOURCE_URL_TYPE_MARKER_GOOG_HTML_SECURITY_PRIVATE_ === goog.html.TrustedResourceUrl.TYPE_MARKER_GOOG_HTML_SECURITY_PRIVATE_) {
     return trustedResourceUrl.privateDoNotAccessOrElseTrustedResourceUrlWrappedValue_;
   } else {
@@ -117,9 +127,8 @@ goog.html.TrustedResourceUrl.fromConstants = function(parts) {
  * @return {!goog.html.TrustedResourceUrl}
  */
 goog.html.TrustedResourceUrl.createTrustedResourceUrlSecurityPrivateDoNotAccessOrElse = function(url) {
-  var trustedResourceUrl = new goog.html.TrustedResourceUrl;
-  trustedResourceUrl.privateDoNotAccessOrElseTrustedResourceUrlWrappedValue_ = url;
-  return trustedResourceUrl;
+  var value = goog.html.trustedtypes.PRIVATE_DO_NOT_ACCESS_OR_ELSE_POLICY ? goog.html.trustedtypes.PRIVATE_DO_NOT_ACCESS_OR_ELSE_POLICY.createScriptURL(url) : url;
+  return new goog.html.TrustedResourceUrl(goog.html.TrustedResourceUrl.CONSTRUCTOR_TOKEN_PRIVATE_, value);
 };
 /**
  * @private
@@ -132,7 +141,7 @@ goog.html.TrustedResourceUrl.stringifyParams_ = function(prefix, currentString, 
   if (params == null) {
     return currentString;
   }
-  if (goog.isString(params)) {
+  if (typeof params === "string") {
     return params ? prefix + encodeURIComponent(params) : "";
   }
   for (var key in params) {
@@ -150,5 +159,6 @@ goog.html.TrustedResourceUrl.stringifyParams_ = function(prefix, currentString, 
   }
   return currentString;
 };
+/** @private @const @type {!Object} */ goog.html.TrustedResourceUrl.CONSTRUCTOR_TOKEN_PRIVATE_ = {};
 
 //# sourceMappingURL=goog.html.trustedresourceurl.js.map

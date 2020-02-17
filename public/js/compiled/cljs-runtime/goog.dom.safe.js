@@ -8,6 +8,7 @@ goog.require("goog.html.SafeScript");
 goog.require("goog.html.SafeStyle");
 goog.require("goog.html.SafeUrl");
 goog.require("goog.html.TrustedResourceUrl");
+goog.require("goog.html.uncheckedconversions");
 goog.require("goog.string.Const");
 goog.require("goog.string.internal");
 /** @enum {string} */ goog.dom.safe.InsertAdjacentHtmlPosition = {AFTERBEGIN:"afterbegin", AFTEREND:"afterend", BEFOREBEGIN:"beforebegin", BEFOREEND:"beforeend"};
@@ -17,7 +18,7 @@ goog.require("goog.string.internal");
  * @param {!goog.html.SafeHtml} html
  */
 goog.dom.safe.insertAdjacentHtml = function(node, position, html) {
-  node.insertAdjacentHTML(position, goog.html.SafeHtml.unwrap(html));
+  node.insertAdjacentHTML(position, goog.html.SafeHtml.unwrapTrustedHTML(html));
 };
 /** @private @const @type {!Object<string,boolean>} */ goog.dom.safe.SET_INNER_HTML_DISALLOWED_TAGS_ = {"MATH":true, "SCRIPT":true, "STYLE":true, "SVG":true, "TEMPLATE":true};
 /**
@@ -29,17 +30,19 @@ goog.dom.safe.isInnerHtmlCleanupRecursive_ = goog.functions.cacheReturnValue(fun
     return false;
   }
   var div = document.createElement("div");
-  div.innerHTML = "\x3cdiv\x3e\x3cdiv\x3e\x3c/div\x3e\x3c/div\x3e";
+  var childDiv = document.createElement("div");
+  childDiv.appendChild(document.createElement("div"));
+  div.appendChild(childDiv);
   if (goog.DEBUG && !div.firstChild) {
     return false;
   }
   var innerChild = div.firstChild.firstChild;
-  div.innerHTML = "";
+  div.innerHTML = goog.html.SafeHtml.unwrapTrustedHTML(goog.html.SafeHtml.EMPTY);
   return !innerChild.parentElement;
 });
 /**
  * @param {?Element} elem
- * @param {string} html
+ * @param {!goog.html.SafeHtml} html
  */
 goog.dom.safe.unsafeSetInnerHtmlDoNotUseOrElse = function(elem, html) {
   if (goog.dom.safe.isInnerHtmlCleanupRecursive_()) {
@@ -47,7 +50,7 @@ goog.dom.safe.unsafeSetInnerHtmlDoNotUseOrElse = function(elem, html) {
       elem.removeChild(elem.lastChild);
     }
   }
-  elem.innerHTML = html;
+  elem.innerHTML = goog.html.SafeHtml.unwrapTrustedHTML(html);
 };
 /**
  * @param {!Element} elem
@@ -61,14 +64,14 @@ goog.dom.safe.setInnerHtml = function(elem, html) {
       throw new Error("goog.dom.safe.setInnerHtml cannot be used to set content of " + elem.tagName + ".");
     }
   }
-  goog.dom.safe.unsafeSetInnerHtmlDoNotUseOrElse(elem, goog.html.SafeHtml.unwrap(html));
+  goog.dom.safe.unsafeSetInnerHtmlDoNotUseOrElse(elem, html);
 };
 /**
  * @param {!Element} elem
  * @param {!goog.html.SafeHtml} html
  */
 goog.dom.safe.setOuterHtml = function(elem, html) {
-  elem.outerHTML = goog.html.SafeHtml.unwrap(html);
+  elem.outerHTML = goog.html.SafeHtml.unwrapTrustedHTML(html);
 };
 /**
  * @param {!Element} form
@@ -121,7 +124,7 @@ goog.dom.safe.setStyle = function(elem, style) {
  * @param {!goog.html.SafeHtml} html
  */
 goog.dom.safe.documentWrite = function(doc, html) {
-  doc.write(goog.html.SafeHtml.unwrap(html));
+  doc.write(goog.html.SafeHtml.unwrapTrustedHTML(html));
 };
 /**
  * @param {!HTMLAnchorElement} anchor
@@ -188,7 +191,7 @@ goog.dom.safe.setVideoSrc = function(videoElement, url) {
  */
 goog.dom.safe.setEmbedSrc = function(embed, url) {
   goog.dom.asserts.assertIsHTMLEmbedElement(embed);
-  embed.src = goog.html.TrustedResourceUrl.unwrap(url);
+  embed.src = goog.html.TrustedResourceUrl.unwrapTrustedScriptURL(url);
 };
 /**
  * @param {!HTMLFrameElement} frame
@@ -212,7 +215,7 @@ goog.dom.safe.setIframeSrc = function(iframe, url) {
  */
 goog.dom.safe.setIframeSrcdoc = function(iframe, html) {
   goog.dom.asserts.assertIsHTMLIFrameElement(iframe);
-  iframe.srcdoc = goog.html.SafeHtml.unwrap(html);
+  iframe.srcdoc = goog.html.SafeHtml.unwrapTrustedHTML(html);
 };
 /**
  * @param {!HTMLLinkElement} link
@@ -233,7 +236,7 @@ goog.dom.safe.setLinkHrefAndRel = function(link, url, rel) {
       if (url instanceof goog.html.SafeUrl) {
         link.href = goog.html.SafeUrl.unwrap(url);
       } else {
-        link.href = goog.html.SafeUrl.sanitizeAssertUnchanged(url).getTypedStringValue();
+        link.href = goog.html.SafeUrl.unwrap(goog.html.SafeUrl.sanitizeAssertUnchanged(url));
       }
     }
   }
@@ -244,7 +247,7 @@ goog.dom.safe.setLinkHrefAndRel = function(link, url, rel) {
  */
 goog.dom.safe.setObjectData = function(object, url) {
   goog.dom.asserts.assertIsHTMLObjectElement(object);
-  object.data = goog.html.TrustedResourceUrl.unwrap(url);
+  object.data = goog.html.TrustedResourceUrl.unwrapTrustedScriptURL(url);
 };
 /**
  * @param {!HTMLScriptElement} script
@@ -252,7 +255,7 @@ goog.dom.safe.setObjectData = function(object, url) {
  */
 goog.dom.safe.setScriptSrc = function(script, url) {
   goog.dom.asserts.assertIsHTMLScriptElement(script);
-  script.src = goog.html.TrustedResourceUrl.unwrap(url);
+  script.src = goog.html.TrustedResourceUrl.unwrapTrustedScriptURL(url);
   var nonce = goog.getScriptNonce();
   if (nonce) {
     script.setAttribute("nonce", nonce);
@@ -264,7 +267,7 @@ goog.dom.safe.setScriptSrc = function(script, url) {
  */
 goog.dom.safe.setScriptContent = function(script, content) {
   goog.dom.asserts.assertIsHTMLScriptElement(script);
-  script.text = goog.html.SafeScript.unwrap(content);
+  script.text = goog.html.SafeScript.unwrapTrustedScript(content);
   var nonce = goog.getScriptNonce();
   if (nonce) {
     script.setAttribute("nonce", nonce);
@@ -327,7 +330,7 @@ goog.dom.safe.openInWindow = function(url, opt_openerWin, opt_name, opt_specs, o
   } else {
     safeUrl = goog.html.SafeUrl.sanitizeAssertUnchanged(url);
   }
-  var win = opt_openerWin || window;
+  var win = opt_openerWin || goog.global;
   return win.open(goog.html.SafeUrl.unwrap(safeUrl), opt_name ? goog.string.Const.unwrap(opt_name) : "", opt_specs, opt_replace);
 };
 /**
@@ -345,7 +348,7 @@ goog.dom.safe.parseFromStringHtml = function(parser, html) {
  * @return {?Document}
  */
 goog.dom.safe.parseFromString = function(parser, content, type) {
-  return parser.parseFromString(goog.html.SafeHtml.unwrap(content), type);
+  return parser.parseFromString(goog.html.SafeHtml.unwrapTrustedHTML(content), type);
 };
 /**
  * @param {!Blob} blob
@@ -356,12 +359,12 @@ goog.dom.safe.createImageFromBlob = function(blob) {
   if (!/^image\/.*/g.test(blob.type)) {
     throw new Error("goog.dom.safe.createImageFromBlob only accepts MIME type image/.*.");
   }
-  var objectUrl = window.URL.createObjectURL(blob);
-  var image = new Image;
+  var objectUrl = goog.global.URL.createObjectURL(blob);
+  var image = new goog.global.Image;
   image.onload = function() {
-    window.URL.revokeObjectURL(objectUrl);
+    goog.global.URL.revokeObjectURL(objectUrl);
   };
-  image.src = objectUrl;
+  goog.dom.safe.setImageSrc(image, goog.html.uncheckedconversions.safeUrlFromStringKnownToSatisfyTypeContract(goog.string.Const.from("Image blob URL."), objectUrl));
   return image;
 };
 

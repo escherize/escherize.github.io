@@ -2,8 +2,8 @@ goog.provide("goog.json");
 goog.provide("goog.json.Replacer");
 goog.provide("goog.json.Reviver");
 goog.provide("goog.json.Serializer");
-/** @define {boolean} */ goog.define("goog.json.USE_NATIVE_JSON", false);
-/** @define {boolean} */ goog.define("goog.json.TRY_NATIVE_JSON", false);
+/** @define {boolean} */ goog.json.USE_NATIVE_JSON = goog.define("goog.json.USE_NATIVE_JSON", false);
+/** @define {boolean} */ goog.json.TRY_NATIVE_JSON = goog.define("goog.json.TRY_NATIVE_JSON", false);
 /**
  * @param {string} s
  * @return {boolean}
@@ -12,10 +12,10 @@ goog.json.isValid = function(s) {
   if (/^\s*$/.test(s)) {
     return false;
   }
-  var backslashesRe = /\\["\\\/bfnrtu]/g;
-  var simpleValuesRe = /(?:"[^"\\\n\r\u2028\u2029\x00-\x08\x0a-\x1f]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)[\s\u2028\u2029]*(?=:|,|]|}|$)/g;
-  var openBracketsRe = /(?:^|:|,)(?:[\s\u2028\u2029]*\[)+/g;
-  var remainderRe = /^[\],:{}\s\u2028\u2029]*$/;
+  /** @const */ var backslashesRe = /\\["\\\/bfnrtu]/g;
+  /** @const */ var simpleValuesRe = /(?:"[^"\\\n\r\u2028\u2029\x00-\x08\x0a-\x1f]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)[\s\u2028\u2029]*(?=:|,|]|}|$)/g;
+  /** @const */ var openBracketsRe = /(?:^|:|,)(?:[\s\u2028\u2029]*\[)+/g;
+  /** @const */ var remainderRe = /^[\],:{}\s\u2028\u2029]*$/;
   return remainderRe.test(s.replace(backslashesRe, "@").replace(simpleValuesRe, "]").replace(openBracketsRe, ""));
 };
 /** @private @type {function(string,!Error)} */ goog.json.errorLogger_ = goog.nullFunction;
@@ -39,15 +39,15 @@ goog.json.parse = goog.json.USE_NATIVE_JSON ? /** @type {function(*):Object} */ 
       error = ex;
     }
   }
-  var o = String(s);
+  /** @const */ var o = String(s);
   if (goog.json.isValid(o)) {
     try {
-      var result = /** @type {?Object} */ (eval("(" + o + ")"));
+      /** @const */ var result = /** @type {?Object} */ (eval("(" + o + ")"));
       if (error) {
         goog.json.errorLogger_("Invalid JSON: " + o, error);
       }
       return result;
-    } catch (ex$3) {
+    } catch (ex$4) {
     }
   }
   throw new Error("Invalid JSON string: " + o);
@@ -74,7 +74,7 @@ goog.json.Serializer = function(opt_replacer) {
  * @return {string}
  */
 goog.json.Serializer.prototype.serialize = function(object) {
-  var sb = [];
+  /** @const */ var sb = [];
   this.serializeInternal(object, sb);
   return sb.join("");
 };
@@ -149,12 +149,12 @@ goog.json.Serializer.prototype.serializeNumber_ = function(n, sb) {
  * @param {Array<string>} sb
  */
 goog.json.Serializer.prototype.serializeArray = function(arr, sb) {
-  var l = arr.length;
+  /** @const */ var l = arr.length;
   sb.push("[");
   var sep = "";
   for (var i = 0; i < l; i++) {
     sb.push(sep);
-    var value = arr[i];
+    /** @const */ var value = arr[i];
     this.serializeInternal(this.replacer_ ? this.replacer_.call(arr, String(i), value) : value, sb);
     sep = ",";
   }
@@ -170,7 +170,7 @@ goog.json.Serializer.prototype.serializeObject_ = function(obj, sb) {
   var sep = "";
   for (var key in obj) {
     if (Object.prototype.hasOwnProperty.call(obj, key)) {
-      var value = obj[key];
+      /** @const */ var value = obj[key];
       if (typeof value != "function") {
         sb.push(sep);
         this.serializeString_(key, sb);

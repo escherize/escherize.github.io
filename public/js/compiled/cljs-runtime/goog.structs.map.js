@@ -5,7 +5,8 @@ goog.require("goog.iter.StopIteration");
  * @constructor
  * @param {*=} opt_map
  * @param {...*} var_args
- * @template K, V
+ * @template K
+ * @template V
  * @deprecated This type is misleading: use ES6 Map instead.
  */
 goog.structs.Map = function(opt_map, var_args) {

@@ -2,8 +2,8 @@ goog.provide("goog.debug");
 goog.require("goog.array");
 goog.require("goog.debug.errorcontext");
 goog.require("goog.userAgent");
-/** @define {boolean} */ goog.define("goog.debug.LOGGING_ENABLED", goog.DEBUG);
-/** @define {boolean} */ goog.define("goog.debug.FORCE_SLOPPY_STACKS", false);
+/** @define {boolean} */ goog.debug.LOGGING_ENABLED = goog.define("goog.debug.LOGGING_ENABLED", goog.DEBUG);
+/** @define {boolean} */ goog.debug.FORCE_SLOPPY_STACKS = goog.define("goog.debug.FORCE_SLOPPY_STACKS", false);
 /**
  * @param {function(Object)} logFunc
  * @param {boolean=} opt_cancel
@@ -75,13 +75,13 @@ goog.debug.deepExpose = function(obj, opt_showFn) {
       return str.replace(/\n/g, "\n" + space);
     };
     try {
-      if (!goog.isDef(obj)) {
+      if (obj === undefined) {
         str.push("undefined");
       } else {
-        if (goog.isNull(obj)) {
+        if (obj === null) {
           str.push("NULL");
         } else {
-          if (goog.isString(obj)) {
+          if (typeof obj === "string") {
             str.push('"' + indentMultiline(obj) + '"');
           } else {
             if (goog.isFunction(obj)) {
@@ -151,7 +151,7 @@ goog.debug.normalizeErrorObject = function(err) {
   if (err == null) {
     err = 'Unknown Error of type "null/undefined"';
   }
-  if (goog.isString(err)) {
+  if (typeof err === "string") {
     return {"message":err, "name":"Unknown error", "lineNumber":"Not available", "fileName":href, "stack":"Not available"};
   }
   var lineNumber, fileName;
@@ -164,7 +164,7 @@ goog.debug.normalizeErrorObject = function(err) {
   }
   try {
     fileName = err.fileName || err.filename || err.sourceURL || goog.global["$googDebugFname"] || href;
-  } catch (e$2) {
+  } catch (e$3) {
     fileName = "Not available";
     threwError = true;
   }

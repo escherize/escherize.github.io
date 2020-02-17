@@ -4,6 +4,8 @@
  :dependencies [[refactor-nrepl "2.4.0-SNAPSHOT"]
                 [cider/cider-nrepl "0.22.4"]
 
+                [quil "3.0.0"]
+
                 [binaryage/devtools "0.9.7"]
 
                 [reagent "0.8.1"]

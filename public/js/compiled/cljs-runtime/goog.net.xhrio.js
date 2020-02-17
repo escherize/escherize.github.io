@@ -1,5 +1,6 @@
 goog.provide("goog.net.XhrIo");
 goog.provide("goog.net.XhrIo.ResponseType");
+goog.forwardDeclare("goog.Uri");
 goog.require("goog.Timer");
 goog.require("goog.array");
 goog.require("goog.asserts");
@@ -17,7 +18,6 @@ goog.require("goog.structs");
 goog.require("goog.structs.Map");
 goog.require("goog.uri.utils");
 goog.require("goog.userAgent");
-goog.forwardDeclare("goog.Uri");
 goog.scope(function() {
   /**
    * @constructor
@@ -225,9 +225,9 @@ goog.scope(function() {
       this.inSend_ = true;
       this.xhr_.send(content);
       this.inSend_ = false;
-    } catch (err$4) {
-      goog.log.fine(this.logger_, this.formatMsg_("Send error: " + err$4.message));
-      this.error_(goog.net.ErrorCode.EXCEPTION, err$4);
+    } catch (err$5) {
+      goog.log.fine(this.logger_, this.formatMsg_("Send error: " + err$5.message));
+      this.error_(goog.net.ErrorCode.EXCEPTION, err$5);
     }
   };
   /**
@@ -236,7 +236,7 @@ goog.scope(function() {
    * @return {boolean}
    */
   goog.net.XhrIo.shouldUseXhr2Timeout_ = function(xhr) {
-    return goog.userAgent.IE && goog.userAgent.isVersionOrHigher(9) && goog.isNumber(xhr[goog.net.XhrIo.XHR2_TIMEOUT_]) && goog.isDef(xhr[goog.net.XhrIo.XHR2_ON_TIMEOUT_]);
+    return goog.userAgent.IE && goog.userAgent.isVersionOrHigher(9) && typeof xhr[goog.net.XhrIo.XHR2_TIMEOUT_] === "number" && xhr[goog.net.XhrIo.XHR2_ON_TIMEOUT_] !== undefined;
   };
   /**
    * @private
@@ -557,7 +557,7 @@ goog.scope(function() {
       return undefined;
     }
     var value = this.xhr_.getResponseHeader(key);
-    return goog.isNull(value) ? undefined : value;
+    return value === null ? undefined : value;
   };
   /**
    * @return {string}
@@ -578,7 +578,7 @@ goog.scope(function() {
       var keyValue = goog.string.splitLimit(headersArray[i], ":", 1);
       var key = keyValue[0];
       var value = keyValue[1];
-      if (!goog.isString(value)) {
+      if (typeof value !== "string") {
         continue;
       }
       value = value.trim();
@@ -613,7 +613,7 @@ goog.scope(function() {
    * @return {string}
    */
   goog.net.XhrIo.prototype.getLastError = function() {
-    return goog.isString(this.lastError_) ? this.lastError_ : String(this.lastError_);
+    return typeof this.lastError_ === "string" ? this.lastError_ : String(this.lastError_);
   };
   /**
    * @private

@@ -121,16 +121,12 @@
      (js/setTimeout #(set-color! x y color) i))))
 
 (defn game-over? [board]
-  (= 1 (count (->> board
-                   vals
-                   (mapcat vals)
-                   (map :color)
-                   distinct))))
+  (= 1 (count (->> board vals (mapcat vals) (map :color) set))))
 
 (defn view []
-  [:div {:style {:margin-top "10px"}}
+  [:div {:style {:margin-top "10px" :width 600 :margin "auto"}}
    [:div
-    [:button {:on-click (fn [_] (randomize-board))} "Randomize"]]
+    [:button {:on-click (fn [_] (randomize-board))} "Restart"]]
    (if (not (:hints-open? @state))
      [:button {:on-click #(swap! state update :hints-open? not)} "How to Play"]
      [:div {:style {:margin "10px"

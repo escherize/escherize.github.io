@@ -6,7 +6,7 @@ goog.require("goog.array");
 goog.require("goog.asserts");
 goog.require("goog.functions");
 goog.require("goog.math");
-/** @typedef {(goog.iter.Iterator|{length:number}|{__iterator__})} */ goog.iter.Iterable;
+/** @typedef {({length:number}|{__iterator__})} */ goog.iter.Iterable;
 /** @const @type {!Error} */ goog.iter.StopIteration = "StopIteration" in goog.global ? goog.global["StopIteration"] : {message:"StopIteration", stack:""};
 /**
  * @constructor
@@ -63,7 +63,8 @@ goog.iter.toIterator = function(iterable) {
  * @param {(goog.iter.Iterator<VALUE>|goog.iter.Iterable)} iterable
  * @param {function(this:THIS,VALUE,?,!goog.iter.Iterator<VALUE>)} f
  * @param {THIS=} opt_obj
- * @template THIS, VALUE
+ * @template THIS
+ * @template VALUE
  */
 goog.iter.forEach = function(iterable, f, opt_obj) {
   if (goog.isArrayLike(iterable)) {
@@ -80,9 +81,9 @@ goog.iter.forEach = function(iterable, f, opt_obj) {
       while (true) {
         f.call(opt_obj, iterable.next(), undefined, iterable);
       }
-    } catch (ex$1) {
-      if (ex$1 !== goog.iter.StopIteration) {
-        throw ex$1;
+    } catch (ex$2) {
+      if (ex$2 !== goog.iter.StopIteration) {
+        throw ex$2;
       }
     }
   }
@@ -92,7 +93,8 @@ goog.iter.forEach = function(iterable, f, opt_obj) {
  * @param {function(this:THIS,VALUE,undefined,!goog.iter.Iterator<VALUE>):boolean} f
  * @param {THIS=} opt_obj
  * @return {!goog.iter.Iterator<VALUE>}
- * @template THIS, VALUE
+ * @template THIS
+ * @template VALUE
  */
 goog.iter.filter = function(iterable, f, opt_obj) {
   var iterator = goog.iter.toIterator(iterable);
@@ -112,7 +114,8 @@ goog.iter.filter = function(iterable, f, opt_obj) {
  * @param {function(this:THIS,VALUE,undefined,!goog.iter.Iterator<VALUE>):boolean} f
  * @param {THIS=} opt_obj
  * @return {!goog.iter.Iterator<VALUE>}
- * @template THIS, VALUE
+ * @template THIS
+ * @template VALUE
  */
 goog.iter.filterFalse = function(iterable, f, opt_obj) {
   return goog.iter.filter(iterable, goog.functions.not(f), opt_obj);
@@ -159,7 +162,9 @@ goog.iter.join = function(iterable, deliminator) {
  * @param {function(this:THIS,VALUE,undefined,!goog.iter.Iterator<VALUE>):RESULT} f
  * @param {THIS=} opt_obj
  * @return {!goog.iter.Iterator<RESULT>}
- * @template THIS, VALUE, RESULT
+ * @template THIS
+ * @template VALUE
+ * @template RESULT
  */
 goog.iter.map = function(iterable, f, opt_obj) {
   var iterator = goog.iter.toIterator(iterable);
@@ -176,7 +181,8 @@ goog.iter.map = function(iterable, f, opt_obj) {
  * @param {VALUE} val
  * @param {THIS=} opt_obj
  * @return {VALUE}
- * @template THIS, VALUE
+ * @template THIS
+ * @template VALUE
  */
 goog.iter.reduce = function(iterable, f, val, opt_obj) {
   var rval = val;
@@ -190,7 +196,8 @@ goog.iter.reduce = function(iterable, f, val, opt_obj) {
  * @param {function(this:THIS,VALUE,undefined,!goog.iter.Iterator<VALUE>):boolean} f
  * @param {THIS=} opt_obj
  * @return {boolean}
- * @template THIS, VALUE
+ * @template THIS
+ * @template VALUE
  */
 goog.iter.some = function(iterable, f, opt_obj) {
   iterable = goog.iter.toIterator(iterable);
@@ -212,7 +219,8 @@ goog.iter.some = function(iterable, f, opt_obj) {
  * @param {function(this:THIS,VALUE,undefined,!goog.iter.Iterator<VALUE>):boolean} f
  * @param {THIS=} opt_obj
  * @return {boolean}
- * @template THIS, VALUE
+ * @template THIS
+ * @template VALUE
  */
 goog.iter.every = function(iterable, f, opt_obj) {
   iterable = goog.iter.toIterator(iterable);
@@ -238,7 +246,7 @@ goog.iter.chain = function(var_args) {
   return goog.iter.chainFromIterable(arguments);
 };
 /**
- * @param {goog.iter.Iterable} iterable
+ * @param {(goog.iter.Iterator<?>|goog.iter.Iterable)} iterable
  * @return {!goog.iter.Iterator<VALUE>}
  * @template VALUE
  */
@@ -269,7 +277,8 @@ goog.iter.chainFromIterable = function(iterable) {
  * @param {function(this:THIS,VALUE,undefined,!goog.iter.Iterator<VALUE>):boolean} f
  * @param {THIS=} opt_obj
  * @return {!goog.iter.Iterator<VALUE>}
- * @template THIS, VALUE
+ * @template THIS
+ * @template VALUE
  */
 goog.iter.dropWhile = function(iterable, f, opt_obj) {
   var iterator = goog.iter.toIterator(iterable);
@@ -293,7 +302,8 @@ goog.iter.dropWhile = function(iterable, f, opt_obj) {
  * @param {function(this:THIS,VALUE,undefined,!goog.iter.Iterator<VALUE>):boolean} f
  * @param {THIS=} opt_obj
  * @return {!goog.iter.Iterator<VALUE>}
- * @template THIS, VALUE
+ * @template THIS
+ * @template VALUE
  */
 goog.iter.takeWhile = function(iterable, f, opt_obj) {
   var iterator = goog.iter.toIterator(iterable);
@@ -430,7 +440,7 @@ goog.iter.cycle = function(iterable) {
  */
 goog.iter.count = function(opt_start, opt_step) {
   var counter = opt_start || 0;
-  var step = goog.isDef(opt_step) ? opt_step : 1;
+  var step = opt_step !== undefined ? opt_step : 1;
   var iter = new goog.iter.Iterator;
   iter.next = function() {
     var returnValue = counter;
@@ -450,7 +460,7 @@ goog.iter.repeat = function(value) {
   return iter;
 };
 /**
- * @param {!goog.iter.Iterable} iterable
+ * @param {(!goog.iter.Iterator<number>|!goog.iter.Iterable)} iterable
  * @return {!goog.iter.Iterator<number>}
  */
 goog.iter.accumulate = function(iterable) {
@@ -534,7 +544,8 @@ goog.iter.compress = function(iterable, selectors) {
  * @extends {goog.iter.Iterator<!Array<?>>}
  * @param {(!goog.iter.Iterator<VALUE>|!goog.iter.Iterable)} iterable
  * @param {function(VALUE):KEY=} opt_keyFunc
- * @template KEY, VALUE
+ * @template KEY
+ * @template VALUE
  */
 goog.iter.GroupByIterator_ = function(iterable, opt_keyFunc) {
   /** @type {!goog.iter.Iterator} */ this.iterator = goog.iter.toIterator(iterable);
@@ -577,17 +588,19 @@ goog.iter.GroupByIterator_.prototype.groupItems_ = function(targetKey) {
  * @param {(!goog.iter.Iterator<VALUE>|!goog.iter.Iterable)} iterable
  * @param {function(VALUE):KEY=} opt_keyFunc
  * @return {!goog.iter.Iterator<!Array<?>>}
- * @template KEY, VALUE
+ * @template KEY
+ * @template VALUE
  */
 goog.iter.groupBy = function(iterable, opt_keyFunc) {
   return new goog.iter.GroupByIterator_(iterable, opt_keyFunc);
 };
 /**
- * @param {!goog.iter.Iterable} iterable
+ * @param {(!goog.iter.Iterator<?>|!goog.iter.Iterable)} iterable
  * @param {function(this:THIS,...*):RESULT} f
  * @param {THIS=} opt_obj
  * @return {!goog.iter.Iterator<RESULT>}
- * @template THIS, RESULT
+ * @template THIS
+ * @template RESULT
  */
 goog.iter.starMap = function(iterable, f, opt_obj) {
   var iterator = goog.iter.toIterator(iterable);
@@ -606,7 +619,7 @@ goog.iter.starMap = function(iterable, f, opt_obj) {
  */
 goog.iter.tee = function(iterable, opt_num) {
   var iterator = goog.iter.toIterator(iterable);
-  var num = goog.isNumber(opt_num) ? opt_num : 2;
+  var num = typeof opt_num === "number" ? opt_num : 2;
   var buffers = goog.array.map(goog.array.range(num), function() {
     return [];
   });
@@ -681,7 +694,7 @@ goog.iter.consume = function(iterable, count) {
 goog.iter.slice = function(iterable, start, opt_end) {
   goog.asserts.assert(goog.math.isInt(start) && start >= 0);
   var iterator = goog.iter.consume(iterable, start);
-  if (goog.isNumber(opt_end)) {
+  if (typeof opt_end === "number") {
     goog.asserts.assert(goog.math.isInt(opt_end) && opt_end >= start);
     iterator = goog.iter.limit(iterator, opt_end - start);
   }
@@ -706,7 +719,7 @@ goog.iter.hasDuplicates_ = function(arr) {
  */
 goog.iter.permutations = function(iterable, opt_length) {
   var elements = goog.iter.toArray(iterable);
-  var length = goog.isNumber(opt_length) ? opt_length : elements.length;
+  var length = typeof opt_length === "number" ? opt_length : elements.length;
   var sets = goog.array.repeat(elements, length);
   var product = goog.iter.product.apply(undefined, sets);
   return goog.iter.filter(product, function(arr) {

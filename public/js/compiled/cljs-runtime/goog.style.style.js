@@ -1,4 +1,5 @@
 goog.provide("goog.style");
+goog.forwardDeclare("goog.events.Event");
 goog.require("goog.array");
 goog.require("goog.asserts");
 goog.require("goog.dom");
@@ -14,14 +15,13 @@ goog.require("goog.object");
 goog.require("goog.reflect");
 goog.require("goog.string");
 goog.require("goog.userAgent");
-goog.forwardDeclare("goog.events.Event");
 /**
  * @param {Element} element
  * @param {(string|Object)} style
  * @param {(string|number|boolean)=} opt_value
  */
 goog.style.setStyle = function(element, style, opt_value) {
-  if (goog.isString(style)) {
+  if (typeof style === "string") {
     goog.style.setStyle_(element, opt_value, style);
   } else {
     for (var key in style) {
@@ -565,7 +565,7 @@ goog.style.getSizeWithDisplay_ = function(element) {
   var offsetWidth = /** @type {!HTMLElement} */ (element).offsetWidth;
   var offsetHeight = /** @type {!HTMLElement} */ (element).offsetHeight;
   var webkitOffsetsZero = goog.userAgent.WEBKIT && !offsetWidth && !offsetHeight;
-  if ((!goog.isDef(offsetWidth) || webkitOffsetsZero) && element.getBoundingClientRect) {
+  if ((offsetWidth === undefined || webkitOffsetsZero) && element.getBoundingClientRect) {
     var clientRect = goog.style.getBoundingClientRect_(element);
     return new goog.math.Size(clientRect.right - clientRect.left, clientRect.bottom - clientRect.top);
   }
@@ -739,7 +739,7 @@ goog.style.uninstallStyles = function(styleSheet) {
  */
 goog.style.setSafeStyleSheet = function(element, safeStyleSheet) {
   var stylesString = goog.html.SafeStyleSheet.unwrap(safeStyleSheet);
-  if (goog.userAgent.IE && goog.isDef(element.cssText)) {
+  if (goog.userAgent.IE && element.cssText !== undefined) {
     element.cssText = stylesString;
   } else {
     element.innerHTML = stylesString;

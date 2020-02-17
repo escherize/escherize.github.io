@@ -1,4 +1,5 @@
 goog.provide("goog.window");
+goog.require("goog.dom");
 goog.require("goog.dom.TagName");
 goog.require("goog.dom.safe");
 goog.require("goog.html.SafeUrl");
@@ -19,7 +20,7 @@ goog.window.createFakeWindow_ = function() {
   return (/** @type {!Window} */ ({}));
 };
 /**
- * @param {(goog.html.SafeUrl|string|Object|null)} linkRef
+ * @param {(!goog.html.SafeUrl|string|!Object|null)} linkRef
  * @param {?Object=} opt_options
  * @param {?Window=} opt_parentWin
  * @return {?Window}
@@ -64,7 +65,7 @@ goog.window.open = function(linkRef, opt_options, opt_parentWin) {
   var optionString = sb.join(",");
   var newWin;
   if (goog.labs.userAgent.platform.isIos() && parentWin.navigator && parentWin.navigator["standalone"] && target && target != "_self") {
-    var a = /** @type {!HTMLAnchorElement} */ (parentWin.document.createElement(String(goog.dom.TagName.A)));
+    var a = goog.dom.createElement(goog.dom.TagName.A);
     goog.dom.safe.setAnchorHref(a, safeLinkRef);
     a.setAttribute("target", target);
     if (opt_options["noreferrer"]) {
@@ -86,8 +87,11 @@ goog.window.open = function(linkRef, opt_options, opt_parentWin) {
         }
         newWin.opener = null;
         var safeHtml = goog.html.uncheckedconversions.safeHtmlFromStringKnownToSatisfyTypeContract(goog.string.Const.from("b/12014412, meta tag with sanitized URL"), '\x3cmeta name\x3d"referrer" content\x3d"no-referrer"\x3e' + '\x3cmeta http-equiv\x3d"refresh" content\x3d"0; url\x3d' + goog.string.htmlEscape(sanitizedLinkRef) + '"\x3e');
-        goog.dom.safe.documentWrite(newWin.document, safeHtml);
-        newWin.document.close();
+        var newDoc = newWin.document;
+        if (newDoc) {
+          goog.dom.safe.documentWrite(newDoc, safeHtml);
+          newDoc.close();
+        }
       }
     } else {
       newWin = parentWin.open(goog.html.SafeUrl.unwrap(safeLinkRef), target, optionString);

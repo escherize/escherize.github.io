@@ -6,7 +6,7 @@ goog.require("goog.async.FreeList");
   this.workHead_ = null;
   this.workTail_ = null;
 };
-/** @define {number} */ goog.define("goog.async.WorkQueue.DEFAULT_MAX_UNUSED", 100);
+/** @define {number} */ goog.async.WorkQueue.DEFAULT_MAX_UNUSED = goog.define("goog.async.WorkQueue.DEFAULT_MAX_UNUSED", 100);
 /** @private @const @type {goog.async.FreeList<goog.async.WorkItem>} */ goog.async.WorkQueue.freelist_ = new goog.async.FreeList(function() {
   return new goog.async.WorkItem;
 }, function(item) {

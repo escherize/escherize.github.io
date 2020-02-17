@@ -14,7 +14,9 @@ goog.object.is = function(v, v2) {
  * @param {Object<K,V>} obj
  * @param {function(this:T,V,?,Object<K,V>):?} f
  * @param {T=} opt_obj
- * @template T, K, V
+ * @template T
+ * @template K
+ * @template V
  */
 goog.object.forEach = function(obj, f, opt_obj) {
   for (var key in obj) {
@@ -26,10 +28,12 @@ goog.object.forEach = function(obj, f, opt_obj) {
  * @param {function(this:T,V,?,Object<K,V>):boolean} f
  * @param {T=} opt_obj
  * @return {!Object<K,V>}
- * @template T, K, V
+ * @template T
+ * @template K
+ * @template V
  */
 goog.object.filter = function(obj, f, opt_obj) {
-  var res = {};
+  /** @const */ var res = {};
   for (var key in obj) {
     if (f.call(/** @type {?} */ (opt_obj), obj[key], key, obj)) {
       res[key] = obj[key];
@@ -42,10 +46,13 @@ goog.object.filter = function(obj, f, opt_obj) {
  * @param {function(this:T,V,?,Object<K,V>):R} f
  * @param {T=} opt_obj
  * @return {!Object<K,R>}
- * @template T, K, V, R
+ * @template T
+ * @template K
+ * @template V
+ * @template R
  */
 goog.object.map = function(obj, f, opt_obj) {
-  var res = {};
+  /** @const */ var res = {};
   for (var key in obj) {
     res[key] = f.call(/** @type {?} */ (opt_obj), obj[key], key, obj);
   }
@@ -56,7 +63,9 @@ goog.object.map = function(obj, f, opt_obj) {
  * @param {function(this:T,V,?,Object<K,V>):boolean} f
  * @param {T=} opt_obj
  * @return {boolean}
- * @template T, K, V
+ * @template T
+ * @template K
+ * @template V
  */
 goog.object.some = function(obj, f, opt_obj) {
   for (var key in obj) {
@@ -71,7 +80,9 @@ goog.object.some = function(obj, f, opt_obj) {
  * @param {?function(this:T,V,?,Object<K,V>):boolean} f
  * @param {T=} opt_obj
  * @return {boolean}
- * @template T, K, V
+ * @template T
+ * @template K
+ * @template V
  */
 goog.object.every = function(obj, f, opt_obj) {
   for (var key in obj) {
@@ -104,7 +115,8 @@ goog.object.getAnyKey = function(obj) {
 /**
  * @param {Object<K,V>} obj
  * @return {(V|undefined)}
- * @template K, V
+ * @template K
+ * @template V
  */
 goog.object.getAnyValue = function(obj) {
   for (var key in obj) {
@@ -115,7 +127,8 @@ goog.object.getAnyValue = function(obj) {
  * @param {Object<K,V>} obj
  * @param {V} val
  * @return {boolean}
- * @template K, V
+ * @template K
+ * @template V
  */
 goog.object.contains = function(obj, val) {
   return goog.object.containsValue(obj, val);
@@ -123,10 +136,11 @@ goog.object.contains = function(obj, val) {
 /**
  * @param {Object<K,V>} obj
  * @return {!Array<V>}
- * @template K, V
+ * @template K
+ * @template V
  */
 goog.object.getValues = function(obj) {
-  var res = [];
+  /** @const */ var res = [];
   var i = 0;
   for (var key in obj) {
     res[i++] = obj[key];
@@ -138,7 +152,7 @@ goog.object.getValues = function(obj) {
  * @return {!Array<string>}
  */
 goog.object.getKeys = function(obj) {
-  var res = [];
+  /** @const */ var res = [];
   var i = 0;
   for (var key in obj) {
     res[i++] = key;
@@ -151,8 +165,8 @@ goog.object.getKeys = function(obj) {
  * @return {*}
  */
 goog.object.getValueByKeys = function(obj, var_args) {
-  var isArrayLike = goog.isArrayLike(var_args);
-  var keys = isArrayLike ? /** @type {!IArrayLike<(number|string)>} */ (var_args) : arguments;
+  /** @const */ var isArrayLike = goog.isArrayLike(var_args);
+  /** @const */ var keys = isArrayLike ? /** @type {!IArrayLike<(number|string)>} */ (var_args) : arguments;
   for (var i = isArrayLike ? 0 : 1; i < keys.length; i++) {
     if (obj == null) {
       return undefined;
@@ -173,7 +187,8 @@ goog.object.containsKey = function(obj, key) {
  * @param {Object<K,V>} obj
  * @param {V} val
  * @return {boolean}
- * @template K, V
+ * @template K
+ * @template V
  */
 goog.object.containsValue = function(obj, val) {
   for (var key in obj) {
@@ -188,7 +203,9 @@ goog.object.containsValue = function(obj, val) {
  * @param {function(this:T,V,string,Object<K,V>):boolean} f
  * @param {T=} opt_this
  * @return {(string|undefined)}
- * @template T, K, V
+ * @template T
+ * @template K
+ * @template V
  */
 goog.object.findKey = function(obj, f, opt_this) {
   for (var key in obj) {
@@ -203,10 +220,12 @@ goog.object.findKey = function(obj, f, opt_this) {
  * @param {function(this:T,V,string,Object<K,V>):boolean} f
  * @param {T=} opt_this
  * @return {V}
- * @template T, K, V
+ * @template T
+ * @template K
+ * @template V
  */
 goog.object.findValue = function(obj, f, opt_this) {
-  var key = goog.object.findKey(obj, f, opt_this);
+  /** @const */ var key = goog.object.findKey(obj, f, opt_this);
   return key && obj[key];
 };
 /**
@@ -243,7 +262,8 @@ goog.object.remove = function(obj, key) {
  * @param {Object<K,V>} obj
  * @param {string} key
  * @param {V} val
- * @template K, V
+ * @template K
+ * @template V
  */
 goog.object.add = function(obj, key, val) {
   if (obj !== null && key in obj) {
@@ -256,7 +276,9 @@ goog.object.add = function(obj, key, val) {
  * @param {string} key
  * @param {R=} opt_val
  * @return {(V|R|undefined)}
- * @template K, V, R
+ * @template K
+ * @template V
+ * @template R
  */
 goog.object.get = function(obj, key, opt_val) {
   if (obj !== null && key in obj) {
@@ -268,7 +290,8 @@ goog.object.get = function(obj, key, opt_val) {
  * @param {Object<K,V>} obj
  * @param {string} key
  * @param {V} value
- * @template K, V
+ * @template K
+ * @template V
  */
 goog.object.set = function(obj, key, value) {
   obj[key] = value;
@@ -278,7 +301,8 @@ goog.object.set = function(obj, key, value) {
  * @param {string} key
  * @param {V} value
  * @return {V}
- * @template K, V
+ * @template K
+ * @template V
  */
 goog.object.setIfUndefined = function(obj, key, value) {
   return key in /** @type {!Object} */ (obj) ? obj[key] : obj[key] = value;
@@ -288,13 +312,14 @@ goog.object.setIfUndefined = function(obj, key, value) {
  * @param {string} key
  * @param {function():V} f
  * @return {V}
- * @template K, V
+ * @template K
+ * @template V
  */
 goog.object.setWithReturnValueIfNotSet = function(obj, key, f) {
   if (key in obj) {
     return obj[key];
   }
-  var val = f();
+  /** @const */ var val = f();
   obj[key] = val;
   return val;
 };
@@ -302,7 +327,8 @@ goog.object.setWithReturnValueIfNotSet = function(obj, key, f) {
  * @param {!Object<K,V>} a
  * @param {!Object<K,V>} b
  * @return {boolean}
- * @template K, V
+ * @template K
+ * @template V
  */
 goog.object.equals = function(a, b) {
   for (var k in a) {
@@ -310,8 +336,8 @@ goog.object.equals = function(a, b) {
       return false;
     }
   }
-  for (var k in b) {
-    if (!(k in a)) {
+  for (var k$1 in b) {
+    if (!(k$1 in a)) {
       return false;
     }
   }
@@ -320,10 +346,11 @@ goog.object.equals = function(a, b) {
 /**
  * @param {Object<K,V>} obj
  * @return {!Object<K,V>}
- * @template K, V
+ * @template K
+ * @template V
  */
 goog.object.clone = function(obj) {
-  var res = {};
+  /** @const */ var res = {};
   for (var key in obj) {
     res[key] = obj[key];
   }
@@ -335,12 +362,12 @@ goog.object.clone = function(obj) {
  * @template T
  */
 goog.object.unsafeClone = function(obj) {
-  var type = goog.typeOf(obj);
+  /** @const */ var type = goog.typeOf(obj);
   if (type == "object" || type == "array") {
     if (goog.isFunction(obj.clone)) {
       return obj.clone();
     }
-    var clone = type == "array" ? [] : {};
+    /** @const */ var clone = type == "array" ? [] : {};
     for (var key in obj) {
       clone[key] = goog.object.unsafeClone(obj[key]);
     }
@@ -353,7 +380,7 @@ goog.object.unsafeClone = function(obj) {
  * @return {!Object}
  */
 goog.object.transpose = function(obj) {
-  var transposed = {};
+  /** @const */ var transposed = {};
   for (var key in obj) {
     transposed[obj[key]] = key;
   }
@@ -363,9 +390,11 @@ goog.object.transpose = function(obj) {
 /**
  * @param {Object} target
  * @param {...(Object|null|undefined)} var_args
+ * @deprecated Prefer Object.assign
  */
 goog.object.extend = function(target, var_args) {
-  var key, source;
+  var key;
+  var source;
   for (var i = 1; i < arguments.length; i++) {
     source = arguments[i];
     for (key in source) {
@@ -385,14 +414,14 @@ goog.object.extend = function(target, var_args) {
  * @throws {Error}
  */
 goog.object.create = function(var_args) {
-  var argLength = arguments.length;
+  /** @const */ var argLength = arguments.length;
   if (argLength == 1 && goog.isArray(arguments[0])) {
     return goog.object.create.apply(null, arguments[0]);
   }
   if (argLength % 2) {
     throw new Error("Uneven number of arguments");
   }
-  var rv = {};
+  /** @const */ var rv = {};
   for (var i = 0; i < argLength; i += 2) {
     rv[arguments[i]] = arguments[i + 1];
   }
@@ -403,11 +432,11 @@ goog.object.create = function(var_args) {
  * @return {!Object}
  */
 goog.object.createSet = function(var_args) {
-  var argLength = arguments.length;
+  /** @const */ var argLength = arguments.length;
   if (argLength == 1 && goog.isArray(arguments[0])) {
     return goog.object.createSet.apply(null, arguments[0]);
   }
-  var rv = {};
+  /** @const */ var rv = {};
   for (var i = 0; i < argLength; i++) {
     rv[arguments[i]] = true;
   }
@@ -416,7 +445,8 @@ goog.object.createSet = function(var_args) {
 /**
  * @param {!Object<K,V>} obj
  * @return {!Object<K,V>}
- * @template K, V
+ * @template K
+ * @template V
  */
 goog.object.createImmutableView = function(obj) {
   var result = obj;
@@ -447,16 +477,24 @@ goog.object.getAllPropertyNames = function(obj, opt_includeObjectPrototype, opt_
   if (!Object.getOwnPropertyNames || !Object.getPrototypeOf) {
     return goog.object.getKeys(obj);
   }
-  var visitedSet = {};
+  /** @const */ var visitedSet = {};
   var proto = obj;
   while (proto && (proto !== Object.prototype || !!opt_includeObjectPrototype) && (proto !== Function.prototype || !!opt_includeFunctionPrototype)) {
-    var names = Object.getOwnPropertyNames(proto);
+    /** @const */ var names = Object.getOwnPropertyNames(proto);
     for (var i = 0; i < names.length; i++) {
       visitedSet[names[i]] = true;
     }
     proto = Object.getPrototypeOf(proto);
   }
   return goog.object.getKeys(visitedSet);
+};
+/**
+ * @param {function(new:?)} constructor
+ * @return {?Object}
+ */
+goog.object.getSuperClass = function(constructor) {
+  var proto = Object.getPrototypeOf(constructor.prototype);
+  return proto && proto.constructor;
 };
 
 //# sourceMappingURL=goog.object.object.js.map

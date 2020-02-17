@@ -13,7 +13,8 @@ goog.require("goog.promise.Resolver");
  * @implements {goog.Thenable<TYPE>}
  * @param {function(this:RESOLVER_CONTEXT,function((TYPE|IThenable<TYPE>|Thenable)=),function(*=)):void} resolver
  * @param {RESOLVER_CONTEXT=} opt_context
- * @template TYPE, RESOLVER_CONTEXT
+ * @template TYPE
+ * @template RESOLVER_CONTEXT
  */
 goog.Promise = function(resolver, opt_context) {
   /** @private @type {goog.Promise.State_} */ this.state_ = goog.Promise.State_.PENDING;
@@ -57,8 +58,8 @@ goog.Promise = function(resolver, opt_context) {
     }
   }
 };
-/** @define {boolean} */ goog.define("goog.Promise.LONG_STACK_TRACES", false);
-/** @define {number} */ goog.define("goog.Promise.UNHANDLED_REJECTION_DELAY", 0);
+/** @define {boolean} */ goog.Promise.LONG_STACK_TRACES = goog.define("goog.Promise.LONG_STACK_TRACES", false);
+/** @define {number} */ goog.Promise.UNHANDLED_REJECTION_DELAY = goog.define("goog.Promise.UNHANDLED_REJECTION_DELAY", 0);
 /** @private @enum {number} */ goog.Promise.State_ = {PENDING:0, BLOCKED:1, FULFILLED:2, REJECTED:3};
 /** @private @final @struct @constructor */ goog.Promise.CallbackEntry_ = function() {
   /** @type {?goog.Promise} */ this.child = null;
@@ -75,7 +76,7 @@ goog.Promise.CallbackEntry_.prototype.reset = function() {
   this.context = null;
   this.always = false;
 };
-/** @define {number} */ goog.define("goog.Promise.DEFAULT_MAX_UNUSED", 100);
+/** @define {number} */ goog.Promise.DEFAULT_MAX_UNUSED = goog.define("goog.Promise.DEFAULT_MAX_UNUSED", 100);
 /** @private @const @type {goog.async.FreeList<!goog.Promise.CallbackEntry_>} */ goog.Promise.freelist_ = new goog.async.FreeList(function() {
   return new goog.Promise.CallbackEntry_;
 }, function(item) {
@@ -314,8 +315,8 @@ goog.Promise.prototype.thenCatch = function(onRejected, opt_context) {
  */
 goog.Promise.prototype.cancel = function(opt_message) {
   if (this.state_ == goog.Promise.State_.PENDING) {
+    var err = new goog.Promise.CancellationError(opt_message);
     goog.async.run(function() {
-      var err = new goog.Promise.CancellationError(opt_message);
       this.cancelInternal_(err);
     }, this);
   }
@@ -389,7 +390,8 @@ goog.Promise.prototype.addCallbackEntry_ = function(callbackEntry) {
  * @param {?function(this:THIS,*):*} onRejected
  * @param {THIS=} opt_context
  * @return {!goog.Promise}
- * @template RESULT, THIS
+ * @template RESULT
+ * @template THIS
  */
 goog.Promise.prototype.addChildPromise_ = function(onFulfilled, onRejected, opt_context) {
   /** @type {goog.Promise.CallbackEntry_} */ var callbackEntry = goog.Promise.getCallbackEntry_(null, null, null);
@@ -405,7 +407,7 @@ goog.Promise.prototype.addChildPromise_ = function(onFulfilled, onRejected, opt_
     callbackEntry.onRejected = onRejected ? function(reason) {
       try {
         var result = onRejected.call(opt_context, reason);
-        if (!goog.isDef(result) && reason instanceof goog.Promise.CancellationError) {
+        if (result === undefined && reason instanceof goog.Promise.CancellationError) {
           reject(reason);
         } else {
           resolve(result);
@@ -635,7 +637,7 @@ goog.Promise.invokeCallback_ = function(callbackEntry, state, result) {
  * @param {!Error} err
  */
 goog.Promise.prototype.addStackTrace_ = function(err) {
-  if (goog.Promise.LONG_STACK_TRACES && goog.isString(err.stack)) {
+  if (goog.Promise.LONG_STACK_TRACES && typeof err.stack === "string") {
     var trace = err.stack.split("\n", 4)[3];
     var message = err.message;
     message += Array(11 - message.length).join(" ");
@@ -647,7 +649,7 @@ goog.Promise.prototype.addStackTrace_ = function(err) {
  * @param {?} err
  */
 goog.Promise.prototype.appendLongStack_ = function(err) {
-  if (goog.Promise.LONG_STACK_TRACES && err && goog.isString(err.stack) && this.stack_.length) {
+  if (goog.Promise.LONG_STACK_TRACES && err && typeof err.stack === "string" && this.stack_.length) {
     var longTrace = ["Promise trace:"];
     for (var promise = this; promise; promise = promise.parent_) {
       for (var i = this.currentStep_; i >= 0; i--) {

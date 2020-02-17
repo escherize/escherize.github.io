@@ -19,7 +19,7 @@
                           :x 50
                           :y 50
                           :d-bound 5
-                          :length 0
+                          :length 19
                           :trail '()}})
 
 (def killer-len 20)
@@ -35,8 +35,8 @@
   (let [{:keys [player candy game-over?]} @db
         {:keys [length trail]} player]
     [:div
-     [:p "Use wasd to move around, and collect green apples while avoiding your poisonous red tail! The longer you get the higher your score."]
-     [:div "Score: " (:length player)]
+     [:p "Use wasd to move around. Collect pink candies while avoiding your poisonous red tail!"]
+     [:div "Score: " (- 19 (:length player))]
      (if game-over?
        [:div {:style {:margin-top "50px"}}
         [:h1 "Game Over"

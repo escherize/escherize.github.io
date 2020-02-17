@@ -1,6 +1,14 @@
 goog.provide("goog.dom.classlist");
 goog.require("goog.array");
-/** @define {boolean} */ goog.define("goog.dom.classlist.ALWAYS_USE_DOM_TOKEN_LIST", false);
+/** @define {boolean} */ goog.dom.classlist.ALWAYS_USE_DOM_TOKEN_LIST = goog.define("goog.dom.classlist.ALWAYS_USE_DOM_TOKEN_LIST", false);
+/**
+ * @private
+ * @param {?Element} element
+ * @return {string}
+ */
+goog.dom.classlist.getClassName_ = function(element) {
+  return typeof element.className == "string" ? element.className : element.getAttribute && element.getAttribute("class") || "";
+};
 /**
  * @param {Element} element
  * @return {!IArrayLike<?>}
@@ -9,15 +17,21 @@ goog.dom.classlist.get = function(element) {
   if (goog.dom.classlist.ALWAYS_USE_DOM_TOKEN_LIST || element.classList) {
     return element.classList;
   }
-  var className = element.className;
-  return goog.isString(className) && className.match(/\S+/g) || [];
+  return goog.dom.classlist.getClassName_(element).match(/\S+/g) || [];
 };
 /**
  * @param {Element} element
  * @param {string} className
  */
 goog.dom.classlist.set = function(element, className) {
-  element.className = className;
+  if (typeof element.className == "string") {
+    element.className = className;
+    return;
+  } else {
+    if (element.setAttribute) {
+      element.setAttribute("class", className);
+    }
+  }
 };
 /**
  * @param {Element} element
@@ -40,7 +54,8 @@ goog.dom.classlist.add = function(element, className) {
     return;
   }
   if (!goog.dom.classlist.contains(element, className)) {
-    element.className += element.className.length > 0 ? " " + className : className;
+    var oldClassName = goog.dom.classlist.getClassName_(element);
+    goog.dom.classlist.set(element, oldClassName + (oldClassName.length > 0 ? " " + className : className));
   }
 };
 /**
@@ -61,10 +76,11 @@ goog.dom.classlist.addAll = function(element, classesToAdd) {
   goog.array.forEach(classesToAdd, function(className) {
     classMap[className] = true;
   });
-  element.className = "";
+  var newClassName = "";
   for (var className in classMap) {
-    element.className += element.className.length > 0 ? " " + className : className;
+    newClassName += newClassName.length > 0 ? " " + className : className;
   }
+  goog.dom.classlist.set(element, newClassName);
 };
 /**
  * @param {Element} element
@@ -76,9 +92,9 @@ goog.dom.classlist.remove = function(element, className) {
     return;
   }
   if (goog.dom.classlist.contains(element, className)) {
-    element.className = goog.array.filter(goog.dom.classlist.get(element), function(c) {
+    goog.dom.classlist.set(element, goog.array.filter(goog.dom.classlist.get(element), function(c) {
       return c != className;
-    }).join(" ");
+    }).join(" "));
   }
 };
 /**
@@ -92,9 +108,9 @@ goog.dom.classlist.removeAll = function(element, classesToRemove) {
     });
     return;
   }
-  element.className = goog.array.filter(goog.dom.classlist.get(element), function(className) {
+  goog.dom.classlist.set(element, goog.array.filter(goog.dom.classlist.get(element), function(className) {
     return !goog.array.contains(classesToRemove, className);
-  }).join(" ");
+  }).join(" "));
 };
 /**
  * @param {Element} element

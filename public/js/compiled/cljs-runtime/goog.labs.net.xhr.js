@@ -134,7 +134,7 @@ goog.scope(function() {
       if (options.headers) {
         for (var key in options.headers) {
           var value = options.headers[key];
-          if (goog.isDefAndNotNull(value)) {
+          if (value != null) {
             request.setRequestHeader(key, value);
           }
         }
@@ -162,10 +162,10 @@ goog.scope(function() {
       }
       try {
         request.send(data);
-      } catch (e$5) {
+      } catch (e$6) {
         request.onreadystatechange = goog.nullFunction;
         goog.global.clearTimeout(timer);
-        reject(new xhr.Error("Error sending XHR: " + e$5.message, url, request));
+        reject(new xhr.Error("Error sending XHR: " + e$6.message, url, request));
       }
     });
     return result.thenCatch(function(error) {

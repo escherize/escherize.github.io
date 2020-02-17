@@ -44,10 +44,11 @@ goog.reflect.canAccessProperty = function(obj, prop) {
  * @param {function(?):V} valueFn
  * @param {function(?):K=} opt_keyFn
  * @return {V}
- * @template K, V
+ * @template K
+ * @template V
  */
 goog.reflect.cache = function(cacheObj, key, valueFn, opt_keyFn) {
-  var storedKey = opt_keyFn ? opt_keyFn(key) : key;
+  /** @const */ var storedKey = opt_keyFn ? opt_keyFn(key) : key;
   if (Object.prototype.hasOwnProperty.call(cacheObj, storedKey)) {
     return cacheObj[storedKey];
   }

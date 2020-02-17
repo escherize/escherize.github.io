@@ -7,7 +7,7 @@ goog.require("goog.events.Event");
 goog.require("goog.events.EventType");
 goog.require("goog.reflect");
 goog.require("goog.userAgent");
-/** @define {boolean} */ goog.define("goog.events.USE_LAYER_XY_AS_OFFSET_XY", false);
+/** @define {boolean} */ goog.events.USE_LAYER_XY_AS_OFFSET_XY = goog.define("goog.events.USE_LAYER_XY_AS_OFFSET_XY", false);
 /**
  * @constructor
  * @extends {goog.events.Event}
@@ -173,7 +173,7 @@ goog.events.BrowserEvent.prototype.getBrowserEvent = function() {
  * @return {string}
  */
 goog.events.BrowserEvent.getPointerType_ = function(e) {
-  if (goog.isString(e.pointerType)) {
+  if (typeof e.pointerType === "string") {
     return e.pointerType;
   }
   return goog.events.BrowserEvent.IE_POINTER_TYPE_MAP[e.pointerType] || "";

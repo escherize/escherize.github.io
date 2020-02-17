@@ -14,7 +14,7 @@ goog.debug.LogBuffer.getInstance = function() {
   }
   return goog.debug.LogBuffer.instance_;
 };
-/** @define {number} */ goog.define("goog.debug.LogBuffer.CAPACITY", 0);
+/** @define {number} */ goog.debug.LogBuffer.CAPACITY = goog.define("goog.debug.LogBuffer.CAPACITY", 0);
 /** @private @type {!Array<(!goog.debug.LogRecord|undefined)>} */ goog.debug.LogBuffer.prototype.buffer_;
 /** @private @type {number} */ goog.debug.LogBuffer.prototype.curIndex_;
 /** @private @type {boolean} */ goog.debug.LogBuffer.prototype.isFull_;

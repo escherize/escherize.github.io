@@ -17,9 +17,11 @@ goog.string.Const = function(opt_token, opt_content) {
 /** @override */ goog.string.Const.prototype.getTypedStringValue = function() {
   return this.stringConstValueWithSecurityContract__googStringSecurityPrivate_;
 };
-/** @override */ goog.string.Const.prototype.toString = function() {
-  return "Const{" + this.stringConstValueWithSecurityContract__googStringSecurityPrivate_ + "}";
-};
+if (goog.DEBUG) {
+  /** @override */ goog.string.Const.prototype.toString = function() {
+    return "Const{" + this.stringConstValueWithSecurityContract__googStringSecurityPrivate_ + "}";
+  };
+}
 /**
  * @param {!goog.string.Const} stringConst
  * @return {string}
