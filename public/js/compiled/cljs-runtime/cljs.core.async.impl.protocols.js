@@ -269,8 +269,8 @@ throw cljs.core.missing_protocol("Buffer.close-buf!",b);
 });
 
 cljs.core.async.impl.protocols.add_BANG_ = (function cljs$core$async$impl$protocols$add_BANG_(var_args){
-var G__35512 = arguments.length;
-switch (G__35512) {
+var G__34802 = arguments.length;
+switch (G__34802) {
 case 1:
 return cljs.core.async.impl.protocols.add_BANG_.cljs$core$IFn$_invoke$arity$1((arguments[(0)]));
 
