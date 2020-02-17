@@ -1,4 +1,4 @@
-(ns new-root.scratch
+(ns new-root.neumorph
   (:require [reagent.core :as r]))
 
 ;; (def origin (r/atom [0 0]))
@@ -13,10 +13,6 @@
      (+ y (/ h 2))]))
 
 (defn sqared [x] (* x x))
-
-(defonce *selector (r/atom 0))
-(defn bump-selector []
-  (swap! *selector (comp #(mod % 3) inc)))
 
 (defn p1+p2->box-shadow
   [to from]
@@ -35,18 +31,21 @@
         ;; unit-vector [unit-x unit-y]
         us 12
         scale (fn [x] (/ x 50))]
-    ;;(->bs (* us unit-x) (* us unit-y))
-    (case @*selector
+
+    ;; tried these, chose # 0
+    #_(case @*selector
       0 (->bs (* us unit-x) (* us unit-y))
       1 (->bs (* us unit-x) (* us unit-y) (scale x) (scale y))
-      2 (->bs (scale x) (scale y) (* us unit-x) (* us unit-y)))))
+      2 (->bs (scale x) (scale y) (* us unit-x) (* us unit-y)))
+
+    (->bs (* us unit-x) (* us unit-y))))
 
 (defonce *pointer (r/atom [300 300]))
 
 (defn shadow-box []
   (let [*my-position (r/atom [])
-        title (rand-nth ["Beep" "Boop" "Eli"])
-        width (* 62.5 (rand-nth (range 2 7)))]
+        title (rand-nth ["Beep" "Boop"])
+        width (* 31.25 (rand-nth (range 3 7)))]
     (r/create-class
      {:component-did-mount (fn [this] (reset! *my-position (find-location (r/dom-node this))))
       :reagent-render
@@ -55,8 +54,8 @@
          {:style (merge
                   {:margin "30px"
                    :width width
-                   :height "100px"
-                   :border-radius "30px"
+                   :height 50
+                   :border-radius "20px"
                    :padding "20px"
                    :box-shadow "-14px 14px 20px #c9cbcf, 14px -14px 20px #ffffff"}
                   (when @*my-position
@@ -71,7 +70,7 @@
   (r/with-let [handler #(reset! *pointer [(.-pageX %) (.-pageY %)])
                _ (.addEventListener js/document "mousemove" handler)]
     [:div {:style {:margin "100px"}}
-     [:button {:style {:cursor :pointer}
+     #_[:button {:style {:cursor :pointer}
                :on-click bump-selector}
       ({0 "constant dark, constant light."
         1 "constant dark, scaled light."

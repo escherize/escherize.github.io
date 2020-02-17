@@ -63,7 +63,7 @@
     :render
     (fn [] [:div])}))
 
-(defonce running? (r/atom false))
+(defonce running? (r/atom true))
 
 (defn view []
   [:div {:style {:width "800px" :margin "auto"}}

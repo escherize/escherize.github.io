@@ -6,10 +6,10 @@
    [new-root.paint-snake-two.core :as ps-two]
    [new-root.paint :as paint]
    [new-root.mindustry :as mind]
-   [cljs.pprint :as pp]
    [clojure.string :as str]
    [new-root.gen-art :as gen-art]
-   [new-root.scratch :as scratch]))
+   [new-root.scratch :as scratch]
+   [new-root.neumorph :as neumorph]))
 
 (defonce app-state (atom {:thingies 1}))
 
@@ -17,14 +17,15 @@
   [:a {:href (rfee/href ::post {:id id})} text])
 
 (def post-0
-  {:id 0
+  {:id "hello-world"
+   :sorder 0
    :title "Hello World"
    :preview (fn []
               [:div
                [:p "Welcome to my blog!"]
                [:p "It's built as a single page app using
                Clojurescript and reagent, which means the entire thing is
-               completely programmable. Visit my contents " (link "here." 0)]
+               completely programmable. Visit my contents " (link "here." "hello-world")]
                [:button
                 {:style {:cursor :pointer}
                  :on-click (fn [] (swap! app-state update :thingies #(* 2 %)))}
@@ -32,59 +33,61 @@
    :content (fn []
               [:div
                [:h1 "I'm here, and im post 0."]
-               [:p "Here's " (link "Post 1" 1) "."]
+               [:p "Here's " (link "Post 1" "snake-game") "."]
                [:p "Its a game I'm working on!"]])})
 (def post-1
-  {:id 1
+  {:id "snake-game"
+   :sorder 1
    :title "Adding goals and a way to die"
-   :preview (fn []
-              [:div
-               [:div "This is some further work on the " (link "game" 1) " I'm working on"]
-               [:div "It's possible to die, there are apples for the
-                         player to eat, and you can see your
-                         score."]])
+   :preview (fn [] [:div "This is a riff on snake"])
    :content ps-two/view})
 
 (def post-2
-  {:id 2
+  {:id "force-graph"
+   :sorder 2
    :title "Force Directed Graph"
-   :preview (fn [] [:div
-                    [:div "An updatable d3 Force Directed Graph built with cljs. "]
-                    (link "see it" 2)])
+   :preview (fn [] [:div "An updatable d3 Force Directed Graph."])
    :content mind/view})
 
 (def post-3
   {:id "paint"
+   :sorder 3
    :title "Paint fill game"
    :pure true
    :preview (fn []
               [:div
-               [:div "Inspired by a python game I found on my raspberry pi"]
-               [:div (link "Check it out" "paint")]])
+               [:p "Inspired by a python game I found on my raspberry pi"]
+               [:p "Flood the canvas from the top left"]])
    :content paint/view})
 
 (def post-4
   {:id "gen-art"
+   :sorder 4
    :title "Generative Art noob mode"
    :pure true
-   :preview (fn [] [:div "Just feeling "
-                    (link "things" "gen-art")
-                    " out, more to come."])
+   :preview (fn [] [:div "Just getting warmed up"])
    :content gen-art/view})
 
 (def scratch
   {:id "scratch"
    :title "scratch"
+   :exclude-post? true
    :pure true
    :preview (fn [] [:div])
    :content scratch/view})
 
+(def post-5
+  {:id "neumorph"
+   :sorder 5
+   :title "Dynamic Neumorphism"
+   :pure false
+   :preview (fn [] [:div "Yeah.. it's "(link "trendy" "neumorph") "."])
+   :content neumorph/view})
+
 (def posts
-  (merge
-   (zipmap (range) [post-0 post-1 post-2 post-3 post-4 post-4])
-   {"snake" post-2
-    "dear_eli" scratch
-    "scratch" scratch}))
+  (->> [post-1 post-2 post-3 post-4 post-5]
+       (map (juxt :id identity))
+       (into {})))
 
 (defn nav []
   [:div.nav
