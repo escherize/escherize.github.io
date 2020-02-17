@@ -34,9 +34,9 @@
 
     ;; tried these, chose # 0
     #_(case @*selector
-      0 (->bs (* us unit-x) (* us unit-y))
-      1 (->bs (* us unit-x) (* us unit-y) (scale x) (scale y))
-      2 (->bs (scale x) (scale y) (* us unit-x) (* us unit-y)))
+        0 (->bs (* us unit-x) (* us unit-y))
+        1 (->bs (* us unit-x) (* us unit-y) (scale x) (scale y))
+        2 (->bs (scale x) (scale y) (* us unit-x) (* us unit-y)))
 
     (->bs (* us unit-x) (* us unit-y))))
 
@@ -66,17 +66,29 @@
             [:p "origin: " (pr-str @*pointer)]
             [:p "my position: " (pr-str @*my-position)]])])})))
 
+(defn is-mobile? []
+  (-> js/window
+      (.matchMedia "only screen and (max-width: 760px)")
+      (.-matches)))
+
 (defn view []
   (r/with-let [handler #(reset! *pointer [(.-pageX %) (.-pageY %)])
-               _ (.addEventListener js/document "mousemove" handler)]
+               _ (.addEventListener js/document "mousemove" handler)
+               touch-handler (fn [e]
+                               (reset! *pointer
+                                       [(-> e .-touches (aget 0) .-clientX)
+                                        (-> e .-touches (aget 0) .-clientY)]))
+               _ (.addEventListener js/document "touchmove" touch-handler)]
     [:div {:style {:margin "100px"}}
+
      #_[:button {:style {:cursor :pointer}
-               :on-click bump-selector}
-      ({0 "constant dark, constant light."
-        1 "constant dark, scaled light."
-        2 "scaled dark, constant light."} @*selector)]
+                 :on-click bump-selector}
+        ({0 "constant dark, constant light."
+          1 "constant dark, scaled light."
+          2 "scaled dark, constant light."} @*selector)]
      (into
       [:div {:style {:display "flex" :flex-flow "wrap"}}]
       (repeat 30 [shadow-box]))]
     (finally
-      (.removeEventListener js/document "mousemove" handler))))
+      (.removeEventListener js/document "mousemove" handler)
+      (.removeEventListener js/document "touchmove" touch-handler))))
