@@ -8,3 +8,9 @@ div.contain {
     color: #d24c53;
     font-size: 20px;
 }
+
+.teaser-card {
+  border-radius: 31px;
+  background: #eceff4;
+  box-shadow:  14px 14px 20px #c9cbcf, -14px -14px 20px #ffffff;
+}

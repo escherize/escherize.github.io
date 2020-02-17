@@ -111,18 +111,19 @@
    :content gen-art/view})
 
 (def posts
-  (zipmap (range) [post-0 post-1 post-2 post-3 post-4 post-5]))
+  (merge
+   (zipmap (range) [post-0 post-1 post-2 post-3 post-4 post-5])
+   {"snake" post-2
+    "pure" post-4
+    "gen-art" post-5}))
 
 (defn nav []
   [:div.nav
    (into
     [:span
      [:span [:a {:href (rfee/href ::home)} "Home"]]
-     " | "
-     [:span [:a {:href (rfee/href ::projects)} "Projects"]]
-     " | "
-     [:span [:a {:href (rfee/href ::post {:id (dec (count posts))})} "Last Post"]]]
-    (repeat (:thingies @app-state) "  |  "))])
+     (repeat (:thingies @app-state) "  |  ")
+     [:span [:a {:href (rfee/href ::projects)} "Projects"]]])])
 
 (defn blog [page]
   (into
@@ -131,10 +132,10 @@
     [:div.row page]]))
 
 (defn teaser [{:as _ :keys [id title preview content release]}]
-  [:div.card {:style {:border "10px #89c solid"
-                      :border-radius "20px"
-                      :padding "20px"
-                      :margin "20px 40px"}}
+  [:div.teaser-card
+   {:style {:border "none"
+            :padding "10px 20px 20px 30px"
+            :margin "60px"}}
    [:h3 (link title id)]
    [:div.row (cond preview [preview]
                    content [content]
@@ -148,19 +149,25 @@
   [:div
    [:h1 "Escherize Zone"]
    [blog
-    (into [:div]
-          (for [p (reverse (sort-by :id (vals posts)))]
+    (into [:div {:style {:display "flex" :flex-flow "wrap"}}]
+          (for [p (reverse (sort-by :id (distinct (vals posts))))]
             (teaser p)))]
    [footer]])
 
 (defn projects []
   [:div
-   [:h3 "This is the projects component"]
-   [:pre "todo: fill in my projects ha"]])
+   [:h3 "Here are some projects and toys going back to 2012."]
+   (into [:ul]
+         (for [project ["blindfold" "catan" "circles" "cljsfiddle"
+                        "colors" "dnd5" "hiccup.space" "looper"
+                        "magic" "santorini" "transpose"]]
+           [:li>a {:href (str "/works/" project)}
+            (str/capitalize project)]))])
 
 (defn post [match]
   (if-let [id (-> match :parameters :path :id)]
-    (let [{:keys [content title] :as post} (get posts (js/parseInt id))
+    (let [{:keys [content title] :as post} (or (get posts id)
+                                               (get posts (js/parseInt id)))
           pure? (:pure post)]
       (if pure?
         [content]
