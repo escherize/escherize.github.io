@@ -5,12 +5,12 @@
 (def side-size 20)
 (def debug? false)
 
-(def colors [{:title "Orange" :color "#FF8C40" :img "img/sprites/tiles_orange/tileOrange_02.png"}
-             {:title "Red"    :color "#E84378" :img "img/sprites/tiles_red/tileRed_03.png"}
-             {:title "Pink" :color "#F87398" :img "img/sprites/tiles_pink/tilePink_03.png"}
-             {:title "Blue"   :color "#438EE8" :img "img/sprites/tiles_blue/tileBlue_03.png"}
-             {:title "Green"  :color "#84E841" :img "img/sprites/tiles_green/tileGreen_03.png"}
-             {:title "Yellow" :color "#FFE252" :img "img/sprites/tiles_yellow/tileYellow_03.png"}])
+(def colors [{:title "Orange" :color "#FF8C40" :img "/public/img/sprites/tiles_orange/tileOrange_02.png"}
+             {:title "Red"    :color "#E84378" :img "/public/img/sprites/tiles_red/tileRed_03.png"}
+             {:title "Pink" :color "#F87398" :img "/public/img/sprites/tiles_pink/tilePink_03.png"}
+             {:title "Blue"   :color "#438EE8" :img "public/img/sprites/tiles_blue/tileBlue_03.png"}
+             {:title "Green"  :color "#84E841" :img "public/img/sprites/tiles_green/tileGreen_03.png"}
+             {:title "Yellow" :color "#FFE252" :img "public/img/sprites/tiles_yellow/tileYellow_03.png"}])
 
 (defn rand-color [] (:color (rand-nth colors)))
 

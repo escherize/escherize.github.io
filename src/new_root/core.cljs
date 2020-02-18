@@ -113,6 +113,17 @@
                    content [content]
                    :else [:h2 title])]])
 
+(defn shadow-teaser [{:as _ :keys [id title preview content release]}]
+  (neumorph/shadow-box
+   [:div
+    {:style {:border "none"
+             :padding "10px 20px 20px 30px"
+             :margin "60px"}}
+    [:h3 (link title id)]
+    [:div.row (cond preview [preview]
+                    content [content]
+                    :else [:h2 title])]]))
+
 (defn footer []
   [:div {:style {:float :right}}
    [:p "Copyright Bryan Maass 2019"]])
@@ -125,13 +136,14 @@
     [false false] (first (sort [id1 id2]))))
 
 (defn home [_]
-  [:div
-   [:h1 "Escherize Zone"]
-   [blog
-    (into [:div {:style {:display "flex" :flex-flow "wrap"}}]
-          (for [p (reverse (sort-by sorter (distinct (vals posts))))]
-            (teaser p)))]
-   [footer]])
+  (neumorph/wrap-shadow-container
+   [:div
+    [:h1 "Escherize Zone"]
+    [blog
+     (into [:div {:style {:display "flex" :flex-flow "wrap"}}]
+           (for [p (reverse (sort-by sorter (distinct (vals posts))))]
+             (teaser p)))]
+    [footer]]))
 
 (defn projects []
   [:div
