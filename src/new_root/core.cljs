@@ -1,6 +1,6 @@
 (ns new_root.core
   (:require
-   [reagent.core :as r :refer [atom]]
+   [reagent.core :as r]
    [reitit.frontend :as rfe]
    [reitit.frontend.easy :as rfee]
    [new-root.paint-snake-two.core :as ps-two]
@@ -11,7 +11,8 @@
    [new-root.scratch :as scratch]
    [new-root.neumorph :as neumorph]))
 
-(defonce app-state (atom {:thingies 1}))
+(defonce *pointer (r/atom [301 301]))
+(defonce app-state (r/atom {:thingies 1}))
 
 (defn link [text id]
   [:a {:href (rfee/href ::post {:id id})} text])
@@ -113,16 +114,31 @@
                    content [content]
                    :else [:h2 title])]])
 
-(defn shadow-teaser [{:as _ :keys [id title preview content release]}]
-  (neumorph/shadow-box
-   [:div
-    {:style {:border "none"
-             :padding "10px 20px 20px 30px"
-             :margin "60px"}}
-    [:h3 (link title id)]
-    [:div.row (cond preview [preview]
-                    content [content]
-                    :else [:h2 title])]]))
+(defn shadow-teaser [*pointer {:as _ :keys [id title preview content release]}]
+  (let [*my-position (r/atom [])]
+    (r/create-class
+     {:component-did-mount
+      (fn [this] (reset! *my-position (neumorph/find-location (r/dom-node this))))
+      :reagent-render
+      (fn [*pointer content]
+        [:div
+         {:style (merge
+                  {:margin "30px"
+                   :text-align "center"
+                   :border-radius "20px"
+                   :padding "20px"}
+                  (when @*my-position
+                    {:box-shadow
+                     (neumorph/p1+p2->box-shadow @*pointer @*my-position)}))}
+         [:div
+          [:h3 (link title id)]
+          [:div.row (cond preview [preview]
+                          content [content]
+                          :else [:h2 title])]]
+         (when false
+           [:<>
+            [:p "origin: " (pr-str @*pointer)]
+            [:p "my position: " (pr-str @*my-position)]])])})))
 
 (defn footer []
   [:div {:style {:float :right}}
@@ -136,14 +152,23 @@
     [false false] (first (sort [id1 id2]))))
 
 (defn home [_]
-  (neumorph/wrap-shadow-container
-   [:div
-    [:h1 "Escherize Zone"]
-    [blog
-     (into [:div {:style {:display "flex" :flex-flow "wrap"}}]
-           (for [p (reverse (sort-by sorter (distinct (vals posts))))]
-             (teaser p)))]
-    [footer]]))
+  (r/with-let [handler #(reset! *pointer [(.-pageX %) (.-pageY %)])
+               _ (.addEventListener js/document "mousemove" handler)
+               touch-handler (fn [e] (let [last-idx (-> e .-touches .-length dec)
+                                           last-item (-> e .-touches (aget last-idx))]
+                                       (reset! *pointer [(.-clientX last-item) (.-clientY last-item)])))
+               _ (.addEventListener js/document "touchmove" touch-handler)]
+    [:div
+     [:h1 "Escherize Zone"]
+     [blog
+      (into [:div {:style {:display "flex" :flex-flow "wrap"}}]
+            (for [p (reverse (sort-by sorter (distinct (vals posts))))]
+              ;; (teaser p)
+              [shadow-teaser *pointer p]))]
+     [footer]]
+    (finally
+      (.removeEventListener js/document "mousemove" handler)
+      (.removeEventListener js/document "touchmove" touch-handler))))
 
 (defn projects []
   [:div

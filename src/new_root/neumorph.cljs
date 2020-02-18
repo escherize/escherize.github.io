@@ -44,18 +44,14 @@
 (defonce *pointer (r/atom [300 300]))
 
 (defn shadow-box
-  ([]
-   (shadow-box [:p {:user-select :none
-                    :line-height "1em"}
-                (rand-nth ["Beep" "Boop"])]))
-  ([content]
+  ([*pointer content]
    (let [*my-position (r/atom [])
          height 30
          width (* 1.6 height (rand-nth (range 3 7)))]
      (r/create-class
       {:component-did-mount (fn [this] (reset! *my-position (find-location (r/dom-node this))))
        :reagent-render
-       (fn [content]
+       (fn [*pointer content]
          [:div
           {:style (merge
                    {:margin "30px"
@@ -79,7 +75,7 @@
       (.matchMedia "only screen and (max-width: 760px)")
       (.-matches)))
 
-(defn wrap-shadow-container [content]
+(defn wrap-shadow-container [*pointer content]
   (r/with-let [handler #(reset! *pointer [(.-pageX %) (.-pageY %)])
                _ (.addEventListener js/document "mousemove" handler)
                touch-handler (fn [e] (let [last-idx (-> e .-touches .-length dec)
@@ -92,14 +88,23 @@
       (.removeEventListener js/document "touchmove" touch-handler))))
 
 (defn view []
-  (wrap-shadow-container
-   [:div {:style {:margin "100px"}}
-    #_[:button {:style {:cursor :pointer}
-                :on-click bump-selector}
-       ({0 "constant dark, constant light."
-         1 "constant dark, scaled light."
-         2 "scaled dark, constant light."} @*selector)]
-    (into
-     [:div {:style {:display "flex" :flex-flow "wrap"}}]
-     (doall (map (fn [w] [shadow-box w])
-                 (re-seq #"\w+" "Move your mouse or drag to see these nice pseudo 3d tiles."))))]))
+  (r/with-let [handler #(reset! *pointer [(.-pageX %) (.-pageY %)])
+               _ (.addEventListener js/document "mousemove" handler)
+               touch-handler (fn [e] (let [last-idx (-> e .-touches .-length dec)
+                                           last-item (-> e .-touches (aget last-idx))]
+                                       (reset! *pointer [(.-clientX last-item) (.-clientY last-item)])))
+               _ (.addEventListener js/document "touchmove" touch-handler)]
+    [:div {:style {:margin "100px"}}
+     #_[:button {:style {:cursor :pointer}
+                 :on-click bump-selector}
+        ({0 "constant dark, constant light."
+          1 "constant dark, scaled light."
+          2 "scaled dark, constant light."} @*selector)]
+     (into
+      [:div {:style {:display "flex" :flex-flow "wrap"}}]
+      (doall (map (fn [w] [shadow-box *pointer [:p w]])
+                  (re-seq #"\w+"
+                          "Move your mouse or drag to see these nice pseudo 3d tiles."))))]
+    (finally
+      (.removeEventListener js/document "mousemove" handler)
+      (.removeEventListener js/document "touchmove" touch-handler))))
