@@ -140,7 +140,7 @@
            y (range side-size)]
        (let [c (get-in @state [:board x y :color])
              img (:img (color-lookup c))]
-         (js/console.log img)
+         ;;(js/console.log img)
          [:<> {:key (str x "-" y)}
           [:div {:on-click (fn [] (flood-async c))
                  :style (merge
