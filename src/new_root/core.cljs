@@ -114,6 +114,28 @@
                    content [content]
                    :else [:h2 title])]])
 
+(defn shadow-box [*pointer content]
+  (let [*my-position (r/atom [])]
+    (r/create-class
+     {:component-did-mount
+      (fn [this] (reset! *my-position (neumorph/find-location (r/dom-node this))))
+      :reagent-render
+      (fn [*pointer content]
+        [:div
+         {:style (merge
+                  {:margin "20px 30px"
+                   :text-align "center"
+                   :border-radius "20px"
+                   :padding "20px 100px"}
+                  (when @*my-position
+                    {:box-shadow
+                     (neumorph/p1+p2->box-shadow @*pointer @*my-position)}))}
+         content
+         (when false
+           [:<>
+            [:p "origin: " (pr-str @*pointer)]
+            [:p "my position: " (pr-str @*my-position)]])])})))
+
 (defn shadow-teaser [*pointer {:as _ :keys [id title preview content release]}]
   (let [*my-position (r/atom [])]
     (r/create-class
@@ -159,12 +181,14 @@
                                        (reset! *pointer [(.-clientX last-item) (.-clientY last-item)])))
                _ (.addEventListener js/document "touchmove" touch-handler)]
     [:div
-     [:h1 "Escherize Zone"]
-     [blog
-      (into [:div {:style {:display "flex" :flex-flow "wrap"}}]
-            (for [p (reverse (sort-by sorter (distinct (vals posts))))]
-              ;; (teaser p)
-              [shadow-teaser *pointer p]))]
+     [:div {:style {:width "64%" :margin "auto"}}
+      [shadow-box *pointer [:div
+                            [:h1 "Escherize Zone"]
+                            [nav]]]]
+     (into [:div {:style {:display "flex" :flex-flow "wrap"}}]
+           (for [p (reverse (sort-by sorter (distinct (vals posts))))]
+             ;; (teaser p)
+             [shadow-teaser *pointer p]))
      [footer]]
     (finally
       (.removeEventListener js/document "mousemove" handler)
