@@ -63,7 +63,7 @@
 (def post-4
   {:id "gen-art"
    :sorder 4
-   :title "Generative Art noob mode"
+   :title "Generative Art"
    :pure true
    :preview (fn [] [:div "Just getting warmed up"])
    :content gen-art/view})

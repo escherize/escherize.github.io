@@ -1,5 +1,6 @@
 (ns new-root.neumorph
-  (:require [reagent.core :as r]))
+  (:require [reagent.core :as r]
+            [clojure.string :as str]))
 
 ;; (def origin (r/atom [0 0]))
 
@@ -42,29 +43,35 @@
 
 (defonce *pointer (r/atom [300 300]))
 
-(defn shadow-box []
-  (let [*my-position (r/atom [])
-        title (rand-nth ["Beep" "Boop"])
-        width (* 31.25 (rand-nth (range 3 7)))]
-    (r/create-class
-     {:component-did-mount (fn [this] (reset! *my-position (find-location (r/dom-node this))))
-      :reagent-render
-      (fn []
-        [:div
-         {:style (merge
-                  {:margin "30px"
-                   :width width
-                   :height 50
-                   :border-radius "20px"
-                   :padding "20px"
-                   :box-shadow "-14px 14px 20px #c9cbcf, 14px -14px 20px #ffffff"}
-                  (when @*my-position
-                    {:box-shadow (p1+p2->box-shadow @*pointer @*my-position)}))}
-         [:h1 title]
-         (when false
-           [:<>
-            [:p "origin: " (pr-str @*pointer)]
-            [:p "my position: " (pr-str @*my-position)]])])})))
+(defn shadow-box
+  ([]
+   (shadow-box (rand-nth ["Beep" "Boop"])))
+  ([title]
+   (let [*my-position (r/atom [])
+         height 30
+         width (* 1.6 height (rand-nth (range 3 7)))]
+     (r/create-class
+      {:component-did-mount (fn [this] (reset! *my-position (find-location (r/dom-node this))))
+       :reagent-render
+       (fn [title]
+         [:div
+          {:style (merge
+                   {:margin "30px"
+                    :text-align "center"
+                    :width width
+                    :height height
+                    :border-radius "20px"
+                    :padding "20px"
+                    :box-shadow "-14px 14px 20px #c9cbcf, 14px -14px 20px #ffffff"}
+                   (when @*my-position
+                     {:box-shadow
+                      (p1+p2->box-shadow @*pointer @*my-position)}))}
+          [:p {:style {:user-select :none
+                       :line-height "1em"}} title]
+          (when false
+            [:<>
+             [:p "origin: " (pr-str @*pointer)]
+             [:p "my position: " (pr-str @*my-position)]])])}))))
 
 (defn is-mobile? []
   (-> js/window
@@ -74,10 +81,11 @@
 (defn view []
   (r/with-let [handler #(reset! *pointer [(.-pageX %) (.-pageY %)])
                _ (.addEventListener js/document "mousemove" handler)
-               touch-handler (fn [e]
-                               (reset! *pointer
-                                       [(-> e .-touches (aget 0) .-clientX)
-                                        (-> e .-touches (aget 0) .-clientY)]))
+               touch-handler
+               (fn [e]
+                 (let [last-idx (-> e .-touches .-length dec)
+                       last-item (-> e .-touches (aget last-idx))]
+                   (reset! *pointer [(.-clientX last-item) (.-clientY last-item)])))
                _ (.addEventListener js/document "touchmove" touch-handler)]
     [:div {:style {:margin "100px"}}
 
@@ -88,7 +96,8 @@
           2 "scaled dark, constant light."} @*selector)]
      (into
       [:div {:style {:display "flex" :flex-flow "wrap"}}]
-      (repeat 30 [shadow-box]))]
+      (doall (map (fn [w] [shadow-box w])
+                  (re-seq #"\w+" "Move your mouse or drag around to see these nice pseudo 3d tiles."))))]
     (finally
       (.removeEventListener js/document "mousemove" handler)
       (.removeEventListener js/document "touchmove" touch-handler))))
