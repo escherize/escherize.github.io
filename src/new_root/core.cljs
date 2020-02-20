@@ -9,13 +9,17 @@
    [clojure.string :as str]
    [new-root.gen-art :as gen-art]
    [new-root.scratch :as scratch]
-   [new-root.neumorph :as neumorph]))
+   [new-root.neumorph :as neumorph]
+   [new-root.gen-art2 :as gen-art2]))
 
 (defonce *pointer (r/atom [301 301]))
 (defonce app-state (r/atom {:thingies 1}))
 
-(defn link [text id]
-  [:a {:href (rfee/href ::post {:id id})} text])
+(defn double-thingies []
+  (swap! app-state update :thingies #(* 2 %)))
+
+(defn link [text post-id]
+  [:a {:href (rfee/href ::post {:id post-id})} text])
 
 (def post-0
   {:id "hello-world"
@@ -29,7 +33,7 @@
                completely programmable. Visit my contents " (link "here." "hello-world")]
                [:button
                 {:style {:cursor :pointer}
-                 :on-click (fn [] (swap! app-state update :thingies #(* 2 %)))}
+                 :on-click double-thingies}
                 "Click here to see stuff happen"]])
    :content (fn []
               [:div
@@ -85,6 +89,8 @@
    :preview (fn [] [:div "Yeah.. it's "(link "trendy" "neumorph") "."])
    :content neumorph/view})
 
+(def post-6)
+
 (def posts
   (->> [post-1 post-2 post-3 post-4 post-5]
        (map (juxt :id identity))
@@ -95,8 +101,13 @@
    (into
     [:span
      [:span [:a {:href (rfee/href ::home)} "Home"]]
-     (repeat (:thingies @app-state) "  |  ")
-     [:span [:a {:href (rfee/href ::projects)} "Projects"]]])])
+     (repeat (:thingies @app-state)
+             [:span {:style {:cursor :pointer
+                             :user-select :none}
+                     :on-click double-thingies} "  |  "])
+     [:span [:a {:href (rfee/href ::projects)} "Projects"]]
+     #_(repeat (:thingies @app-state) "  |  ")
+     #_[:span [:a {:href (rfee/href ::about)} "About"]]])])
 
 (defn blog [page]
   (into
@@ -106,9 +117,8 @@
 
 (defn teaser [{:as _ :keys [id title preview content release]}]
   [:div.teaser-card
-   {:style {:border "none"
-            :padding "10px 20px 20px 30px"
-            :margin "60px"}}
+   {:style {:margin "30px"
+            :padding "10px 20px 20px 30px"}}
    [:h3 (link title id)]
    [:div.row (cond preview [preview]
                    content [content]
@@ -219,9 +229,13 @@
          [content]]))
     [:pre (pr-str match)]))
 
+(defn about [_]
+  [:h1 "under construction"])
+
 (def routes
   [["/" {:name ::home :view home}]
    ["/projects" {:name ::projects :view projects}]
+   ["/about" {:name ::about :view about}]
    ["/post/:id" {:name ::post
                  :view post
                  :parameters {:path {:id int?}}}]])
