@@ -10,7 +10,7 @@
    [new-root.gen-art :as gen-art]
    [new-root.scratch :as scratch]
    [new-root.neumorph :as neumorph]
-   [new-root.gen-art2 :as gen-art2]))
+   [new-root.gen-art-2 :as gen-art2]))
 
 (defonce *pointer (r/atom [301 301]))
 (defonce app-state (r/atom {:thingies 1}))
@@ -89,10 +89,16 @@
    :preview (fn [] [:div "Yeah.. it's "(link "trendy" "neumorph") "."])
    :content neumorph/view})
 
-(def post-6)
+(def post-6
+  {:id "gen-art-2"
+   :sorder 6
+   :title "More Art"
+   :pure true
+   :preview (fn [] [:div "Where circles don't overlap"])
+   :content gen-art2/view})
 
 (def posts
-  (->> [post-1 post-2 post-3 post-4 post-5]
+  (->> [post-1 post-2 post-3 post-4 post-5 post-6 scratch]
        (map (juxt :id identity))
        (into {})))
 
@@ -196,9 +202,10 @@
                             [:h1 "Escherize Zone"]
                             [nav]]]]
      (into [:div {:style {:display "flex" :flex-flow "wrap"}}]
-           (for [p (reverse (sort-by sorter (distinct (vals posts))))]
+           (for [{:keys [exclude-post?] :as p} (reverse (sort-by sorter (distinct (vals posts))))]
              ;; (teaser p)
-             [shadow-teaser *pointer p]))
+             (when-not exclude-post?
+               [shadow-teaser *pointer p])))
      [footer]]
     (finally
       (.removeEventListener js/document "mousemove" handler)
