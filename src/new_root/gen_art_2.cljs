@@ -6,9 +6,8 @@
 (defn draw [{:keys [circles]}]
   (q/background 255)
   (doseq [{[x y] :pos color :color r :r} circles]
-    (let [r (or r 10)]
-      (q/fill color)
-      (q/ellipse x y r r))))
+    (q/fill color)
+    (q/ellipse x y r r)))
 
 (def pallets
   {:night-sand {:sand-tan "#e1b382"
@@ -41,7 +40,7 @@
 (defonce pallet-title (r/atom (first (keys pallets))))
 
 (defn gen-circle [width height]
-  (let [r (+ 20 (rand-int 100))]
+  (let [r (+ 10 (rand-int 300))]
     {:r r
      :pos [(+ (/ r 2) (rand-int (- width r)))
            (+ (/ r 2) (rand-int (- height r)))]}))
@@ -50,22 +49,24 @@
 
 (defn collide? [{[x1 y1] :pos r1 :r}
                 {[x2 y2] :pos r2 :r}]
-  (< (+ r1 r2)
-     (Math/sqrt (+ (square (- x1 x2))
-                   (square (- y1 y2))))))
+  (< (square (/ (+ r1 r2) 2))
+     (+ (square (- x1 x2))
+        (square (- y1 y2)))))
 
-(defn no-collisions? [{[x y] :pos r :r :as c} circles]
-  (reduce #(and %1 %2) true (map #(collide? c %) circles)))
+(defn no-collisions? [{[x y] :pos r :r :as c}
+                      circles]
+  (->> circles
+       (map #(collide? c %))
+       (reduce #(and %1 %2) true)))
 
 (defn update-state [{:keys [width height] :as state}]
   (let [c' (gen-circle width height)]
     (loop [c c']
       (if (no-collisions? c (:circles state))
         (update state :circles (fn [circs]
-                                 (->> c
-                                      (assoc :color (rand-color))
+                                 (->> (assoc c :color (rand-color @pallet-title))
                                       (conj circs)
-                                      (take 10))))
+                                      (take 200))))
         (recur (gen-circle width height))))))
 
 (defn canvas []
