@@ -1,0 +1,18 @@
+#!/usr/bin/env joker
+
+(ns script
+  (:require [joker.tools.cli :as cli]
+            [joker.os :as os]
+            [joker.string :as s]
+            [joker.hiccup :as h]
+            [joker.strconv :refer [atoi]]))
+
+(def base-dir "works/pico8")
+
+(spit (str base-dir "/index.html")
+ (h/html
+  (into [:div [:div "Here are some pico8 games I have authored."]]
+        (for [g (->> (str base-dir "/")
+                     os/ls
+                     (filter :dir?))]
+          [:h3 [:a {:href (str "/" (:name g))} (:name g)]]))))
