@@ -9,10 +9,16 @@
 
 (def base-dir "works/pico8")
 
+(println "scanning: " base-dir " for dirs to link.")
+
 (spit (str base-dir "/index.html")
- (h/html
-  (into [:div [:div "Here are some pico8 games I have authored."]]
-        (for [g (->> (str base-dir "/")
-                     os/ls
-                     (filter :dir?))]
-          [:h3 [:a {:href (str "/" (:name g))} (:name g)]]))))
+      (h/html
+       (into [:div [:div "Here are some pico8 games I have authored."]]
+             (for [g-name (->> (str base-dir "/")
+                               os/ls
+                               (filter :dir?)
+                               ;; there are more fields here...
+                               (map :name))]
+               (do
+                 (println "linking: " g-name)
+                 [:h3 [:a {:href (str "/" g-name)} g-name]])))))
