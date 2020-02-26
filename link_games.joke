@@ -21,4 +21,4 @@
                                (map :name))]
                (do
                  (println "linking: " g-name)
-                 [:h3 [:a {:href (str "/" g-name)} g-name]])))))
+                 [:h3 [:a {:href (str "./" g-name)} g-name]])))))
