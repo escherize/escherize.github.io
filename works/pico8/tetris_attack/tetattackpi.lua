@@ -8,6 +8,7 @@ function _init()
    c_two = make_cursor(g_two,p2)
 
    sparks = {}
+   music(0)
 end
 
 function _update()
