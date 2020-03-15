@@ -13,7 +13,7 @@
 
 (spit (str base-dir "/index.html")
       (h/html
-       (into [:div [:div "Here are some pico8 games I have authored."]]
+       (into [:div [:h1 "Here are some pico8 games I have authored."]]
              (for [g-name (->> (str base-dir "/")
                                os/ls
                                (filter :dir?)
@@ -21,4 +21,7 @@
                                (map :name))]
                (do
                  (println "linking: " g-name)
-                 [:h3 [:a {:href (str "./" g-name)} (s/capitalize g-name)]])))))
+                 [:h3 [:a {:href (str "./" g-name)}
+                       (s/join " "
+                               (map s/capitalize
+                                    (s/split g-name #"_")))]])))))
