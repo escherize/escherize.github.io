@@ -10,7 +10,8 @@
    [new-root.gen-art :as gen-art]
    [new-root.scratch :as scratch]
    [new-root.neumorph :as neumorph]
-   [new-root.gen-art-2 :as gen-art2]))
+   [new-root.gen-art-2 :as gen-art2]
+   [new-root.gen-art-3 :as gen-art3]))
 
 (defonce *pointer (r/atom [301 301]))
 (defonce app-state (r/atom {:thingies 1}))
@@ -97,8 +98,18 @@
    :preview (fn [] [:div "Where circles don't overlap"])
    :content gen-art2/view})
 
+(def post-7
+  {:id "gen-art-3"
+   :sorder 6
+   :title "Even More Art"
+   :pure true
+   :preview (fn [] [:div "Vector Fields 101"])
+   :content gen-art3/view})
+
+;; TODO: link pico8 stuff
+
 (def posts
-  (->> [post-1 post-2 post-3 post-4 post-5 post-6 scratch]
+  (->> [post-1 post-2 post-3 post-4 post-5 post-6 post-7 scratch]
        (map (juxt :id identity))
        (into {})))
 
