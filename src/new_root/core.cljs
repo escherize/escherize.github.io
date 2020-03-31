@@ -294,7 +294,7 @@
                       :background-color "#dcd"}
               :on-click #(swap! *ballspeed + 0.01)}
         " Speed ⬆️"]
-       (when (and (> @*ballspeed 0.15) @*stutter?)
+       (when (and (> @*ballspeed 0.2) @*stutter?)
          [:div {:style {:position "absolute"
                         :top 54
                         :left 50
