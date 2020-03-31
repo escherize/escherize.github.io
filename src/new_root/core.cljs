@@ -113,7 +113,10 @@
    :pure true
    :no-content true
    :preview (fn []
-              [:div "A few games I've written"
+              [:div
+               "To play, use the arrow keys and z, and x."
+               "They also work on mobile."
+
                [:ul
                 [:li>a {:href "/works/pico8/tetris_attack"} "Tetris Attack v1.1"]
                 [:li>a {:href "/works/pico8/ammo_thruster"} "Ammo Thruster v0.9"]
@@ -182,13 +185,16 @@
     (Math/sqrt x)
     (* -1 (Math/sqrt (* -1 x)))))
 
+(defn clamp [lo n hi]
+  (min hi (max n lo)))
+
 (defn style-fn [{:keys [x y h unit-x unit-y]}]
   {:box-shadow (str (squirt x) "px "
                     (squirt y) "px "
                     "0px " ;; blur
                     "0px " ;; spread
                     "#DBBFCE")
-   :border-radius (- h 150)})
+   :border-radius (clamp 0 (- (/ h 4) 150) 40)})
 
 (defn shadow-box [*pointer content]
   (let [*my-position (r/atom [])]
@@ -239,32 +245,54 @@
 (defn footer []
   [:div])
 
+(def width js/window.innerWidth)
+(def height js/window.innerHeight)
+
+(js/console.log "width:" width)
+(js/console.log "height:" height)
+
+(defn to-scale [range n]
+  (+ (* range 0.25) (* n range 0.5)))
+
 (defn home [_]
-  (r/with-let [handler #(reset! *pointer [(.-pageX %) (.-pageY %)])
-               _ (.addEventListener js/document "mousemove" handler)
-               touch-handler (fn [e]
-                               (let [last-idx (-> e .-touches .-length dec)
-                                     last-item (-> e .-touches (aget last-idx))]
-                                 (reset! *pointer [(.-clientX last-item) (.-clientY last-item)])))
-               _ (.addEventListener js/document "touchmove" touch-handler)]
-    [:div
-     [:div {:style {:width "64%" :margin "auto"}}
-      [shadow-box *pointer [:div
-                            [:h1 "Escherize Zone"]
-                            [nav]]]]
-     (into [:div {:style {:display "flex" :flex-flow "wrap"}}]
-           (for [{:keys [exclude-post?] :as p} (->> (posts)
-                                                    vals
-                                                    distinct
-                                                    (sort-by :sorder)
-                                                    reverse)]
-             ;; (teaser p)
-             (when-not exclude-post?
-               [shadow-teaser *pointer p])))
-     [footer]]
-    (finally
+  (let [cnt (r/atom 0)
+        raf-f (fn raf-f []
+                (swap! cnt #(-> % (+ 0.05)))
+                (reset! *pointer [(to-scale height (Math/sin @cnt))
+                                  (* 2 (to-scale width (Math/sin @cnt)))])
+                (js/requestAnimationFrame raf-f))]
+    (js/requestAnimationFrame raf-f)
+    (fn [_]
+      [:div
+       [:div {:style {:position "absolute"
+                      :left (first @*pointer)
+                      :top (second @*pointer)
+                      :border-radius "50%"
+                      :width 30
+                      :height 30
+                      :border "3px black solid"
+                      :background-color "#FAFF94"}}]
+       #_[:pre (pr-str @cnt)]
+       #_[:pre (pr-str @*pointer)]
+       [:div {:style {:width "64%" :margin "auto"}}
+        [shadow-box *pointer [:div
+                              [:h1 "Escherize Zone"]
+                              [nav]]]]
+       (into [:div {:style {:display "flex"
+                            :flex-flow "wrap"
+                            :justify-content "space-evenly"}}]
+             (for [{:keys [exclude-post?] :as p} (->> (posts)
+                                                      vals
+                                                      distinct
+                                                      (sort-by :sorder)
+                                                      reverse)]
+               ;; (teaser p)
+               (when-not exclude-post?
+                 [shadow-teaser *pointer p])))
+       [footer]]))
+  #_(finally
       (.removeEventListener js/document "mousemove" handler)
-      (.removeEventListener js/document "touchmove" touch-handler))))
+      (.removeEventListener js/document "touchmove" touch-handler)))
 
 (defn projects []
   [:div
