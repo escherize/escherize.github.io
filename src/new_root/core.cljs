@@ -115,10 +115,10 @@
    :preview (fn []
               [:div "A few games I've written"
                [:ul
-                [:li>a {:href "/public/works/tetris_attack"} "Tetris Attack v1.1"]
-                [:li>a {:href "/public/works/ammo_thruster"} "Ammo Thruster v0.9"]
-                [:li>a {:href "/public/works/sliding_tiles"} "Sliding Tiles v0.4"]
-                [:li>a {:href "/public/works/gunner_men"} "Gunner Men 0.1"]]])})
+                [:li>a {:href "/works/pico8/tetris_attack"} "Tetris Attack v1.1"]
+                [:li>a {:href "/works/pico8/ammo_thruster"} "Ammo Thruster v0.9"]
+                [:li>a {:href "/works/pico8/sliding_tiles"} "Sliding Tiles v0.4"]
+                [:li>a {:href "/works/pico8/gunner_men"} "Gunner Men 0.1"]]])})
 
 (def post-9
   {:id "light-strips"
