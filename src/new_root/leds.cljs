@@ -2,6 +2,17 @@
   (:require [markdown-to-hiccup.core :as m]
             [reagent.core :as r]))
 
+(def indexed-values
+  (->> (for [y (range 0 10)]
+         (reverse
+          (for [x (if (odd? y)
+                    (range 0 15)
+                    (reverse (range 0 15)))]
+            [x y])))
+       flatten
+       (partition 2)
+       reverse))
+
 (defn board
   ([] [board {}])
   ([on?]
@@ -56,25 +67,44 @@
        [:div {:style {:align-self "center" :width 300}}
         [board @*board]]])))
 
+
+(defn board-2 []
+  (let [i (r/atom -1)
+        color (r/atom 0)
+        leds (r/atom (zipmap [[4 0]               [0 0]
+                              [0 1]
+                              [4 2] [2 2] [1 2]   [0 2]
+                              [0 3]       [2 3]   [4 3]
+                              [4 4]       [2 4]   [0 4]
+                              [0 5]       [2 5]   [4 5]  [6 5]]
+                             (repeat "red")))
+        update-f (fn update-f []
+                   (swap! i inc)
+                   (swap! i mod 150)
+                   (swap! color #(+ (rand-nth [1 2]) %))
+                   (swap! color mod 360)
+                   (swap! leds assoc
+                          (nth indexed-values @i)
+                          (str "hsl(" @color ",80%,70%)"))
+                   (js/requestAnimationFrame update-f))]
+    (js/requestAnimationFrame update-f)
+    (fn []
+      [:div {:style {:margin 30}}
+       [board @leds]])))
+
 (defn md [content] (->> content (m/md->hiccup) (m/component)))
 
 (defn view []
   [:div.container {:style {:max-width "800px"
                            :margin-top "40px"}}
    [:div {:style {:margin "50px"}}
-    [board
-     (zipmap [[4 0]               [0 0]
-              [0 1]
-              [4 2] [2 2] [1 2]   [0 2]
-              [0 3]       [2 3]   [4 3]
-              [4 4]       [2 4]   [0 4]
-              [0 5]       [2 5]   [4 5]  [6 5]]
-             (map #(str "rgb(" % "," 100 "," (- 255 %) ")")
-                  (range 0 255 10)))]
-
     ]
+   [:div {:style {:margin "50px"}}
+    [board-2]]
+
+   [:h1 {:style {:font-size "100px"}} "Wifi LED Display"]
    (md "
-  # Wifi LED Display
+
 
   Due to coronavirus I needed something to do, and put together a project with a [led strip light](https://en.wikipedia.org/wiki/LED_strip_light) and a Raspberry Pi. I made a wifi-connected LED display out of things laying around the house!
 
@@ -124,10 +154,6 @@ And partly glued onto the board:
 
   Some software was needed to get this thing working. I found a python library that interacts with the strip.
 
-")
-   [board-1]
-   (md
-    "
 ### Python
 Indexing into this was a challenge. I figured out the following function to get `set(x,y,color)` working:
 
@@ -150,17 +176,7 @@ idx(10,15,0,9) => 0
  So, this is the interface for using the light strip. Notice how as the led we set increases the values snake their way up the board. Look carefully how the colors change in a snake pattern here:
 ")
 
-   [:div {:style {:margin 30}}
-    (board (zipmap
-            (->> (for [y (range 0 10)]
-                   (for [x (if (odd? y)
-                             (reverse (range 0 15))
-                             (range 0 15))]
-                     [x y]))
-                 flatten
-                 (partition 2))
-            (map #(str "hsl(" % ",80%,55%)") (take 150 (cycle (range 0 360 5))))))]
-
+   [board-2]
    (md
     "
 I used some python library that lets you set values on the strip by their index, and converted from a cartesian coordinate into the snakey index using that `idx` function above.
