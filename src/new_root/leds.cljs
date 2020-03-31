@@ -89,7 +89,7 @@
 
   The first application for it fetches the weather and displays it, like this:
 
-  ![weather app](img/led_images/IMG_0531.jpeg)
+  ![weather app](public/img/led_images/IMG_0531.jpeg)
 
   # Physical Construction
 
@@ -111,7 +111,7 @@
 
   Once finished it looked like this:
 
-  ![leds](img/led_images/IMG_0121.jpeg \"leds\")
+  ![leds](public/img/led_images/IMG_0121.jpeg \"leds\")
 
   ### LED Diffusers
 
@@ -119,15 +119,15 @@
 
 Here they are on the printer, about halfway printed:
 
-![leds](img/led_images/IMG_0520.jpeg)
+![leds](public/img/led_images/IMG_0520.jpeg)
 
 A pile of them:
 
-![leds](img/led_images/IMG_0522.jpeg)
+![leds](public/img/led_images/IMG_0522.jpeg)
 
 And partly glued onto the board:
 
-![leds](img/led_images/IMG_0523.jpeg)
+![leds](public/img/led_images/IMG_0523.jpeg)
 
    ## Coding
 
@@ -245,10 +245,8 @@ coords(0,0,\"abc\")
 
 Using the [Open Weather API](https://openweathermap.org/api), I was able to send a request and get a response with the low, high, and current temp here in Austin. A little more pixel wrangling and we got:
 
- ![weather app](img/led_images/IMG_0531.jpeg)
+ ![weather app](public/img/led_images/IMG_0531.jpeg)
 
 ")
 
-
-   [:div {:style {:height "100px"}}]
-   ])
+   [:div {:style {:height "100px"}}]])
