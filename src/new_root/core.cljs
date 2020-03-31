@@ -179,12 +179,13 @@
    :background-color "#dde"
    :text-align "center"
    :border "1px #5C3449 solid"
+   :border-radius 10
    :padding "30px"})
 
 (defn squirt [x]
   (if (> x 0)
-    (Math/sqrt x)
-    (* -1 (Math/sqrt (* -1 x)))))
+    (Math/sqrt (* 0.5 x))
+    (* -1 (Math/sqrt (* -0.5 x)))))
 
 (defn clamp [lo n hi]
   (min hi (max n lo)))
@@ -194,9 +195,8 @@
                     (squirt y) "px "
                     "0px " ;; blur
                     "0px " ;; spread
-                    (str "hsl(" (+ 20 (/ h 3)) ",30%,70%)"))
-   :background-color (str "hsl(" (/ h 3) ",40%,90%)")
-   :border-radius (clamp 5 (- (/ h 2) 150) 25)})
+                    (str "hsl(" (+ 20 (/ h 5)) ",30%,75%)"))
+   :background-color (str "hsl(" (/ h 5) ",35%,92%)")})
 
 (defn shadow-box [*pointer content]
   (let [*my-position (r/atom [])]
@@ -259,7 +259,7 @@
 (defn home [_]
   (let [cnt (r/atom 0)
         raf-f (fn raf-f []
-                (swap! cnt + 0.08)
+                (swap! cnt + 0.03)
                 (reset! *pointer [(to-scale (width) (Math/sin @cnt))
                                   (to-scale (height) (Math/cos (* 1.6 @cnt)))])
                 (js/requestAnimationFrame raf-f))]
@@ -272,8 +272,7 @@
                       :border-radius "50%"
                       :width 50
                       :height 50
-                      :border "3px black solid"
-                      :opacity 0.4
+                      :opacity 0.5
                       :background-color "#FFF"}}]
        #_[:pre (pr-str @cnt)]
        #_[:pre (pr-str @*pointer)]
