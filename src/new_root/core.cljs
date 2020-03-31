@@ -137,7 +137,7 @@
 (defn posts []
   (->> [post-1 post-2 post-3 post-4 post-5 post-6
         ;; fucked up idk why :D
-        post-7
+        ;; post-7
         post-8
         post-9
         scratch]
