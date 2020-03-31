@@ -116,12 +116,15 @@
               [:div
                "To play, use the arrow keys and z, and x."
                "They also work on mobile."
-
                [:ul
-                [:li>a {:href "/works/pico8/tetris_attack"} "Tetris Attack v1.1"]
-                [:li>a {:href "/works/pico8/ammo_thruster"} "Ammo Thruster v0.9"]
-                [:li>a {:href "/works/pico8/sliding_tiles"} "Sliding Tiles v0.4"]
-                [:li>a {:href "/works/pico8/gunner_men"} "Gunner Men 0.1"]]])})
+                [:li>a {:style {:font-size 20}
+                        :href "/works/pico8/tetris_attack"} "Tetris Attack v1.1"]
+                [:li>a {:style {:font-size 20}
+                        :href "/works/pico8/ammo_thruster"} "Ammo Thruster v0.9"]
+                [:li>a {:style {:font-size 20}
+                        :href "/works/pico8/sliding_tiles"} "Sliding Tiles v0.4"]
+                [:li>a {:style {:font-size 20}
+                        :href "/works/pico8/gunner_men"} "Gunner Men 0.1"]]])})
 
 (def post-9
   {:id "light-strips"
@@ -184,19 +187,19 @@
 
 (defn squirt [x]
   (if (> x 0)
-    (Math/sqrt (* 0.5 x))
-    (* -1 (Math/sqrt (* -0.5 x)))))
+    (Math/sqrt (Math/abs x))
+    (* -1 (Math/sqrt (Math/abs x)))))
 
 (defn clamp [lo n hi]
   (min hi (max n lo)))
 
 (defn style-fn [{:keys [x y h unit-x unit-y]}]
-  {:box-shadow (str (squirt x) "px "
-                    (squirt y) "px "
+  {:box-shadow (str (* 0.8 (squirt x)) "px "
+                    (* 0.8 (squirt y)) "px "
                     "0px " ;; blur
                     "0px " ;; spread
-                    (str "hsl(" (+ 20 (/ h 5)) ",30%,75%)"))
-   :background-color (str "hsl(" (/ h 5) ",35%,92%)")})
+                    (str "hsl(" (/ h 5) ",50%,65%)"))
+   :background-color (str "hsl(" (- (/ h 5) 10) ",50%,93%)")})
 
 (defn shadow-box [*pointer content]
   (let [*my-position (r/atom [])]
@@ -258,8 +261,12 @@
 
 (defn home [_]
   (let [cnt (r/atom 0)
+        *hide-ball (r/atom true)
+        *ballspeed (r/atom 0.03)
+        *stutter? (r/atom false)
         raf-f (fn raf-f []
-                (swap! cnt + 0.03)
+                (swap! cnt + @*ballspeed)
+                (swap! *stutter? not)
                 (reset! *pointer [(to-scale (width) (Math/sin @cnt))
                                   (to-scale (height) (Math/cos (* 1.6 @cnt)))])
                 (js/requestAnimationFrame raf-f))]
@@ -267,13 +274,55 @@
     (fn [_]
       [:div
        [:div {:style {:position "absolute"
-                      :left (first @*pointer)
-                      :top (second @*pointer)
-                      :border-radius "50%"
+                      :cursor :pointer
+                      :left 0
+                      :top 0
+                      :font-size 9
                       :width 50
-                      :height 50
-                      :opacity 0.5
-                      :background-color "#FFF"}}]
+                      :height 20
+                      :background-color "#dcd"}
+              :on-click (fn [] (swap! *hide-ball not))}
+        " Toggle Ball"]
+       [:div {:style {:position "absolute"
+                      :user-select "none"
+                      :cursor :pointer
+                      :left 0
+                      :top 21
+                      :font-size 9
+                      :width 50
+                      :height 20
+                      :background-color "#dcd"}
+              :on-click #(swap! *ballspeed + 0.01)}
+        " Speed ⬆️"]
+       (when (and (> @*ballspeed 0.15) @*stutter?)
+         [:div {:style {:position "absolute"
+                        :top 54
+                        :left 50
+                        :font-size 40
+                        :color "red"
+                        :background-color "white"
+                        :border-radius "10px"}}
+          "Epillepsy Warning!!"])
+       [:div {:style {:position "absolute"
+                      :user-select "none"
+                      :cursor :pointer
+                      :left 0
+                      :top 42
+                      :font-size 9
+                      :width 50
+                      :height 20
+                      :background-color "#dcd"}
+              :on-click #(swap! *ballspeed * 0.5)}
+        " Speed ⬇️"]
+       (when-not @*hide-ball
+         [:div {:style {:position "absolute"
+                        :left (first @*pointer)
+                        :top (second @*pointer)
+                        :border-radius "50%"
+                        :width 50
+                        :height 50
+                        :opacity 0.8
+                        :background-color "#FFF"}}])
        #_[:pre (pr-str @cnt)]
        #_[:pre (pr-str @*pointer)]
        [:div {:style {:width "64%" :margin "auto"}}
