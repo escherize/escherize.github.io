@@ -194,15 +194,9 @@
                     (squirt y) "px "
                     "0px " ;; blur
                     "0px " ;; spread
-                    (str "hsl(" (+ 20 (/ h 3)) ",30%,70%)")
-                    ;; 3 "px "
-                    ;; 3 "px "
-                    ;; "20 px "
-                    ;; h "px "
-                    ;; "#fff"
-                    )
+                    (str "hsl(" (+ 20 (/ h 3)) ",30%,70%)"))
    :background-color (str "hsl(" (/ h 3) ",40%,90%)")
-   :border-radius (clamp 0 (- (/ h 2) 150) 20)})
+   :border-radius (clamp 5 (- (/ h 2) 150) 25)})
 
 (defn shadow-box [*pointer content]
   (let [*my-position (r/atom [])]
@@ -253,11 +247,11 @@
 (defn footer []
   [:div {:style {:height 100}}])
 
-(def width js/window.innerWidth)
-(def height js/window.innerHeight)
+(defn width [] js/window.innerWidth)
+(defn height [] js/window.innerHeight)
 
-(js/console.log "width:" width)
-(js/console.log "height:" height)
+(js/console.log "width:" (width))
+(js/console.log "height:" (height))
 
 (defn to-scale [range n]
   (+ (* range 0.45) (* range n 0.35)))
@@ -265,9 +259,9 @@
 (defn home [_]
   (let [cnt (r/atom 0)
         raf-f (fn raf-f []
-                (swap! cnt + 0.008)
-                (reset! *pointer [(to-scale width (Math/sin @cnt))
-                                  (to-scale height (Math/cos (* 1.6 @cnt)))])
+                (swap! cnt + 0.08)
+                (reset! *pointer [(to-scale (width) (Math/sin @cnt))
+                                  (to-scale (height) (Math/cos (* 1.6 @cnt)))])
                 (js/requestAnimationFrame raf-f))]
     (js/requestAnimationFrame raf-f)
     (fn [_]
