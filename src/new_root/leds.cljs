@@ -16,8 +16,7 @@
 (defn board
   ([] [board {}])
   ([on?]
-   (into [:div {:style {:width (* 22 15)
-                        :margin "auto"}}]
+   (into [:div {:style {:width 330 :margin "auto auto auto -30px"}}]
          (for [y (range 10)]
            (into [:div {:style {:margin 0 :line-height 0}}]
                  (for [x (range 15)]
@@ -33,7 +32,7 @@
 (defn board-1 []
   (let [*board (r/atom {})]
     (fn []
-      [:div {:style {:margin "50px"
+      [:div {:style {:margin "50px auto"
                      :padding "10px"
                      :border "1px solid grey"
                      :display "flex"
@@ -91,7 +90,7 @@
                    (js/requestAnimationFrame update-f))]
     (js/requestAnimationFrame update-f)
     (fn []
-      [:div {:style {:margin 30}}
+      [:div {:style {:margin "30px 0"}}
        [board @leds]])))
 
 (defn board-3 []
@@ -208,7 +207,7 @@ idx(10,15,0,9) => 0
  So, this is the interface for using the light strip. Notice how as the led we set increases the values snake their way up the board. Look carefully how the colors change in a snake pattern here.
 
 
-#### Mouse over the blue div below and observe how our board animates.
+#### Tap the blue box below and observe how our board animates.
 ")
 
    [:div {:style {:margin "50px"}}
