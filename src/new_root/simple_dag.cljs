@@ -1,4 +1,4 @@
-(ns new-root.mindustry
+(ns new-root.simple-dag
   (:require
    [reagent.core :as reagent]
    [rid3.core :as rid3 :refer [rid3->]]

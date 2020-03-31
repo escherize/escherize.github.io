@@ -67,29 +67,63 @@
        [:div {:style {:align-self "center" :width 300}}
         [board @*board]]])))
 
-
 (defn board-2 []
   (let [i (r/atom -1)
         color (r/atom 0)
-        leds (r/atom (zipmap [[4 0]               [0 0]
-                              [0 1]
-                              [4 2] [2 2] [1 2]   [0 2]
-                              [0 3]       [2 3]   [4 3]
-                              [4 4]       [2 4]   [0 4]
-                              [0 5]       [2 5]   [4 5]  [6 5]]
-                             (repeat "red")))
+        starting (->> [[0 0]               [4 0]  [6 0]
+                       [0 1]                      [6 1]
+                       [0 2] [1 2] [2 2]   [4 2]  [6 2]
+                       [0 3]       [2 3]   [4 3]  [6 3]
+                       [0 4]       [2 4]   [4 4]
+                       [0 5]       [2 5]   [4 5]  [6 5]]
+                      (map (fn [[x y]] [(+ 4 x) (+ 2 y)]))
+                      set)
+        leds (r/atom (zipmap starting (repeat "#aaa")))
         update-f (fn update-f []
                    (swap! i inc)
                    (swap! i mod 150)
                    (swap! color #(+ (rand-nth [1 2]) %))
                    (swap! color mod 360)
-                   (swap! leds assoc
-                          (nth indexed-values @i)
-                          (str "hsl(" @color ",80%,70%)"))
+                   (when (not (starting (nth indexed-values @i)))
+                     (swap! leds assoc
+                            (nth indexed-values @i)
+                            (str "hsl(" @color ",80%,70%)")))
                    (js/requestAnimationFrame update-f))]
     (js/requestAnimationFrame update-f)
     (fn []
       [:div {:style {:margin 30}}
+       [board @leds]])))
+
+(defn board-3 []
+  (let [i (r/atom -1)
+        color (r/atom 0)
+        animate? (r/atom false)
+        starting (->> [[0 0]               [4 0]  [6 0]
+                       [0 1]                      [6 1]
+                       [0 2] [1 2] [2 2]   [4 2]  [6 2]
+                       [0 3]       [2 3]   [4 3]  [6 3]
+                       [0 4]       [2 4]   [4 4]
+                       [0 5]       [2 5]   [4 5]  [6 5]]
+                      (map (fn [[x y]] [(+ 4 x) (+ 2 y)]))
+                      set)
+        leds (r/atom (zipmap starting (repeat "#aaa")))
+        update-f (fn update-f []
+                   (when @animate?
+                     (swap! i inc)
+                     (swap! i mod 150)
+                     (swap! color #(+ (rand-nth [1 2]) %))
+                     (swap! color mod 360)
+                     (swap! leds assoc
+                            (nth indexed-values @i)
+                            (str "hsl(" @color ",80%,70%)")))
+                   (js/requestAnimationFrame update-f))]
+    (js/requestAnimationFrame update-f)
+    (fn []
+      [:div {:style {:padding 30
+                     :cursor :pointer
+                     :background-color "#66c"}
+             :on-mouse-over #(reset! animate? true)
+             :on-mouse-out #(reset! animate? false)}
        [board @leds]])))
 
 (defn md [content] (->> content (m/md->hiccup) (m/component)))
@@ -97,8 +131,6 @@
 (defn view []
   [:div.container {:style {:max-width "800px"
                            :margin-top "40px"}}
-   [:div {:style {:margin "50px"}}
-    ]
    [:div {:style {:margin "50px"}}
     [board-2]]
 
@@ -173,10 +205,15 @@ idx(10,15,0,0) => 149
 idx(10,15,0,9) => 0
 ```
 
- So, this is the interface for using the light strip. Notice how as the led we set increases the values snake their way up the board. Look carefully how the colors change in a snake pattern here:
+ So, this is the interface for using the light strip. Notice how as the led we set increases the values snake their way up the board. Look carefully how the colors change in a snake pattern here.
+
+
+#### Mouse over the blue div below and observe how our board animates.
 ")
 
-   [board-2]
+   [:div {:style {:margin "50px"}}
+    [board-3]]
+
    (md
     "
 I used some python library that lets you set values on the strip by their index, and converted from a cartesian coordinate into the snakey index using that `idx` function above.
@@ -267,10 +304,16 @@ With this framework I can build a wide array of apps for my light board.
 
 #### Weather App
 
-Using the [Open Weather API](https://openweathermap.org/api), I was able to send a request and get a response with the low, high, and current temp here in Austin. A little more pixel wrangling and we got:
+Using the [Open Weather API](https://openweathermap.org/api), I was able to send a request and get a response with the low, high, and current temp here in Austin. Every 10 seconds we query this api, and I use the top right led to be a status indicator. When loading it turns green, when all is well it dissapears, and it turns red on errors with the api.
+
+A little more pixel wrangling and we got:
 
  ![weather app](public/img/led_images/IMG_0531.jpeg)
 
-")
+# Conclusion
 
-   [:div {:style {:height "100px"}}]])
+All in all a great way to spend our lockdown!")
+
+   [:div {:style {:height "100px"}}]
+
+   [:div.footer "@escherize on Twitter"]])

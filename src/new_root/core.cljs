@@ -1,18 +1,17 @@
 (ns new_root.core
-  (:require
-   [reagent.core :as r]
-   [reitit.frontend :as rfe]
-   [reitit.frontend.easy :as rfee]
-   [new-root.paint-snake-two.core :as ps-two]
-   [new-root.paint :as paint]
-   [new-root.mindustry :as mind]
-   [clojure.string :as str]
-   [new-root.gen-art :as gen-art]
-   [new-root.leds :as leds]
-   [new-root.scratch :as scratch]
-   [new-root.neumorph :as neumorph]
-   [new-root.gen-art-2 :as gen-art2]
-   [new-root.gen-art-3 :as gen-art3]))
+  (:require [clojure.string :as str]
+            [new-root.gen-art :as gen-art]
+            [new-root.gen-art-2 :as gen-art2]
+            [new-root.gen-art-3 :as gen-art3]
+            [new-root.leds :as leds]
+            [new-root.neumorph :as neumorph]
+            [new-root.paint :as paint]
+            [new-root.paint-snake-two.core :as ps-two]
+            [new-root.scratch :as scratch]
+            [new-root.simple-dag :as simple-dag]
+            [reagent.core :as r]
+            [reitit.frontend :as rfe]
+            [reitit.frontend.easy :as rfee]))
 
 (defonce *pointer (r/atom [301 301]))
 (defonce app-state (r/atom {:thingies 1}))
@@ -54,7 +53,7 @@
    :sorder 2
    :title "Force Directed Graph"
    :preview (fn [] [:div "An updatable d3 Force Directed Graph."])
-   :content mind/view})
+   :content simple-dag/view})
 
 (def post-3
   {:id "paint"
@@ -108,24 +107,37 @@
    :content gen-art3/view})
 
 (def post-8
-  {:id "light-strips"
+  {:id "pico8"
    :sorder 8
+   :title "Pico-8"
+   :pure true
+   :no-content true
+   :preview (fn []
+              [:div "A few games I've written"
+               [:ul
+                [:li>a {:href "/public/works/tetris_attack"} "Tetris Attack v1.1"]
+                [:li>a {:href "/public/works/ammo_thruster"} "Ammo Thruster v0.9"]
+                [:li>a {:href "/public/works/sliding_tiles"} "Sliding Tiles v0.4"]
+                [:li>a {:href "/public/works/gunner_men"} "Gunner Men 0.1"]]])})
+
+(def post-9
+  {:id "light-strips"
+   :sorder 9
    :title "Working with LED Strips"
    :pure true
    :preview (fn []
-              (let [n (r/atom 3)]
-                (fn []
-                  [:div {:on-mouse-enter #(swap! n inc)
-                         :style {:cursor :pointer
-                                 :font-size 50}}
-                   (str/join (repeat @n "💡"))])))
+              [:div {:style {:cursor :pointer
+                             :font-size 40}}
+               "💡💡💡💡💡"])
    :content leds/view})
 
 (defn posts []
   (->> [post-1 post-2 post-3 post-4 post-5 post-6
         ;; fucked up idk why :D
-        #_post-7
-        post-8 scratch]
+        post-7
+        post-8
+        post-9
+        scratch]
        (map (juxt :id identity))
        (into {})))
 
@@ -148,14 +160,35 @@
     [:div.row [nav]]
     [:div.row page]]))
 
-(defn teaser [{:as _ :keys [id title preview content release]}]
+(defn teaser [{:as _ :keys [id title preview content no-content release]}]
   [:div.teaser-card
    {:style {:margin "30px"
             :padding "10px 20px 20px 30px"}}
-   [:h3 (link title id)]
+   [:h3 (if no-content
+          title
+          (link title id))]
    [:div.row (cond preview [preview]
                    content [content]
                    :else [:h2 title])]])
+
+(def btn-style
+  {:margin "25px"
+   :text-align "center"
+   :border "2px #5C3449 solid"
+   :padding "30px"})
+
+(defn squirt [x]
+  (if (> x 0)
+    (Math/sqrt x)
+    (* -1 (Math/sqrt (* -1 x)))))
+
+(defn style-fn [{:keys [x y h unit-x unit-y]}]
+  {:box-shadow (str (squirt x) "px "
+                    (squirt y) "px "
+                    "0px " ;; blur
+                    "0px " ;; spread
+                    "#DBBFCE")
+   :border-radius (- h 150)})
 
 (defn shadow-box [*pointer content]
   (let [*my-position (r/atom [])]
@@ -166,20 +199,19 @@
       (fn [*pointer content]
         [:div
          {:style (merge
-                  {:margin "20px 30px"
-                   :text-align "center"
-                   :border-radius "20px"
-                   :padding "20px 100px"}
+                  btn-style
                   (when @*my-position
-                    {:box-shadow
-                     (neumorph/p1+p2->box-shadow @*pointer @*my-position)}))}
+                    (style-fn
+                     (neumorph/p1+p2->box-shadow-main @*pointer @*my-position))))}
          content
          (when false
            [:<>
             [:p "origin: " (pr-str @*pointer)]
             [:p "my position: " (pr-str @*my-position)]])])})))
 
-(defn shadow-teaser [*pointer {:as _ :keys [id title preview content release]}]
+(defn shadow-teaser
+  [*pointer
+   {:as _ :keys [id title preview no-content content release]}]
   (let [*my-position (r/atom [])]
     (r/create-class
      {:component-did-mount
@@ -188,15 +220,14 @@
       (fn [*pointer content]
         [:div
          {:style (merge
-                  {:margin "30px"
-                   :text-align "center"
-                   :border-radius "20px"
-                   :padding "20px"}
+                  btn-style
                   (when @*my-position
-                    {:box-shadow
-                     (neumorph/p1+p2->box-shadow @*pointer @*my-position)}))}
+                    (style-fn
+                     (neumorph/p1+p2->box-shadow-main @*pointer @*my-position))))}
          [:div
-          [:h3 (link title id)]
+          [:h3 (if no-content
+                 title
+                 (link title id))]
           [:div.row (cond preview [preview]
                           content [content]
                           :else [:h2 title])]]
@@ -206,15 +237,15 @@
             [:p "my position: " (pr-str @*my-position)]])])})))
 
 (defn footer []
-  [:div {:style {:float :right}}
-   [:p "Copyright Bryan Maass 2019"]])
+  [:div])
 
 (defn home [_]
   (r/with-let [handler #(reset! *pointer [(.-pageX %) (.-pageY %)])
                _ (.addEventListener js/document "mousemove" handler)
-               touch-handler (fn [e] (let [last-idx (-> e .-touches .-length dec)
-                                           last-item (-> e .-touches (aget last-idx))]
-                                       (reset! *pointer [(.-clientX last-item) (.-clientY last-item)])))
+               touch-handler (fn [e]
+                               (let [last-idx (-> e .-touches .-length dec)
+                                     last-item (-> e .-touches (aget last-idx))]
+                                 (reset! *pointer [(.-clientX last-item) (.-clientY last-item)])))
                _ (.addEventListener js/document "touchmove" touch-handler)]
     [:div
      [:div {:style {:width "64%" :margin "auto"}}
