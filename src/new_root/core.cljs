@@ -101,7 +101,7 @@
 
 (def post-7
   {:id "gen-art-3"
-   :sorder 6
+   :sorder 7
    :title "Even More Art"
    :pure true
    :preview (fn [] [:div "Vector Fields 101"])
@@ -109,7 +109,7 @@
 
 (def post-8
   {:id "light-strips"
-   :sorder 6
+   :sorder 8
    :title "Working with LED Strips"
    :pure true
    :preview (fn []
@@ -122,7 +122,10 @@
    :content leds/view})
 
 (defn posts []
-  (->> [post-1 post-2 post-3 post-4 post-5 post-6 post-7 post-8 scratch]
+  (->> [post-1 post-2 post-3 post-4 post-5 post-6
+        ;; fucked up idk why :D
+        #_post-7
+        post-8 scratch]
        (map (juxt :id identity))
        (into {})))
 
@@ -206,13 +209,6 @@
   [:div {:style {:float :right}}
    [:p "Copyright Bryan Maass 2019"]])
 
-(defn sorter [id1 id2]
-  (case [(string? id1) (string? id2)]
-    [false true] id2
-    [true false] id1
-    [true true] (first (sort [id1 id2]))
-    [false false] (first (sort [id1 id2]))))
-
 (defn home [_]
   (r/with-let [handler #(reset! *pointer [(.-pageX %) (.-pageY %)])
                _ (.addEventListener js/document "mousemove" handler)
@@ -226,7 +222,11 @@
                             [:h1 "Escherize Zone"]
                             [nav]]]]
      (into [:div {:style {:display "flex" :flex-flow "wrap"}}]
-           (for [{:keys [exclude-post?] :as p} (reverse (sort-by sorter (distinct (vals (posts)))))]
+           (for [{:keys [exclude-post?] :as p} (->> (posts)
+                                                    vals
+                                                    distinct
+                                                    (sort-by :sorder)
+                                                    reverse)]
              ;; (teaser p)
              (when-not exclude-post?
                [shadow-teaser *pointer p])))

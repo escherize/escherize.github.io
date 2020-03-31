@@ -5,7 +5,7 @@
 (defn board
   ([] [board {}])
   ([on?]
-   (into [:div {:style {:width (* 15 15)
+   (into [:div {:style {:width (* 22 15)
                         :margin "auto"}}]
          (for [y (range 10)]
            (into [:div {:style {:margin 0 :line-height 0}}]
@@ -13,8 +13,8 @@
                    [:div {:style
                           (merge
                            {:display :inline-block
-                            :width 13
-                            :height 13
+                            :width 20
+                            :height 20
                             :border "1px solid black"}
                            (when (on? [x y])
                              {:background-color (on? [x y])}))}]))))))
