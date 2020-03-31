@@ -85,7 +85,7 @@
    (md "
   # Wifi LED Display
 
-  I made a wifi-connected LED display out of things laying around the house. Due to coronavirus I needed something to do, and put together a project with a [led strip light](https://en.wikipedia.org/wiki/LED_strip_light) and a Raspberry Pi.
+  Due to coronavirus I needed something to do, and put together a project with a [led strip light](https://en.wikipedia.org/wiki/LED_strip_light) and a Raspberry Pi. I made a wifi-connected LED display out of things laying around the house!
 
   The first application for it fetches the weather and displays it, like this:
 
