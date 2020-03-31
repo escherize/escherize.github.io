@@ -176,8 +176,9 @@
 
 (def btn-style
   {:margin "25px"
+   :background-color "#dde"
    :text-align "center"
-   :border "2px #5C3449 solid"
+   :border "1px #5C3449 solid"
    :padding "30px"})
 
 (defn squirt [x]
@@ -193,8 +194,15 @@
                     (squirt y) "px "
                     "0px " ;; blur
                     "0px " ;; spread
-                    "#DBBFCE")
-   :border-radius (clamp 0 (- (/ h 2) 150) 40)})
+                    (str "hsl(" (+ 20 (/ h 3)) ",30%,70%)")
+                    ;; 3 "px "
+                    ;; 3 "px "
+                    ;; "20 px "
+                    ;; h "px "
+                    ;; "#fff"
+                    )
+   :background-color (str "hsl(" (/ h 3) ",40%,90%)")
+   :border-radius (clamp 0 (- (/ h 2) 150) 20)})
 
 (defn shadow-box [*pointer content]
   (let [*my-position (r/atom [])]
@@ -252,7 +260,7 @@
 (js/console.log "height:" height)
 
 (defn to-scale [range n]
-  (+ (* range 0.5) (* range n 0.4)))
+  (+ (* range 0.45) (* range n 0.35)))
 
 (defn home [_]
   (let [cnt (r/atom 0)
@@ -272,7 +280,7 @@
                       :height 50
                       :border "3px black solid"
                       :opacity 0.4
-                      :background-color "#FAFF94"}}]
+                      :background-color "#FFF"}}]
        #_[:pre (pr-str @cnt)]
        #_[:pre (pr-str @*pointer)]
        [:div {:style {:width "64%" :margin "auto"}}
