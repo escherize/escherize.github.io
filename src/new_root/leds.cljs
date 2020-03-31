@@ -63,24 +63,15 @@
                            :margin-top "40px"}}
    [:div {:style {:margin "50px"}}
     [board
-     (zipmap [[0 0]               [4 0]
+     (zipmap [[4 0]               [0 0]
               [0 1]
-              [0 2] [1 2] [2 2]   [4 2]
+              [4 2] [2 2] [1 2]   [0 2]
               [0 3]       [2 3]   [4 3]
-              [0 4]       [2 4]   [4 4]
+              [4 4]       [2 4]   [0 4]
               [0 5]       [2 5]   [4 5]  [6 5]]
-             (repeat "red"))]
-    [:div {:style {:height 30}}]
-    (board (zipmap
-            (->> (for [y (range 0 10)]
-                   (for [x (if (odd? y)
-                             (range 0 15)
-                             (reverse (range 0 15)))]
-                     [x y]))
-                 flatten
-                 (partition 2))
-            (map #(str "rgb(" (- 150 %) "," % "," % ")")
-                 (range 200 0 -4))))
+             (map #(str "rgb(" % "," 100 "," (- 255 %) ")")
+                  (range 0 255 10)))]
+
     ]
    (md "
   # Wifi LED Display
@@ -95,7 +86,7 @@
 
   We needed a board to mount the leds to (and subsequently hang on the wall). One of the drawers in our [Ikea Alex](https://www.ikea.com/us/en/p/alex-drawer-unit-on-casters-white-40196241/) broke, and the white, thin, and sturdy bottom of the drawer made a great foundation!
 
-  ### Layout and hot gluing
+  ### Layout and Hot Gluing
 
   I had 150 leds, and wanted to shoot for an aspect ratio near the golden ratio: `1.61`. So I wrote a script to figure out what a good width and height would be. I ended up on 15x10. When I told my wife there were 150 leds, she immediately said 15x10. Heh.
 
@@ -129,7 +120,7 @@ And partly glued onto the board:
 
 ![leds](public/img/led_images/IMG_0523.jpeg)
 
-   ## Coding
+   # Coding
 
   Some software was needed to get this thing working. I found a python library that interacts with the strip.
 
@@ -156,15 +147,29 @@ idx(10,15,0,0) => 149
 idx(10,15,0,9) => 0
 ```
 
- So, this is the interface for using the light strip. Notice how as the led we set increases the values snake their way up the board.
+ So, this is the interface for using the light strip. Notice how as the led we set increases the values snake their way up the board. Look carefully how the colors change in a snake pattern here:
+")
 
+   [:div {:style {:margin 30}}
+    (board (zipmap
+            (->> (for [y (range 0 10)]
+                   (for [x (if (odd? y)
+                             (reverse (range 0 15))
+                             (range 0 15))]
+                     [x y]))
+                 flatten
+                 (partition 2))
+            (map #(str "hsl(" % ",80%,55%)") (take 150 (cycle (range 0 360 5))))))]
+
+   (md
+    "
 I used some python library that lets you set values on the strip by their index, and converted from a cartesian coordinate into the snakey index using that `idx` function above.
 
 ### Font
 
 I needed an awesome font, and found [434.ttf](public/434.ttf). It's the alternative font for [tic-80](https://tic.computer/), and is nice and small.
 
-### setting up fonts
+### Setting Up Fonts
 
 The font file looks something like this
 
@@ -240,8 +245,11 @@ def coords(x_offset,y_offset,string):
 coords(0,0,\"abc\")
 => the pixels to turn on to display abc in the top left corner
 ```
+### Apps
 
-### weather app
+With this framework I can build a wide array of apps for my light board.
+
+#### Weather App
 
 Using the [Open Weather API](https://openweathermap.org/api), I was able to send a request and get a response with the low, high, and current temp here in Austin. A little more pixel wrangling and we got:
 
