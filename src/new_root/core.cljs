@@ -8,6 +8,7 @@
    [new-root.mindustry :as mind]
    [clojure.string :as str]
    [new-root.gen-art :as gen-art]
+   [new-root.leds :as leds]
    [new-root.scratch :as scratch]
    [new-root.neumorph :as neumorph]
    [new-root.gen-art-2 :as gen-art2]))
@@ -97,8 +98,22 @@
    :preview (fn [] [:div "Where circles don't overlap"])
    :content gen-art2/view})
 
-(def posts
-  (->> [post-1 post-2 post-3 post-4 post-5 post-6 scratch]
+(def post-7
+  {:id "light-strips"
+   :sorder 6
+   :title "Working with LED Strips"
+   :pure true
+   :preview (fn []
+              (let [n (r/atom 3)]
+                (fn []
+                  [:div {:on-mouse-enter #(swap! n inc)
+                         :style {:cursor :pointer
+                                 :font-size 50}}
+                   (str/join (repeat @n "💡"))])))
+   :content leds/view})
+
+(defn posts []
+  (->> [post-1 post-2 post-3 post-4 post-5 post-6 post-7 scratch]
        (map (juxt :id identity))
        (into {})))
 
@@ -202,7 +217,7 @@
                             [:h1 "Escherize Zone"]
                             [nav]]]]
      (into [:div {:style {:display "flex" :flex-flow "wrap"}}]
-           (for [{:keys [exclude-post?] :as p} (reverse (sort-by sorter (distinct (vals posts))))]
+           (for [{:keys [exclude-post?] :as p} (reverse (sort-by sorter (distinct (vals (posts)))))]
              ;; (teaser p)
              (when-not exclude-post?
                [shadow-teaser *pointer p])))
@@ -223,7 +238,8 @@
 
 (defn post [match]
   (if-let [id (-> match :parameters :path :id)]
-    (let [{:keys [content title] :as post} (or (get posts id)
+    (let [posts (posts)
+          {:keys [content title] :as post} (or (get posts id)
                                                (get posts (js/parseInt id)))
           pure? (:pure post)]
       (if pure?
