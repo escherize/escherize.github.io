@@ -194,7 +194,7 @@
                     "0px " ;; blur
                     "0px " ;; spread
                     "#DBBFCE")
-   :border-radius (clamp 0 (- (/ h 4) 150) 40)})
+   :border-radius (clamp 0 (- (/ h 2) 150) 40)})
 
 (defn shadow-box [*pointer content]
   (let [*my-position (r/atom [])]
@@ -243,7 +243,7 @@
             [:p "my position: " (pr-str @*my-position)]])])})))
 
 (defn footer []
-  [:div])
+  [:div {:style {:height 100}}])
 
 (def width js/window.innerWidth)
 (def height js/window.innerHeight)
@@ -252,14 +252,14 @@
 (js/console.log "height:" height)
 
 (defn to-scale [range n]
-  (+ (* range 0.25) (* n range 0.5)))
+  (+ (* range 0.5) (* range n 0.4)))
 
 (defn home [_]
   (let [cnt (r/atom 0)
         raf-f (fn raf-f []
-                (swap! cnt #(-> % (+ 0.05)))
-                (reset! *pointer [(to-scale height (Math/sin @cnt))
-                                  (* 2 (to-scale width (Math/sin @cnt)))])
+                (swap! cnt + 0.008)
+                (reset! *pointer [(to-scale width (Math/sin @cnt))
+                                  (to-scale height (Math/cos (* 1.6 @cnt)))])
                 (js/requestAnimationFrame raf-f))]
     (js/requestAnimationFrame raf-f)
     (fn [_]
@@ -268,9 +268,10 @@
                       :left (first @*pointer)
                       :top (second @*pointer)
                       :border-radius "50%"
-                      :width 30
-                      :height 30
+                      :width 50
+                      :height 50
                       :border "3px black solid"
+                      :opacity 0.4
                       :background-color "#FAFF94"}}]
        #_[:pre (pr-str @cnt)]
        #_[:pre (pr-str @*pointer)]
