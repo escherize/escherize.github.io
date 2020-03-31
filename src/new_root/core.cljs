@@ -294,13 +294,13 @@
                       :background-color "#dcd"}
               :on-click #(swap! *ballspeed + 0.01)}
         " Speed ⬆️"]
-       (when (and (> @*ballspeed 0.2) @*stutter?)
+       (when (> @*ballspeed 0.25)
          [:div {:style {:position "absolute"
                         :top 54
                         :left 50
                         :font-size 40
-                        :color "red"
-                        :background-color "white"
+                        :color (if  @*stutter? "red" "yellow")
+                        :background-color (if  @*stutter? "white" "black")
                         :border-radius "10px"}}
           "Epillepsy Warning!!"])
        [:div {:style {:position "absolute"
