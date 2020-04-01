@@ -275,8 +275,8 @@
       [:div
        [:div {:style {:position "absolute"
                       :cursor :pointer
-                      :left 0
-                      :top 0
+                      :left 1
+                      :top 1
                       :font-size 9
                       :width 50
                       :height 20
@@ -286,19 +286,20 @@
        [:div {:style {:position "absolute"
                       :user-select "none"
                       :cursor :pointer
-                      :left 0
-                      :top 21
+                      :left 1
+                      :top 22
                       :font-size 9
                       :width 50
                       :height 20
                       :background-color "#dcd"}
               :on-click #(swap! *ballspeed + 0.01)}
         " Speed ⬆️"]
-       (when (> @*ballspeed 0.25)
+       (when (> @*ballspeed 0.35)
          [:div {:style {:position "absolute"
-                        :top 54
-                        :left 50
+                        :top 35
+                        :left 60
                         :font-size 40
+                        :padding 5
                         :color (if  @*stutter? "red" "yellow")
                         :background-color (if  @*stutter? "white" "black")
                         :border-radius "10px"}}
@@ -306,8 +307,8 @@
        [:div {:style {:position "absolute"
                       :user-select "none"
                       :cursor :pointer
-                      :left 0
-                      :top 42
+                      :left 1
+                      :top 43
                       :font-size 9
                       :width 50
                       :height 20
@@ -323,8 +324,6 @@
                         :height 50
                         :opacity 0.8
                         :background-color "#FFF"}}])
-       #_[:pre (pr-str @cnt)]
-       #_[:pre (pr-str @*pointer)]
        [:div {:style {:width "64%" :margin "auto"}}
         [shadow-box *pointer [:div
                               [:h1 "Escherize Zone"]
