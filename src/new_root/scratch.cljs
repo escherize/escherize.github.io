@@ -1,5 +1,6 @@
 (ns new-root.scratch
-  (:require [reagent.core :as r]))
+  (:require [reagent.core :as r]
+            [reagent.dom :as rd]))
 
 ;; (def origin (r/atom [0 0]))
 
@@ -48,7 +49,7 @@
         title (rand-nth ["Beep" "Boop" "Eli"])
         width (* 62.5 (rand-nth (range 2 7)))]
     (r/create-class
-     {:component-did-mount (fn [this] (reset! *my-position (find-location (r/dom-node this))))
+     {:component-did-mount (fn [this] (reset! *my-position (find-location (rd/dom-node this))))
       :reagent-render
       (fn []
         [:div

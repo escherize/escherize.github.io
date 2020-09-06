@@ -1,5 +1,5 @@
 ;; shadow-cljs configuration
-{:source-paths ["src"]
+{:source-paths ["src" "dev"]
 
  :dependencies [[refactor-nrepl "2.4.0-SNAPSHOT"]
                 [cider/cider-nrepl "0.22.4"]
@@ -8,7 +8,7 @@
 
                 [binaryage/devtools "0.9.7"]
 
-                [reagent "0.8.1"]
+                [reagent "1.0.0-alpha2"]
 
                 [rid3 "0.2.1-1"]
                 [cljsjs/d3 "4.3.0-4"]
@@ -25,16 +25,14 @@
  {:app {:target     :browser
         :output-dir "public/js/compiled"
         :asset-path "/js/compiled"
-
         :modules
         {:main {:entries [new_root.core]}}
 
-        :devtools
-        {:before-load new_root.core/stop
-         :after-load  new_root.core/start
-         :http-root   "public"
-         :http-port   8700
-         :preloads    [devtools.preload]}
+        :devtools {:before-load new_root.core/stop
+                   :after-load  new_root.core/start
+                   :http-root   "public"
+                   :http-port   8700
+                   :preloads    [devtools.preload]}
 
         :release
         {:output-dir "./js/compiled"

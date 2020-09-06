@@ -1,6 +1,7 @@
 (ns new-root.gen-art
   (:require [quil.core :as q]
             [quil.middleware :as m]
+            [reagent.dom :as rd] 
             [reagent.core :as r]))
 
 (defn draw [{:keys [circles]}]
@@ -48,7 +49,7 @@
   (r/create-class
    {:component-did-mount
     (fn [component]
-      (let [node (r/dom-node component)
+      (let [node (rd/dom-node component)
             width (/ (.-innerWidth js/window) 2)
             height (/ (.-innerHeight js/window) 2)]
         (q/sketch

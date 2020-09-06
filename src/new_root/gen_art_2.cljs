@@ -1,5 +1,6 @@
 (ns new-root.gen-art-2
   (:require [quil.core :as q]
+            [reagent.dom :as rd]
             [quil.middleware :as m]
             [reagent.core :as r]))
 
@@ -73,7 +74,7 @@
   (r/create-class
    {:component-did-mount
     (fn [component]
-      (let [node (r/dom-node component)
+      (let [node (rd/dom-node component)
             marg 10
             width (- (.-innerWidth js/window) marg)
             height (/ (.-innerHeight js/window) 2)]

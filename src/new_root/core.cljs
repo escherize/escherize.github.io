@@ -9,15 +9,14 @@
             [new-root.paint-snake-two.core :as ps-two]
             [new-root.scratch :as scratch]
             [new-root.simple-dag :as simple-dag]
+            [new-root.relations-grouping :as grouping]
             [reagent.core :as r]
+            [reagent.dom :as rd]
             [reitit.frontend :as rfe]
             [reitit.frontend.easy :as rfee]))
 
 (defonce *pointer (r/atom [301 301]))
 (defonce app-state (r/atom {:thingies 1}))
-
-(defn double-thingies []
-  (swap! app-state update :thingies #(* 2 %)))
 
 (defn link [text post-id]
   [:a {:href (rfee/href ::post {:id post-id})} text])
@@ -31,11 +30,7 @@
                [:p "Welcome to my blog!"]
                [:p "It's built as a single page app using
                Clojurescript and reagent, which means the entire thing is
-               completely programmable. Visit my contents " (link "here." "hello-world")]
-               [:button
-                {:style {:cursor :pointer}
-                 :on-click double-thingies}
-                "Click here to see stuff happen"]])
+               completely programmable. Visit my contents " (link "here." "hello-world")]])
    :content (fn []
               [:div
                [:h1 "I'm here, and im post 0."]
@@ -131,14 +126,11 @@
    :sorder 9
    :title "Working with LED Strips"
    :pure true
-   :preview (fn []
-              [:div {:style {:cursor :pointer
-                             :font-size 40}}
-               "💡💡💡💡💡"])
+   :preview (fn [] "Setting up a low-fi LED display, and accessing 2d arrays")
    :content leds/view})
 
 (defn posts []
-  (->> [post-1 post-2 post-3 post-4 post-5 post-6
+  (->> [post-0 post-1 post-2 post-3 post-4 post-5 post-6
         ;; fucked up idk why :D
         ;; post-7
         post-8
@@ -149,16 +141,15 @@
 
 (defn nav []
   [:div.nav
-   (into
-    [:span
-     [:span [:a {:href (rfee/href ::home)} "Home"]]
-     (repeat (:thingies @app-state)
-             [:span {:style {:cursor :pointer
-                             :user-select :none}
-                     :on-click double-thingies} "  |  "])
-     [:span [:a {:href (rfee/href ::projects)} "Projects"]]
-     #_(repeat (:thingies @app-state) "  |  ")
-     #_[:span [:a {:href (rfee/href ::about)} "About"]]])])
+   [:span {:key "home"} [:a {:href (rfee/href ::home)} "Home"]]
+   [:span {:key "pipe1"} " | "]
+   [:span {:key "projects"}
+    [:a {:href (rfee/href ::projects)} "Projects"]]
+   #_(repeat (:thingies @app-state) "  |  ")
+   #_[:span [:a {:href (rfee/href ::about)} "About"]]])
+
+
+
 
 (defn blog [page]
   (into
@@ -181,7 +172,7 @@
   {:margin "25px"
    :background-color "#dde"
    :text-align "center"
-   :border "1px #5C3449 solid"
+   :border "5px rgb(12, 112, 160) solid"
    :border-radius 10
    :padding "30px"})
 
@@ -194,18 +185,24 @@
   (min hi (max n lo)))
 
 (defn style-fn [{:keys [x y h unit-x unit-y]}]
-  {:box-shadow (str (* 0.8 (squirt x)) "px "
-                    (* 0.8 (squirt y)) "px "
-                    "0px " ;; blur
-                    "0px " ;; spread
-                    (str "hsl(" (/ h 5) ",50%,65%)"))
-   :background-color (str "hsl(" (- (/ h 5) 10) ",50%,93%)")})
+  (let [dist (Math/sqrt (+ (* x x) (* y y)))]
+    (js/console.log h)
+    {:box-shadow (str (* 0.8 (squirt x)) "px "
+                      (* 0.8 (squirt y)) "px "
+                      (/ h 100) "px " ;; blur
+                      (/ h 80) "px " ;; spread
+                      "#aab"
+                      ;; changing colors like:
+                      #_(str "hsl(" (/ h 5) ",50%,65%)"))
+     ;; changing colors?
+     ;; get brigher when mouse closer
+     :background-color (str "hsl(-130,40%," (max (- 95 (/ h 100)) 85) "%)")}))
 
 (defn shadow-box [*pointer content]
   (let [*my-position (r/atom [])]
     (r/create-class
      {:component-did-mount
-      (fn [this] (reset! *my-position (neumorph/find-location (r/dom-node this))))
+      (fn [this] (reset! *my-position (neumorph/find-location (rd/dom-node this))))
       :reagent-render
       (fn [*pointer content]
         [:div
@@ -213,7 +210,9 @@
                   btn-style
                   (when @*my-position
                     (style-fn
-                     (neumorph/p1+p2->box-shadow-main @*pointer @*my-position))))}
+                     (neumorph/p1+p2->box-shadow-main
+                      @*pointer
+                      @*my-position))))}
          content
          (when false
            [:<>
@@ -226,12 +225,18 @@
   (let [*my-position (r/atom [])]
     (r/create-class
      {:component-did-mount
-      (fn [this] (reset! *my-position (neumorph/find-location (r/dom-node this))))
+      (fn [this] (reset! *my-position (neumorph/find-location (rd/dom-node this))))
       :reagent-render
       (fn [*pointer content]
-        [:div
+        [:div.shadow-teaser
          {:style (merge
-                  btn-style
+                  {:margin "30px 25px"
+                   :background-color "#dde"
+                   :text-align "center"
+                   :border "8px rgb(21, 121, 169) solid"
+                   :border-radius "20px"
+                   :max-width "300px"
+                   :padding "20px"}
                   (when @*my-position
                     (style-fn
                      (neumorph/p1+p2->box-shadow-main @*pointer @*my-position))))}
@@ -259,71 +264,14 @@
 (defn to-scale [range n]
   (+ (* range 0.45) (* range n 0.35)))
 
+(defn home-posts []
+  (->> (posts) vals distinct (sort-by :sorder) reverse))
+
 (defn home [_]
-  (let [cnt (r/atom 0)
-        *hide-ball (r/atom true)
-        *ballspeed (r/atom 0.03)
-        *stutter? (r/atom false)
-        raf-f (fn raf-f []
-                (swap! cnt + @*ballspeed)
-                (swap! *stutter? not)
-                (reset! *pointer [(to-scale (width) (Math/sin @cnt))
-                                  (to-scale (height) (Math/cos (* 1.6 @cnt)))])
-                (js/requestAnimationFrame raf-f))]
-    (js/requestAnimationFrame raf-f)
+  (r/with-let [handler #(reset! *pointer [(.-pageX %) (.-pageY %)])
+               _ (.addEventListener js/document "mousemove" handler)]
     (fn [_]
       [:div
-       [:div {:style {:position "absolute"
-                      :cursor :pointer
-                      :left 1
-                      :top 1
-                      :font-size 9
-                      :width 50
-                      :height 20
-                      :background-color "#dcd"}
-              :on-click (fn [] (swap! *hide-ball not))}
-        " Toggle Ball"]
-       [:div {:style {:position "absolute"
-                      :user-select "none"
-                      :cursor :pointer
-                      :left 1
-                      :top 22
-                      :font-size 9
-                      :width 50
-                      :height 20
-                      :background-color "#dcd"}
-              :on-click #(swap! *ballspeed + 0.01)}
-        " Speed ⬆️"]
-       (when (> @*ballspeed 0.35)
-         [:div {:style {:position "absolute"
-                        :top 35
-                        :left 60
-                        :font-size 40
-                        :padding 5
-                        :color (if  @*stutter? "red" "yellow")
-                        :background-color (if  @*stutter? "white" "black")
-                        :border-radius "10px"}}
-          "Epillepsy Warning!!"])
-       [:div {:style {:position "absolute"
-                      :user-select "none"
-                      :cursor :pointer
-                      :left 1
-                      :top 43
-                      :font-size 9
-                      :width 50
-                      :height 20
-                      :background-color "#dcd"}
-              :on-click #(swap! *ballspeed * 0.5)}
-        " Speed ⬇️"]
-       (when-not @*hide-ball
-         [:div {:style {:position "absolute"
-                        :left (first @*pointer)
-                        :top (second @*pointer)
-                        :border-radius "50%"
-                        :width 50
-                        :height 50
-                        :opacity 0.8
-                        :background-color "#FFF"}}])
        [:div {:style {:width "64%" :margin "auto"}}
         [shadow-box *pointer [:div
                               [:h1 "Escherize Zone"]
@@ -331,18 +279,12 @@
        (into [:div {:style {:display "flex"
                             :flex-flow "wrap"
                             :justify-content "space-evenly"}}]
-             (for [{:keys [exclude-post?] :as p} (->> (posts)
-                                                      vals
-                                                      distinct
-                                                      (sort-by :sorder)
-                                                      reverse)]
+             (for [{:keys [exclude-post?] :as p} (home-posts)]
                ;; (teaser p)
-               (when-not exclude-post?
-                 [shadow-teaser *pointer p])))
-       [footer]]))
-  #_(finally
-      (.removeEventListener js/document "mousemove" handler)
-      (.removeEventListener js/document "touchmove" touch-handler)))
+               (when-not exclude-post? [shadow-teaser *pointer p])))
+       [footer]])
+    (finally
+      (.removeEventListener js/document "mousemove" handler))))
 
 (defn projects []
   [:div
@@ -387,8 +329,10 @@
      (let [view (:view (:data (:match @app-state)))]
        [view (:match @app-state)]))])
 
-(defn start []
-  (r/render-component [current-page] (. js/document (getElementById "app"))))
+(defn ^:dev/after-load start []
+  (js/console.log "starting..")
+  (.resize (js/$ js/window) (fn [] (js/console.log "changed")))
+  (rd/render [current-page] (. js/document (getElementById "app"))))
 
 (defn ^:export init []
   ;; init is called ONCE when the page loads

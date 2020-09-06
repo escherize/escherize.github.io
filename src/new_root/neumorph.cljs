@@ -1,5 +1,6 @@
 (ns new-root.neumorph
   (:require [reagent.core :as r]
+            [reagent.dom :as rd]
             [clojure.string :as str]))
 
 ;; (def origin (r/atom [0 0]))
@@ -13,7 +14,7 @@
     [(+ x (/ w 2))
      (+ y (/ h 2))]))
 
-(defn sqared [x] (* x x))
+(defn ** [x] (* x x))
 
 (defn p1+p2->box-shadow
   [to from]
@@ -27,7 +28,7 @@
         [x2 y2] to
         x (- x1 x2)
         y (- y1 y2)
-        h (Math/sqrt (+ (sqared x) (sqared y)))
+        h (Math/sqrt (+ (** x) (** y)))
         unit-x (/ x h)
         unit-y (/ y h)
         us 12]
@@ -40,7 +41,7 @@
         [x2 y2] to
         x (- x1 x2)
         y (- y1 y2)
-        h (Math/sqrt (+ (sqared x) (sqared y)))
+        h (Math/sqrt (+ (** x) (** y)))
         unit-x (/ x h)
         unit-y (/ y h)
         bs (->bs (* 17 unit-x) (* 17 unit-y))]
@@ -51,8 +52,6 @@
      :unit-x unit-x
      :unit-y unit-y}))
 
-
-
 (defonce *pointer (r/atom [300 300]))
 
 (defn shadow-box
@@ -60,7 +59,7 @@
    (let [*my-position (r/atom [])
          height 30]
      (r/create-class
-      {:component-did-mount (fn [this] (reset! *my-position (find-location (r/dom-node this))))
+      {:component-did-mount (fn [this] (reset! *my-position (find-location (rd/dom-node this))))
        :reagent-render
        (fn [*pointer content]
          [:div
@@ -109,9 +108,7 @@
      (into
       [:div {:style {:display "flex" :flex-flow "wrap"}}]
       (doall
-       (map (fn [w] [shadow-box *pointer
-                     [:p w]])
-            (repeat 30 "Neumorphism"))))]
+       (map (fn [w] [shadow-box *pointer [:p w]]) (repeat 30 "Neumorphism"))))]
     (finally
       (.removeEventListener js/document "mousemove" handler)
       (.removeEventListener js/document "touchmove" touch-handler))))
