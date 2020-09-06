@@ -109,7 +109,7 @@
    :no-content true
    :preview (fn []
               [:div
-               "To play, use the arrow keys and z, and x."
+               "To play, use the arrow keys and z, and x. "
                "They also work on mobile."
                [:ul
                 [:li>a {:style {:font-size 20}
