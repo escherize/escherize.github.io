@@ -140,9 +140,9 @@
        (into {})))
 
 (defn nav []
-  [:div.nav
-   [:span {:key "home"} [:a {:href (rfee/href ::home)} "Home"]]
-   [:span {:key "pipe1"} " | "]
+  [:div {:style {:width "200px" :margin "auto"}}
+   [:span {:key "home"
+           :style {:margin-right "20px"}} [:a {:href (rfee/href ::home)} "Home"]]
    [:span {:key "projects"}
     [:a {:href (rfee/href ::projects)} "Projects"]]
    #_(repeat (:thingies @app-state) "  |  ")
@@ -214,10 +214,9 @@
                       @*pointer
                       @*my-position))))}
          content
-         (when false
-           [:<>
+         #_[:<>
             [:p "origin: " (pr-str @*pointer)]
-            [:p "my position: " (pr-str @*my-position)]])])})))
+            [:p "my position: " (pr-str @*my-position)]]])})))
 
 (defn shadow-teaser
   [*pointer
@@ -270,12 +269,14 @@
 (defn home [_]
   (r/with-let [handler #(reset! *pointer [(.-pageX %) (.-pageY %)])
                _ (.addEventListener js/document "mousemove" handler)]
-    (fn [_]
+    (fn []
       [:div
-       [:div {:style {:width "64%" :margin "auto"}}
-        [shadow-box *pointer [:div
-                              [:h1 "Escherize Zone"]
-                              [nav]]]]
+       [:div.top {:style {:margin-top "30px"
+                          :margin-bottom "30px"}}
+        [:div {:style {:width "300px"
+                       :margin "auto"}}
+         [:h1 "Escherize Zone"]]
+        [nav]]
        (into [:div {:style {:display "flex"
                             :flex-flow "wrap"
                             :justify-content "space-evenly"}}]
@@ -316,11 +317,11 @@
   [:h1 "under construction"])
 
 (def routes
-  [["/" {:name ::home :view home}]
-   ["/projects" {:name ::projects :view projects}]
-   ["/about" {:name ::about :view about}]
+  [["/" {:name ::home :view (fn [] home)}]
+   ["/projects" {:name ::projects :view (fn [] projects)}]
+   ["/about" {:name ::about :view (fn [] about)}]
    ["/post/:id" {:name ::post
-                 :view post
+                 :view (fn [] post)
                  :parameters {:path {:id int?}}}]])
 
 (defn current-page []
@@ -331,7 +332,7 @@
 
 (defn ^:dev/after-load start []
   (js/console.log "starting..")
-  (.resize (js/$ js/window) (fn [] (js/console.log "changed")))
+  ;;(.resize (js/$ js/window) (fn [] (js/console.log "changed")))
   (rd/render [current-page] (. js/document (getElementById "app"))))
 
 (defn ^:export init []
