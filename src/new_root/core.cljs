@@ -114,11 +114,11 @@
                [:ul
                 [:li>a {:style {:font-size 20}
                         :href "/works/pico8/tetris_attack"} "Tetris Attack v1.1"]
-                [:li>a {:style {:font-size 20}
+                [:li>a {:style {:font-size 18}
                         :href "/works/pico8/ammo_thruster"} "Ammo Thruster v0.9"]
-                [:li>a {:style {:font-size 20}
+                [:li>a {:style {:font-size 16}
                         :href "/works/pico8/sliding_tiles"} "Sliding Tiles v0.4"]
-                [:li>a {:style {:font-size 20}
+                [:li>a {:style {:font-size 14}
                         :href "/works/pico8/gunner_men"} "Gunner Men 0.1"]]])})
 
 (def post-9
