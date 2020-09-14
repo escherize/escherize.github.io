@@ -186,7 +186,6 @@
 
 (defn style-fn [{:keys [x y h unit-x unit-y]}]
   (let [dist (Math/sqrt (+ (* x x) (* y y)))]
-    (js/console.log h)
     {:box-shadow (str (* 0.8 (squirt x)) "px "
                       (* 0.8 (squirt y)) "px "
                       (/ h 100) "px " ;; blur

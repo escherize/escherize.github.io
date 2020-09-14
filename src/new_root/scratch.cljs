@@ -49,7 +49,11 @@
         title (rand-nth ["Beep" "Boop" "Eli"])
         width (* 62.5 (rand-nth (range 2 7)))]
     (r/create-class
-     {:component-did-mount (fn [this] (reset! *my-position (find-location (rd/dom-node this))))
+     {:component-did-mount (fn [this]
+                             #_(.onscroll js/document
+                                          (fn []
+                                            (reset! *my-position (find-location (rd/dom-node this)))))
+                             (reset! *my-position (find-location (rd/dom-node this))))
       :reagent-render
       (fn []
         [:div
