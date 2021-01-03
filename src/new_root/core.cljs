@@ -4,6 +4,7 @@
             [new-root.gen-art-2 :as gen-art2]
             [new-root.gen-art-3 :as gen-art3]
             [new-root.leds :as leds]
+            [new-root.weight :as weight]
             [new-root.neumorph :as neumorph]
             [new-root.paint :as paint]
             [new-root.paint-snake-two.core :as ps-two]
@@ -129,12 +130,21 @@
    :preview (fn [] "Setting up a low-fi LED display, and accessing 2d arrays")
    :content leds/view})
 
+(def post-10
+  {:id "weights"
+   :sorder 10
+   :title "Barbell Calculator"
+   :pure true
+   :preview (fn [] "Quickly visualize what to put on your bar")
+   :content weight/view})
+
 (defn posts []
   (->> [post-0 post-1 post-2 post-3 post-4 post-5 post-6
         ;; fucked up idk why :D
         ;; post-7
         post-8
         post-9
+        post-10
         scratch]
        (map (juxt :id identity))
        (into {})))
@@ -147,9 +157,6 @@
     [:a {:href (rfee/href ::projects)} "Projects"]]
    #_(repeat (:thingies @app-state) "  |  ")
    #_[:span [:a {:href (rfee/href ::about)} "About"]]])
-
-
-
 
 (defn blog [page]
   (into
@@ -182,9 +189,9 @@
     (* -1 (Math/sqrt (Math/abs x)))))
 
 (defn clamp [lo n hi]
-  (min hi (max n lo)))
+  (->> n (max lo) (min hi)))
 
-(defn style-fn [{:keys [x y h unit-x unit-y]}]
+(defn style-fn [{:keys [x y h #_unit-x #_unit-y]}]
   (let [dist (Math/sqrt (+ (* x x) (* y y)))]
     {:box-shadow (str (* 0.8 (squirt x)) "px "
                       (* 0.8 (squirt y)) "px "
