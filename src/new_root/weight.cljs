@@ -47,7 +47,7 @@
       [:div {:style {:text-align "center"}}
        "Select your weights for each side"]
       (into [:div]
-            (mapv weight-button
+            (mapv (fn [n] [weight-button n])
                   [1 1 1 2.5 5
                    10 10 10
                    15
