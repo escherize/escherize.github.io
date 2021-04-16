@@ -1,4 +1,4 @@
-(ns new_root.core
+(ns new-root.core
   (:require [clojure.string :as str]
             [new-root.gen-art :as gen-art]
             [new-root.gen-art-2 :as gen-art2]

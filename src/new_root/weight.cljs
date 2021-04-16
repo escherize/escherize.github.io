@@ -14,17 +14,17 @@
             45  0}}))
 
 (defn total-weight [state]
-  (pr-str
-   (+
-    (reduce + 0 (for [[w c] (:weights state)] (* 2 w c)))
-    (:bar-weight state))))
+  (reduce +
+          (:bar-weight state 0)
+          (for [[w c] (:weights state)]
+            (* 2 w c))))
 
 (defn weight-button [_lbs]
   (let [on? (r/atom false)]
     (fn [lbs]
       [:button
        {:style {:background-color (when @on? "#a74343")
-                :color (when @on? "white")}
+                :color            (when @on? "white")}
         :on-click
         (fn []
           (if @on?
@@ -46,22 +46,14 @@
                     :border-radius "20px"}}
       [:div {:style {:text-align "center"}}
        "Select your weights for each side"]
-      [:div
-       [weight-button 1]
-       [weight-button 2.5]
-       [weight-button 5]
-       [weight-button 10]
-       [weight-button 15]
-       [weight-button 25]
-       [weight-button 35]
-       [weight-button 45]
-       [weight-button 45]
-       [weight-button 45]
-       [weight-button 45]
-       [weight-button 45]
-       [weight-button 45]
-       [weight-button 45]
-       [weight-button 45]]]
+      (into [:div]
+            (mapv weight-button
+                  [1 1 1 2.5 5
+                   10 10 10
+                   15
+                   25 25 25
+                   35
+                   45 45 45 45 45 45 45 45]))]
      [:div {:style {:margin-top "30px"}}
       [:label "Bar Weight:"]
       [:input {:value (:bar-weight @state)

@@ -16,7 +16,9 @@
                 [re-frame "0.10.9"]
                 [metosin/reitit "0.3.9"]
 
-                [markdown-to-hiccup "0.6.2"]]
+                [markdown-to-hiccup "0.6.2"]
+
+                [escherize/defrag "0.1.4"]]
 
  :nrepl {:port 8777
          :middleware [refactor-nrepl.middleware/wrap-refactor]}
