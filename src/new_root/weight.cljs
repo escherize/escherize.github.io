@@ -47,13 +47,15 @@
       [:div {:style {:text-align "center"}}
        "Select your weights for each side"]
       (into [:div]
-            (mapv (fn [n] [weight-button n])
-                  [1 1 1 2.5 5
-                   10 10 10
-                   15
-                   25 25 25
-                   35
-                   45 45 45 45 45 45 45 45]))]
+            (mapv (fn [n]
+                    (if (= n :break)
+                      [:br]
+                      [weight-button n]))
+                  [1 1 1 2.5 5 :break
+                   10 10 10 15 :break
+                   25 25 25 35 :break
+                   45 45 45 45 :break
+                   45 45 45 45]))]
      [:div {:style {:margin-top "30px"}}
       [:label "Bar Weight:"]
       [:input {:value (:bar-weight @state)
