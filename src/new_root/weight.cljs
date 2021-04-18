@@ -19,12 +19,26 @@
           (for [[w c] (:weights state)]
             (* 2 w c))))
 
+(def widths {1 20
+             2.5 23
+             5 30
+             10 40
+             15 45
+             25 50
+             35 60
+             45 70})
+
 (defn weight-button [_lbs]
   (let [on? (r/atom false)]
     (fn [lbs]
       [:button
-       {:style {:background-color (when @on? "#a74343")
-                :color            (when @on? "white")}
+       {:style {
+                :border "1px solid grey"
+                :margin 20
+                :background-color (when @on? "#4343c7")
+                :color            (when @on? "white")
+                :width (max 42
+                            (int (* 3 lbs)))}
         :on-click
         (fn []
           (if @on?
@@ -32,30 +46,42 @@
                 (swap! state update-in [:weights lbs] dec))
             (do (reset! on? true)
                 (swap! state update-in [:weights lbs] inc))))}
-       lbs " lb"])))
+       lbs])))
 
 (defn view []
   (fn []
     [:div {:style {:margin "30px 20px"}}
      [:h2 {:style {:text-align "center"}}
       [:code {:style {:font-size "40px"}}
-       (total-weight @state)]
-      " lbs total"]
-     [:div {:style {:border "3px solid blue"
-                    :padding "3px"
-                    :border-radius "20px"}}
-      [:div {:style {:text-align "center"}}
-       "Select your weights for each side"]
-      (into [:div]
-            (mapv (fn [n]
-                    (if (= n :break)
-                      [:br]
-                      [weight-button n]))
-                  [1 1 1 2.5 5 :break
-                   10 10 10 15 :break
-                   25 25 25 35 :break
-                   45 45 45 45 :break
-                   45 45 45 45]))]
+       (total-weight @state)] " lbs"]
+     [:div {:style {:border "3px solid grey"
+                    :padding "10px"
+                    :border-radius "5px"}}
+      [:div {:style {:display "flex"
+                     :flex-flow "row wrap"
+                     :justify-content "space-around"
+                     :align-content "stretch"}}
+       [weight-button 1]
+       [weight-button 1]
+       [weight-button 1]
+       [weight-button 2.5]
+       [weight-button 5]
+       [weight-button 10]
+       [weight-button 10]
+       [weight-button 10]
+       [weight-button 15]
+       [weight-button 25]
+       [weight-button 25]
+       [weight-button 25]
+       [weight-button 35]
+       [weight-button 45]
+       [weight-button 45]
+       [weight-button 45]
+       [weight-button 45]
+       [weight-button 45]
+       [weight-button 45]
+       [weight-button 45]
+       [weight-button 45]]]
      [:div {:style {:margin-top "30px"}}
       [:label "Bar Weight:"]
       [:input {:value (:bar-weight @state)

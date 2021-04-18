@@ -2,43 +2,22 @@ goog.loadModule(function(exports) {
   "use strict";
   goog.module("goog.math.Long");
   goog.module.declareLegacyNamespace();
-  /** @const */ var asserts = goog.require("goog.asserts");
-  /** @const */ var reflect = goog.require("goog.reflect");
-  /**
-   * @final
-   * @struct
-   * @constructor
-   * @param {number} low
-   * @param {number} high
-   */
+  var asserts = goog.require("goog.asserts");
+  var reflect = goog.require("goog.reflect");
   var Long = function(low, high) {
-    /** @private @const @type {number} */ this.low_ = low | 0;
-    /** @private @const @type {number} */ this.high_ = high | 0;
+    this.low_ = low | 0;
+    this.high_ = high | 0;
   };
-  /**
-   * @return {number}
-   */
   Long.prototype.toInt = function() {
     return this.low_;
   };
-  /**
-   * @return {number}
-   */
   Long.prototype.toNumber = function() {
     return this.high_ * TWO_PWR_32_DBL_ + this.getLowBitsUnsigned();
   };
-  /**
-   * @return {boolean}
-   */
   Long.prototype.isSafeInteger = function() {
     var top11Bits = this.high_ >> 21;
     return top11Bits == 0 || top11Bits == -1 && !(this.low_ == 0 && this.high_ == (4292870144 | 0));
   };
-  /**
-   * @param {number=} opt_radix
-   * @return {string}
-   * @override
-   */
   Long.prototype.toString = function(opt_radix) {
     var radix = opt_radix || 10;
     if (radix < 2 || 36 < radix) {
@@ -60,27 +39,15 @@ goog.loadModule(function(exports) {
     val = remDiv.toNumber();
     return (radix == 10 ? val : val.toString(radix)) + digits;
   };
-  /**
-   * @return {number}
-   */
   Long.prototype.getHighBits = function() {
     return this.high_;
   };
-  /**
-   * @return {number}
-   */
   Long.prototype.getLowBits = function() {
     return this.low_;
   };
-  /**
-   * @return {number}
-   */
   Long.prototype.getLowBitsUnsigned = function() {
     return this.low_ >>> 0;
   };
-  /**
-   * @return {number}
-   */
   Long.prototype.getNumBitsAbs = function() {
     if (this.isNegative()) {
       if (this.equals(Long.getMinValue())) {
@@ -98,70 +65,33 @@ goog.loadModule(function(exports) {
       return this.high_ != 0 ? bit + 33 : bit + 1;
     }
   };
-  /**
-   * @return {boolean}
-   */
   Long.prototype.isZero = function() {
     return this.low_ == 0 && this.high_ == 0;
   };
-  /**
-   * @return {boolean}
-   */
   Long.prototype.isNegative = function() {
     return this.high_ < 0;
   };
-  /**
-   * @return {boolean}
-   */
   Long.prototype.isOdd = function() {
     return (this.low_ & 1) == 1;
   };
-  /**
-   * @param {?Long} other
-   * @return {boolean}
-   */
   Long.prototype.equals = function(other) {
     return this.low_ == other.low_ && this.high_ == other.high_;
   };
-  /**
-   * @param {?Long} other
-   * @return {boolean}
-   */
   Long.prototype.notEquals = function(other) {
     return !this.equals(other);
   };
-  /**
-   * @param {?Long} other
-   * @return {boolean}
-   */
   Long.prototype.lessThan = function(other) {
     return this.compare(other) < 0;
   };
-  /**
-   * @param {?Long} other
-   * @return {boolean}
-   */
   Long.prototype.lessThanOrEqual = function(other) {
     return this.compare(other) <= 0;
   };
-  /**
-   * @param {?Long} other
-   * @return {boolean}
-   */
   Long.prototype.greaterThan = function(other) {
     return this.compare(other) > 0;
   };
-  /**
-   * @param {?Long} other
-   * @return {boolean}
-   */
   Long.prototype.greaterThanOrEqual = function(other) {
     return this.compare(other) >= 0;
   };
-  /**
-   * @param {?Long} other
-   * @return {number}
-   */
   Long.prototype.compare = function(other) {
     if (this.high_ == other.high_) {
       if (this.low_ == other.low_) {
@@ -171,19 +101,12 @@ goog.loadModule(function(exports) {
     }
     return this.high_ > other.high_ ? 1 : -1;
   };
-  /**
-   * @return {!Long}
-   */
   Long.prototype.negate = function() {
     var negLow = ~this.low_ + 1 | 0;
     var overflowFromLow = !negLow;
     var negHigh = ~this.high_ + overflowFromLow | 0;
     return Long.fromBits(negLow, negHigh);
   };
-  /**
-   * @param {?Long} other
-   * @return {!Long}
-   */
   Long.prototype.add = function(other) {
     var a48 = this.high_ >>> 16;
     var a32 = this.high_ & 65535;
@@ -207,17 +130,9 @@ goog.loadModule(function(exports) {
     c48 &= 65535;
     return Long.fromBits(c16 << 16 | c00, c48 << 16 | c32);
   };
-  /**
-   * @param {?Long} other
-   * @return {!Long}
-   */
   Long.prototype.subtract = function(other) {
     return this.add(other.negate());
   };
-  /**
-   * @param {?Long} other
-   * @return {!Long}
-   */
   Long.prototype.multiply = function(other) {
     if (this.isZero()) {
       return this;
@@ -256,10 +171,6 @@ goog.loadModule(function(exports) {
     c48 &= 65535;
     return Long.fromBits(c16 << 16 | c00, c48 << 16 | c32);
   };
-  /**
-   * @param {?Long} other
-   * @return {!Long}
-   */
   Long.prototype.div = function(other) {
     if (other.isZero()) {
       throw new Error("division by zero");
@@ -316,44 +227,21 @@ goog.loadModule(function(exports) {
     }
     return res;
   };
-  /**
-   * @param {?Long} other
-   * @return {!Long}
-   */
   Long.prototype.modulo = function(other) {
     return this.subtract(this.div(other).multiply(other));
   };
-  /**
-   * @return {!Long}
-   */
   Long.prototype.not = function() {
     return Long.fromBits(~this.low_, ~this.high_);
   };
-  /**
-   * @param {?Long} other
-   * @return {!Long}
-   */
   Long.prototype.and = function(other) {
     return Long.fromBits(this.low_ & other.low_, this.high_ & other.high_);
   };
-  /**
-   * @param {?Long} other
-   * @return {!Long}
-   */
   Long.prototype.or = function(other) {
     return Long.fromBits(this.low_ | other.low_, this.high_ | other.high_);
   };
-  /**
-   * @param {?Long} other
-   * @return {!Long}
-   */
   Long.prototype.xor = function(other) {
     return Long.fromBits(this.low_ ^ other.low_, this.high_ ^ other.high_);
   };
-  /**
-   * @param {number} numBits
-   * @return {!Long}
-   */
   Long.prototype.shiftLeft = function(numBits) {
     numBits &= 63;
     if (numBits == 0) {
@@ -368,10 +256,6 @@ goog.loadModule(function(exports) {
       }
     }
   };
-  /**
-   * @param {number} numBits
-   * @return {!Long}
-   */
   Long.prototype.shiftRight = function(numBits) {
     numBits &= 63;
     if (numBits == 0) {
@@ -386,10 +270,6 @@ goog.loadModule(function(exports) {
       }
     }
   };
-  /**
-   * @param {number} numBits
-   * @return {!Long}
-   */
   Long.prototype.shiftRightUnsigned = function(numBits) {
     numBits &= 63;
     if (numBits == 0) {
@@ -408,10 +288,6 @@ goog.loadModule(function(exports) {
       }
     }
   };
-  /**
-   * @param {number} value
-   * @return {!Long}
-   */
   Long.fromInt = function(value) {
     var intValue = value | 0;
     asserts.assert(value === intValue, "value should be a 32-bit integer");
@@ -421,10 +297,6 @@ goog.loadModule(function(exports) {
       return new Long(intValue, intValue < 0 ? -1 : 0);
     }
   };
-  /**
-   * @param {number} value
-   * @return {!Long}
-   */
   Long.fromNumber = function(value) {
     if (value > 0) {
       if (value >= TWO_PWR_63_DBL_) {
@@ -442,19 +314,9 @@ goog.loadModule(function(exports) {
       }
     }
   };
-  /**
-   * @param {number} lowBits
-   * @param {number} highBits
-   * @return {!Long}
-   */
   Long.fromBits = function(lowBits, highBits) {
     return new Long(lowBits, highBits);
   };
-  /**
-   * @param {string} str
-   * @param {number=} opt_radix
-   * @return {!Long}
-   */
   Long.fromString = function(str, opt_radix) {
     if (str.charAt(0) == "-") {
       return Long.fromString(str.substring(1), opt_radix).negate();
@@ -488,11 +350,6 @@ goog.loadModule(function(exports) {
     }
     return result;
   };
-  /**
-   * @param {string} str
-   * @param {number=} opt_radix
-   * @return {boolean}
-   */
   Long.isStringInRange = function(str, opt_radix) {
     var radix = opt_radix || 10;
     if (radix < 2 || 36 < radix) {
@@ -509,73 +366,44 @@ goog.loadModule(function(exports) {
       }
     }
   };
-  /**
-   * @public
-   * @return {!Long}
-   */
   Long.getZero = function() {
     return ZERO_;
   };
-  /**
-   * @public
-   * @return {!Long}
-   */
   Long.getOne = function() {
     return ONE_;
   };
-  /**
-   * @public
-   * @return {!Long}
-   */
   Long.getNegOne = function() {
     return NEG_ONE_;
   };
-  /**
-   * @public
-   * @return {!Long}
-   */
   Long.getMaxValue = function() {
     return MAX_VALUE_;
   };
-  /**
-   * @public
-   * @return {!Long}
-   */
   Long.getMinValue = function() {
     return MIN_VALUE_;
   };
-  /**
-   * @public
-   * @return {!Long}
-   */
   Long.getTwoPwr24 = function() {
     return TWO_PWR_24_;
   };
   exports = Long;
-  /** @private @const @type {!Object<number,!Long>} */ var IntCache_ = {};
-  /**
-   * @private
-   * @param {number} value
-   * @return {!Long}
-   */
+  var IntCache_ = {};
   function getCachedIntValue_(value) {
     return reflect.cache(IntCache_, value, function(val) {
       return new Long(val, val < 0 ? -1 : 0);
     });
   }
-  /** @private @const @type {!Array<string>} */ var MAX_VALUE_FOR_RADIX_ = ["", "", "111111111111111111111111111111111111111111111111111111111111111", "2021110011022210012102010021220101220221", "13333333333333333333333333333333", "1104332401304422434310311212", "1540241003031030222122211", "22341010611245052052300", "777777777777777777777", "67404283172107811827", "9223372036854775807", "1728002635214590697", "41a792678515120367", "10b269549075433c37", "4340724c6c71dc7a7", "160e2ad3246366807", "7fffffffffffffff", 
-  "33d3d8307b214008", "16agh595df825fa7", "ba643dci0ffeehh", "5cbfjia3fh26ja7", "2heiciiie82dh97", "1adaibb21dckfa7", "i6k448cf4192c2", "acd772jnc9l0l7", "64ie1focnn5g77", "3igoecjbmca687", "27c48l5b37oaop", "1bk39f3ah3dmq7", "q1se8f0m04isb", "hajppbc1fc207", "bm03i95hia437", "7vvvvvvvvvvvv", "5hg4ck9jd4u37", "3tdtk1v8j6tpp", "2pijmikexrxp7", "1y2p0ij32e8e7"];
-  /** @private @const @type {!Array<string>} */ var MIN_VALUE_FOR_RADIX_ = ["", "", "-1000000000000000000000000000000000000000000000000000000000000000", "-2021110011022210012102010021220101220222", "-20000000000000000000000000000000", "-1104332401304422434310311213", "-1540241003031030222122212", "-22341010611245052052301", "-1000000000000000000000", "-67404283172107811828", "-9223372036854775808", "-1728002635214590698", "-41a792678515120368", "-10b269549075433c38", "-4340724c6c71dc7a8", "-160e2ad3246366808", 
-  "-8000000000000000", "-33d3d8307b214009", "-16agh595df825fa8", "-ba643dci0ffeehi", "-5cbfjia3fh26ja8", "-2heiciiie82dh98", "-1adaibb21dckfa8", "-i6k448cf4192c3", "-acd772jnc9l0l8", "-64ie1focnn5g78", "-3igoecjbmca688", "-27c48l5b37oaoq", "-1bk39f3ah3dmq8", "-q1se8f0m04isc", "-hajppbc1fc208", "-bm03i95hia438", "-8000000000000", "-5hg4ck9jd4u38", "-3tdtk1v8j6tpq", "-2pijmikexrxp8", "-1y2p0ij32e8e8"];
-  /** @private @const @type {number} */ var MAX_SAFE_INTEGER_ = 9007199254740991;
-  /** @private @const @type {number} */ var TWO_PWR_32_DBL_ = 4294967296;
-  /** @private @const @type {number} */ var TWO_PWR_63_DBL_ = 0x7fffffffffffffff;
-  /** @private @const @type {!Long} */ var ZERO_ = Long.fromBits(0, 0);
-  /** @private @const @type {!Long} */ var ONE_ = Long.fromBits(1, 0);
-  /** @private @const @type {!Long} */ var NEG_ONE_ = Long.fromBits(-1, -1);
-  /** @private @const @type {!Long} */ var MAX_VALUE_ = Long.fromBits(4294967295, 2147483647);
-  /** @private @const @type {!Long} */ var MIN_VALUE_ = Long.fromBits(0, 2147483648);
-  /** @private @const @type {!Long} */ var TWO_PWR_24_ = Long.fromBits(1 << 24, 0);
+  var MAX_VALUE_FOR_RADIX_ = ["", "", "111111111111111111111111111111111111111111111111111111111111111", "2021110011022210012102010021220101220221", "13333333333333333333333333333333", "1104332401304422434310311212", "1540241003031030222122211", "22341010611245052052300", "777777777777777777777", "67404283172107811827", "9223372036854775807", "1728002635214590697", "41a792678515120367", "10b269549075433c37", "4340724c6c71dc7a7", "160e2ad3246366807", "7fffffffffffffff", "33d3d8307b214008", "16agh595df825fa7", 
+  "ba643dci0ffeehh", "5cbfjia3fh26ja7", "2heiciiie82dh97", "1adaibb21dckfa7", "i6k448cf4192c2", "acd772jnc9l0l7", "64ie1focnn5g77", "3igoecjbmca687", "27c48l5b37oaop", "1bk39f3ah3dmq7", "q1se8f0m04isb", "hajppbc1fc207", "bm03i95hia437", "7vvvvvvvvvvvv", "5hg4ck9jd4u37", "3tdtk1v8j6tpp", "2pijmikexrxp7", "1y2p0ij32e8e7"];
+  var MIN_VALUE_FOR_RADIX_ = ["", "", "-1000000000000000000000000000000000000000000000000000000000000000", "-2021110011022210012102010021220101220222", "-20000000000000000000000000000000", "-1104332401304422434310311213", "-1540241003031030222122212", "-22341010611245052052301", "-1000000000000000000000", "-67404283172107811828", "-9223372036854775808", "-1728002635214590698", "-41a792678515120368", "-10b269549075433c38", "-4340724c6c71dc7a8", "-160e2ad3246366808", "-8000000000000000", "-33d3d8307b214009", 
+  "-16agh595df825fa8", "-ba643dci0ffeehi", "-5cbfjia3fh26ja8", "-2heiciiie82dh98", "-1adaibb21dckfa8", "-i6k448cf4192c3", "-acd772jnc9l0l8", "-64ie1focnn5g78", "-3igoecjbmca688", "-27c48l5b37oaoq", "-1bk39f3ah3dmq8", "-q1se8f0m04isc", "-hajppbc1fc208", "-bm03i95hia438", "-8000000000000", "-5hg4ck9jd4u38", "-3tdtk1v8j6tpq", "-2pijmikexrxp8", "-1y2p0ij32e8e8"];
+  var MAX_SAFE_INTEGER_ = 9007199254740991;
+  var TWO_PWR_32_DBL_ = 4294967296;
+  var TWO_PWR_63_DBL_ = 0x7fffffffffffffff;
+  var ZERO_ = Long.fromBits(0, 0);
+  var ONE_ = Long.fromBits(1, 0);
+  var NEG_ONE_ = Long.fromBits(-1, -1);
+  var MAX_VALUE_ = Long.fromBits(4294967295, 2147483647);
+  var MIN_VALUE_ = Long.fromBits(0, 2147483648);
+  var TWO_PWR_24_ = Long.fromBits(1 << 24, 0);
   return exports;
 });
 

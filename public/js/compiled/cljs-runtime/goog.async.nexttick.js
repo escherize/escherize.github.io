@@ -10,20 +10,11 @@ goog.require("goog.html.TrustedResourceUrl");
 goog.require("goog.labs.userAgent.browser");
 goog.require("goog.labs.userAgent.engine");
 goog.require("goog.string.Const");
-/**
- * @param {*} exception
- */
 goog.async.throwException = function(exception) {
   goog.global.setTimeout(function() {
     throw exception;
   }, 0);
 };
-/**
- * @param {function(this:SCOPE)} callback
- * @param {SCOPE=} opt_context
- * @param {boolean=} opt_useSetImmediate
- * @template SCOPE
- */
 goog.async.nextTick = function(callback, opt_context, opt_useSetImmediate) {
   var cb = callback;
   if (opt_context) {
@@ -39,11 +30,6 @@ goog.async.nextTick = function(callback, opt_context, opt_useSetImmediate) {
   }
   goog.async.nextTick.setImmediate_(cb);
 };
-/**
- * @private
- * @return {boolean}
- * @suppress {missingProperties}
- */
 goog.async.nextTick.useSetImmediate_ = function() {
   if (!goog.global.Window || !goog.global.Window.prototype) {
     return true;
@@ -53,15 +39,11 @@ goog.async.nextTick.useSetImmediate_ = function() {
   }
   return false;
 };
-/** @private @type {function(function())} */ goog.async.nextTick.setImmediate_;
-/**
- * @private
- * @return {function(function())}
- */
+goog.async.nextTick.setImmediate_;
 goog.async.nextTick.getSetImmediateEmulator_ = function() {
-  /** @type {(!Function|undefined)} */ var Channel = goog.global["MessageChannel"];
+  var Channel = goog.global["MessageChannel"];
   if (typeof Channel === "undefined" && typeof window !== "undefined" && window.postMessage && window.addEventListener && !goog.labs.userAgent.engine.isPresto()) {
-    /** @constructor */ Channel = function() {
+    Channel = function() {
       var iframe = goog.dom.createElement(goog.dom.TagName.IFRAME);
       iframe.style.display = "none";
       goog.dom.safe.setIframeSrc(iframe, goog.html.TrustedResourceUrl.fromConstant(goog.string.Const.EMPTY));
@@ -118,19 +100,11 @@ goog.async.nextTick.getSetImmediateEmulator_ = function() {
     };
   }
   return function(cb) {
-    goog.global.setTimeout(/** @type {function()} */ (cb), 0);
+    goog.global.setTimeout(cb, 0);
   };
 };
-/**
- * @private
- * @param {function()} callback
- * @return {function()}
- */
 goog.async.nextTick.wrapCallback_ = goog.functions.identity;
-goog.debug.entryPointRegistry.register(/**
- * @param {function(!Function):!Function} transformer
- */
-function(transformer) {
+goog.debug.entryPointRegistry.register(function(transformer) {
   goog.async.nextTick.wrapCallback_ = transformer;
 });
 

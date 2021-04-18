@@ -1,5 +1,4 @@
 goog.provide('devtools.defaults');
-goog.require('cljs.core');
 devtools.defaults.known_features = (new cljs.core.Delay((function (){
 return new cljs.core.PersistentVector(null, 3, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"formatters","formatters",-1875637118),new cljs.core.Keyword(null,"hints","hints",-991113151),new cljs.core.Keyword(null,"async","async",1050769601)], null);
 }),null));

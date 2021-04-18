@@ -8,42 +8,24 @@ goog.require("goog.labs.userAgent.platform");
 goog.require("goog.string");
 goog.require("goog.string.Const");
 goog.require("goog.userAgent");
-/** @type {number} */ goog.window.DEFAULT_POPUP_HEIGHT = 500;
-/** @type {number} */ goog.window.DEFAULT_POPUP_WIDTH = 690;
-/** @type {string} */ goog.window.DEFAULT_POPUP_TARGET = "google_popup";
-/**
- * @private
- * @return {!Window}
- * @suppress {checkTypes}
- */
+goog.window.DEFAULT_POPUP_HEIGHT = 500;
+goog.window.DEFAULT_POPUP_WIDTH = 690;
+goog.window.DEFAULT_POPUP_TARGET = "google_popup";
 goog.window.createFakeWindow_ = function() {
-  return (/** @type {!Window} */ ({}));
+  return {};
 };
-/**
- * @param {(!goog.html.SafeUrl|string|!Object|null)} linkRef
- * @param {?Object=} opt_options
- * @param {?Window=} opt_parentWin
- * @return {?Window}
- */
 goog.window.open = function(linkRef, opt_options, opt_parentWin) {
   if (!opt_options) {
     opt_options = {};
   }
   var parentWin = opt_parentWin || window;
-  /** @type {!goog.html.SafeUrl} */ var safeLinkRef;
+  var safeLinkRef;
   if (linkRef instanceof goog.html.SafeUrl) {
     safeLinkRef = linkRef;
   } else {
-    /**
-     * @type {(string|!goog.string.TypedString)}
-     * @suppress {missingProperties}
-     */
     var url = typeof linkRef.href != "undefined" ? linkRef.href : String(linkRef);
     safeLinkRef = goog.html.SafeUrl.sanitize(url);
   }
-  /**
-   * @suppress {strictMissingProperties}
-   */
   var target = opt_options.target || linkRef.target;
   var sb = [];
   for (var option in opt_options) {
@@ -71,7 +53,7 @@ goog.window.open = function(linkRef, opt_options, opt_parentWin) {
     if (opt_options["noreferrer"]) {
       a.setAttribute("rel", "noreferrer");
     }
-    var click = /** @type {!MouseEvent} */ (document.createEvent("MouseEvent"));
+    var click = document.createEvent("MouseEvent");
     click.initMouseEvent("click", true, true, parentWin, 1);
     a.dispatchEvent(click);
     newWin = goog.window.createFakeWindow_();
@@ -102,12 +84,6 @@ goog.window.open = function(linkRef, opt_options, opt_parentWin) {
   }
   return newWin;
 };
-/**
- * @param {string=} opt_message
- * @param {?Object=} opt_options
- * @param {?Window=} opt_parentWin
- * @return {?Window}
- */
 goog.window.openBlank = function(opt_message, opt_options, opt_parentWin) {
   var loadingMessage;
   if (!opt_message) {
@@ -116,13 +92,8 @@ goog.window.openBlank = function(opt_message, opt_options, opt_parentWin) {
     loadingMessage = goog.string.escapeString(goog.string.htmlEscape(opt_message));
   }
   var url = goog.html.uncheckedconversions.safeUrlFromStringKnownToSatisfyTypeContract(goog.string.Const.from("b/12014412, encoded string in javascript: URL"), 'javascript:"' + encodeURI(loadingMessage) + '"');
-  return (/** @type {?Window} */ (goog.window.open(url, opt_options, opt_parentWin)));
+  return goog.window.open(url, opt_options, opt_parentWin);
 };
-/**
- * @param {(?goog.html.SafeUrl|string|?Object)} linkRef
- * @param {?Object=} opt_options
- * @return {boolean}
- */
 goog.window.popup = function(linkRef, opt_options) {
   if (!opt_options) {
     opt_options = {};

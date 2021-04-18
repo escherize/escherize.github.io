@@ -2,25 +2,14 @@ goog.provide("goog.events.ListenerMap");
 goog.require("goog.array");
 goog.require("goog.events.Listener");
 goog.require("goog.object");
-/**
- * @final
- * @constructor
- * @param {(EventTarget|goog.events.Listenable)} src
- */
 goog.events.ListenerMap = function(src) {
-  /** @type {(EventTarget|goog.events.Listenable)} */ this.src = src;
-  /** @type {!Object<string,!Array<!goog.events.Listener>>} */ this.listeners = {};
-  /** @private @type {number} */ this.typeCount_ = 0;
+  this.src = src;
+  this.listeners = {};
+  this.typeCount_ = 0;
 };
-/**
- * @return {number}
- */
 goog.events.ListenerMap.prototype.getTypeCount = function() {
   return this.typeCount_;
 };
-/**
- * @return {number}
- */
 goog.events.ListenerMap.prototype.getListenerCount = function() {
   var count = 0;
   for (var type in this.listeners) {
@@ -28,14 +17,6 @@ goog.events.ListenerMap.prototype.getListenerCount = function() {
   }
   return count;
 };
-/**
- * @param {(string|!goog.events.EventId)} type
- * @param {!Function} listener
- * @param {boolean} callOnce
- * @param {boolean=} opt_useCapture
- * @param {Object=} opt_listenerScope
- * @return {!goog.events.ListenableKey}
- */
 goog.events.ListenerMap.prototype.add = function(type, listener, callOnce, opt_useCapture, opt_listenerScope) {
   var typeStr = type.toString();
   var listenerArray = this.listeners[typeStr];
@@ -57,13 +38,6 @@ goog.events.ListenerMap.prototype.add = function(type, listener, callOnce, opt_u
   }
   return listenerObj;
 };
-/**
- * @param {(string|!goog.events.EventId)} type
- * @param {!Function} listener
- * @param {boolean=} opt_useCapture
- * @param {Object=} opt_listenerScope
- * @return {boolean}
- */
 goog.events.ListenerMap.prototype.remove = function(type, listener, opt_useCapture, opt_listenerScope) {
   var typeStr = type.toString();
   if (!(typeStr in this.listeners)) {
@@ -83,10 +57,6 @@ goog.events.ListenerMap.prototype.remove = function(type, listener, opt_useCaptu
   }
   return false;
 };
-/**
- * @param {!goog.events.ListenableKey} listener
- * @return {boolean}
- */
 goog.events.ListenerMap.prototype.removeByKey = function(listener) {
   var type = listener.type;
   if (!(type in this.listeners)) {
@@ -94,7 +64,7 @@ goog.events.ListenerMap.prototype.removeByKey = function(listener) {
   }
   var removed = goog.array.remove(this.listeners[type], listener);
   if (removed) {
-    /** @type {!goog.events.Listener} */ (listener).markAsRemoved();
+    listener.markAsRemoved();
     if (this.listeners[type].length == 0) {
       delete this.listeners[type];
       this.typeCount_--;
@@ -102,10 +72,6 @@ goog.events.ListenerMap.prototype.removeByKey = function(listener) {
   }
   return removed;
 };
-/**
- * @param {(string|!goog.events.EventId)=} opt_type
- * @return {number}
- */
 goog.events.ListenerMap.prototype.removeAll = function(opt_type) {
   var typeStr = opt_type && opt_type.toString();
   var count = 0;
@@ -122,11 +88,6 @@ goog.events.ListenerMap.prototype.removeAll = function(opt_type) {
   }
   return count;
 };
-/**
- * @param {(string|!goog.events.EventId)} type
- * @param {boolean} capture
- * @return {!Array<!goog.events.ListenableKey>}
- */
 goog.events.ListenerMap.prototype.getListeners = function(type, capture) {
   var listenerArray = this.listeners[type.toString()];
   var rv = [];
@@ -140,13 +101,6 @@ goog.events.ListenerMap.prototype.getListeners = function(type, capture) {
   }
   return rv;
 };
-/**
- * @param {(string|!goog.events.EventId)} type
- * @param {!Function} listener
- * @param {boolean} capture
- * @param {Object=} opt_listenerScope
- * @return {goog.events.ListenableKey}
- */
 goog.events.ListenerMap.prototype.getListener = function(type, listener, capture, opt_listenerScope) {
   var listenerArray = this.listeners[type.toString()];
   var i = -1;
@@ -155,11 +109,6 @@ goog.events.ListenerMap.prototype.getListener = function(type, listener, capture
   }
   return i > -1 ? listenerArray[i] : null;
 };
-/**
- * @param {(string|!goog.events.EventId)=} opt_type
- * @param {boolean=} opt_capture
- * @return {boolean}
- */
 goog.events.ListenerMap.prototype.hasListener = function(opt_type, opt_capture) {
   var hasType = opt_type !== undefined;
   var typeStr = hasType ? opt_type.toString() : "";
@@ -173,14 +122,6 @@ goog.events.ListenerMap.prototype.hasListener = function(opt_type, opt_capture) 
     return false;
   });
 };
-/**
- * @private
- * @param {!Array<!goog.events.Listener>} listenerArray
- * @param {!Function} listener
- * @param {boolean=} opt_useCapture
- * @param {Object=} opt_listenerScope
- * @return {number}
- */
 goog.events.ListenerMap.findListenerIndex_ = function(listenerArray, listener, opt_useCapture, opt_listenerScope) {
   for (var i = 0; i < listenerArray.length; ++i) {
     var listenerObj = listenerArray[i];
