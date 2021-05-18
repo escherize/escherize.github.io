@@ -1,11 +1,17 @@
-{:tasks {:requires ([babashka.fs :as fs])
+{:paths ["scripts"]
+ :tasks {:requires ([babashka.fs :as fs])
          :init (do
+                 (def release-counter "release_counter.txt")
                  (defn deploy-with-message
                    [message]
                    ["git add -A"
-                    (str "git commit -am " message)
+                    (str "git commit -am '" message " #" (slurp release-counter)  " '")
                     "git push"]))
+
          -clj-files (map str (fs/glob "." "**{.clj,cljc}"))
+         -bump-count {:requires ([fileatom])
+                      :task (fileatom/swap! release-counter (fnil inc 0))}
+
          all-env {:doc "Prints environment var"
                   :task (clojure.pprint/pprint (System/env))}
          env {:doc "Prints environment var"
@@ -14,6 +20,11 @@
                      :task (do
                              (shell "shadow-cljs release :app")
                              (mapv shell (deploy-with-message "no-build-commit")))}
-         no-build-release
-         {:doc "pushes to github pages to rebuild the live site"
-          :task (mapv shell (deploy-with-message "no-build-commit"))}}}
+
+         no-build-release {:doc "pushes to github pages to rebuild the live site"
+                           :task (do (shell "bb -bump-count")
+                                     (mapv shell (deploy-with-message "no-build-commit")))}
+         release (do
+                   (shell "bb -bump-count")
+                   (shell "bb prod-build")
+                   (mapv shell (deploy-with-message "build-commit")))}}
