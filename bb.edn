@@ -1,0 +1,19 @@
+{:tasks {:requires ([babashka.fs :as fs])
+         :init (do
+                 (defn deploy-with-message
+                   [message]
+                   ["git add -A"
+                    (str "git commit -am " message)
+                    "git push"]))
+         -clj-files (map str (fs/glob "." "**{.clj,cljc}"))
+         all-env {:doc "Prints environment var"
+                  :task (clojure.pprint/pprint (System/env))}
+         env {:doc "Prints environment var"
+              :task (System/getenv (first *command-line-args*))}
+         prod-build {:doc "builds app for prod"
+                     :task (do
+                             (shell "shadow-cljs release :app")
+                             (mapv shell (deploy-with-message "no-build-commit")))}
+         no-build-release
+         {:doc "pushes to github pages to rebuild the live site"
+          :task (mapv shell (deploy-with-message "no-build-commit"))}}}
