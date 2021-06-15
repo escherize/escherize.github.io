@@ -9,6 +9,7 @@
                     "git push"]))
 
          -clj-files (map str (fs/glob "." "**{.clj,cljc}"))
+         
          -bump-count {:requires ([fileatom])
                       :task (fileatom/swap! release-counter (fnil inc 0))}
 
