@@ -195,7 +195,6 @@
                         :text-align "center"}}
          (str "(" wob " / 2) = "  (/ wob 2))]]])
    [:div {:style {:display :inline-block
-                  :margin-top "-33px"
                   :background-color "#acf"
                   :padding "4px"
                   :border-radius "4px"
