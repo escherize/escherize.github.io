@@ -213,7 +213,7 @@
 
 (defn view []
   (let [_ (rf/dispatch [::init!])
-        exercise-count @(rf/subscribe [::excercise-count])]
+        #_#_exercise-count @(rf/subscribe [::excercise-count])]
     [:div {:style {:margin "30px 20px"}}
      [exercise]
      ;; [:div exercise-count]

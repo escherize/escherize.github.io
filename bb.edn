@@ -1,31 +1,24 @@
 {:paths ["scripts"]
  :tasks {:requires ([babashka.fs :as fs])
-         :init (do
-                 (def release-counter "release_counter.txt")
-                 (defn deploy-with-message
-                   [message]
-                   ["git add -A"
-                    (str "git commit -am '" message " #" (slurp release-counter)  " '")
-                    "git push"]))
+         :init (do )
+         :enter (locking log (println (str (:name (current-task)) ":") (java.util.Date.)))
 
-         -clj-files (map str (fs/glob "." "**{.clj,cljc}"))
-         
-         -bump-count {:requires ([fileatom])
-                      :task (fileatom/swap! release-counter (fnil inc 0))}
+         ;; -clj-files (map str (fs/glob "." "**{.clj,cljc}"))
 
-         all-env {:doc "Prints environment var"
-                  :task (clojure.pprint/pprint (System/env))}
-         env {:doc "Prints environment var"
-              :task (System/getenv (first *command-line-args*))}
-         prod-build {:doc "builds app for prod"
-                     :task (do
-                             (shell "shadow-cljs release :app")
-                             (mapv shell (deploy-with-message "no-build-commit")))}
+         ;; -bump-count {:requires ([fileatom])
+         ;;              :task (fileatom/swap! release-counter (fnil inc 0))}
 
-         no-build-release {:doc "pushes to github pages to rebuild the live site"
-                           :task (do (shell "bb -bump-count")
-                                     (mapv shell (deploy-with-message "no-build-commit")))}
+         ;; all-env {:doc "Prints environment var"
+         ;;          :task (clojure.pprint/pprint (System/env))}
+         ;; env {:doc "Prints environment var"
+         ;;      :task (System/getenv (first *command-line-args*))}
+         -copy-paths (shell "./link_games.joke")
+         -prod-build (shell "shadow-cljs release :app")
+         -push-code (do
+                      (shell "git add -A")
+                      (shell (str "git commit -am \"$(date)\""))
+                      (shell "git push"))
          release (do
-                   (shell "bb -bump-count")
-                   (shell "bb prod-build")
-                   (mapv shell (deploy-with-message "build-commit")))}}
+                   (run "-copy-paths")
+                   (run "-prod-build")
+                   (run "-push-code"))}}
