@@ -1,20 +1,18 @@
 goog.provide('re_frame.utils');
-goog.require('cljs.core');
-goog.require('re_frame.loggers');
 /**
  * Dissociates an entry from a nested associative structure returning a new
  *   nested structure. keys is a sequence of keys. Any empty maps that result
  *   will not be present in the new structure.
  *   The key thing is that 'm' remains identical? to istelf if the path was never present
  */
-re_frame.utils.dissoc_in = (function re_frame$utils$dissoc_in(m,p__38134){
-var vec__38135 = p__38134;
-var seq__38136 = cljs.core.seq(vec__38135);
-var first__38137 = cljs.core.first(seq__38136);
-var seq__38136__$1 = cljs.core.next(seq__38136);
-var k = first__38137;
-var ks = seq__38136__$1;
-var keys = vec__38135;
+re_frame.utils.dissoc_in = (function re_frame$utils$dissoc_in(m,p__34068){
+var vec__34069 = p__34068;
+var seq__34070 = cljs.core.seq(vec__34069);
+var first__34071 = cljs.core.first(seq__34070);
+var seq__34070__$1 = cljs.core.next(seq__34070);
+var k = first__34071;
+var ks = seq__34070__$1;
+var keys = vec__34069;
 if(ks){
 var temp__5733__auto__ = cljs.core.get.cljs$core$IFn$_invoke$arity$2(m,k);
 if(cljs.core.truth_(temp__5733__auto__)){
