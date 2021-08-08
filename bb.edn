@@ -1,7 +1,8 @@
 {:paths ["scripts"]
  :tasks {:requires ([babashka.fs :as fs])
-         :init (do )
-         :enter (locking log (println (str (:name (current-task)) ":") (java.util.Date.)))
+         :init (do
+                 (def log (Object.)))
+         :enter (locking log (println (str "Running: " (:name (current-task)) ":") (java.util.Date.)))
 
          ;; -clj-files (map str (fs/glob "." "**{.clj,cljc}"))
 
