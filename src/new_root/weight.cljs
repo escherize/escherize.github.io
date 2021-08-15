@@ -40,7 +40,6 @@
        (cond
          (zero? total)
          acc
-
          (not weight)
          (do
            (js/console.log "broken:" [acc weights total])
@@ -172,13 +171,11 @@
      [:label [:strong "Total Weight"]]
      [:input {:value @(rf/subscribe [::total])
               :placeholder "total weight"
-
               :step 5
               :inputmode :numeric
               :input-mode :numeric
               :type "number"
-              :on-change #(rf/dispatch [::set-total (-> % .-target .-value)])}]]
-    ]
+              :on-change #(rf/dispatch [::set-total (-> % .-target .-value)])}]]]
    [:div {:style {:border "4px solid #454545" :padding 3}}
     [:p "Weights per side"]
     [:hr {:style {:height "3px" :color "#454545"}}]
@@ -213,7 +210,7 @@
 
 (defn view []
   (let [_ (rf/dispatch [::init!])
-        #_#_exercise-count @(rf/subscribe [::excercise-count])]
+        exercise-count @(rf/subscribe [::excercise-count])]
     [:div {:style {:margin "30px 20px"}}
      [exercise]
      ;; [:div exercise-count]

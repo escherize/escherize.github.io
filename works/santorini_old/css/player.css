@@ -1,12 +1,12 @@
-/* CSS GENERATED FROM src/bt/css_gen.cljc ->player-css */
+/* CSS GENERATED FROM src/bt/css_gen.cljc */
 .player.one.height-0 {
   width: 5em;
   top: 1em;
   height: 5em;
-  -webkit-transform: translateZ(3.0em) scaleX(0.2) scaleY(0.2);
-  -webkit-transition: 0.1s;
+  -webkit-transform: translateZ(3em) scaleX(0.2) scaleY(0.2);
+  -webkit-transition: 0.2s;
   position: absolute;
-  content: '';
+  content: ;
   box-shadow: inset 0 0 0 .3em hsla(0,0%,0%,.4);
   background-color: #a5d4f3;
   left: 1em;
@@ -24,10 +24,6 @@
   position: absolute;
 }
 
-.player.one.height-0:hover:after {
-  background-color: red;
-}
-
 .player.one.height-0:before {
   background-color: #a5d4f3;
   -webkit-transform: rotateY(90deg) translateX(3em) scaleX(0.6);
@@ -38,34 +34,22 @@
   width: 5em;
   position: absolute;
 }
-
-.player.one.height-0:hover {
-  background-color: #d2eaf9;
-}
-
-.player.one.height-0:hover:before {
-  background-color: #d2eaf9;
-}
-
-.player.one.height-0:hover:after {
-  background-color: #d2eaf9;
-}
 .player.two.height-0 {
   width: 5em;
   top: 1em;
   height: 5em;
-  -webkit-transform: translateZ(3.0em) scaleX(0.2) scaleY(0.2);
-  -webkit-transition: 0.1s;
+  -webkit-transform: translateZ(3em) scaleX(0.2) scaleY(0.2);
+  -webkit-transition: 0.2s;
   position: absolute;
-  content: '';
+  content: ;
   box-shadow: inset 0 0 0 .3em hsla(0,0%,0%,.4);
-  background-color: #F1A3A3;
+  background-color: #f0c58f;
   left: 1em;
   -webkit-transform-style: preserve-3d;
 }
 
 .player.two.height-0:after {
-  background-color: #F1A3A3;
+  background-color: #f0c58f;
   -webkit-transform: rotateX(-90deg) translateY(3em) scaleY(0.6);
   -webkit-transform-origin: 100% 100%;
   box-shadow: inset 0 0 0 .3em hsla(0,0%,0%,0.4);
@@ -75,12 +59,8 @@
   position: absolute;
 }
 
-.player.two.height-0:hover:after {
-  background-color: red;
-}
-
 .player.two.height-0:before {
-  background-color: #F1A3A3;
+  background-color: #f0c58f;
   -webkit-transform: rotateY(90deg) translateX(3em) scaleX(0.6);
   -webkit-transform-origin: 100% 0%;
   box-shadow: inset 0 0 0 .3em hsla(0,0%,0%,0.4);
@@ -89,26 +69,14 @@
   width: 5em;
   position: absolute;
 }
-
-.player.two.height-0:hover {
-  background-color: #f8cfcf;
-}
-
-.player.two.height-0:hover:before {
-  background-color: #f8cfcf;
-}
-
-.player.two.height-0:hover:after {
-  background-color: #f8cfcf;
-}
 .player.one.height-1 {
   width: 5em;
   top: 1em;
   height: 5em;
-  -webkit-transform: translateZ(5.5em) scaleX(0.2) scaleY(0.2);
-  -webkit-transition: 0.1s;
+  -webkit-transform: translateZ(6em) scaleX(0.2) scaleY(0.2);
+  -webkit-transition: 0.2s;
   position: absolute;
-  content: '';
+  content: ;
   box-shadow: inset 0 0 0 .3em hsla(0,0%,0%,.4);
   background-color: #a5d4f3;
   left: 1em;
@@ -126,10 +94,6 @@
   position: absolute;
 }
 
-.player.one.height-1:hover:after {
-  background-color: red;
-}
-
 .player.one.height-1:before {
   background-color: #a5d4f3;
   -webkit-transform: rotateY(90deg) translateX(3em) scaleX(0.6);
@@ -140,34 +104,22 @@
   width: 5em;
   position: absolute;
 }
-
-.player.one.height-1:hover {
-  background-color: #d2eaf9;
-}
-
-.player.one.height-1:hover:before {
-  background-color: #d2eaf9;
-}
-
-.player.one.height-1:hover:after {
-  background-color: #d2eaf9;
-}
 .player.two.height-1 {
   width: 5em;
   top: 1em;
   height: 5em;
-  -webkit-transform: translateZ(5.5em) scaleX(0.2) scaleY(0.2);
-  -webkit-transition: 0.1s;
+  -webkit-transform: translateZ(6em) scaleX(0.2) scaleY(0.2);
+  -webkit-transition: 0.2s;
   position: absolute;
-  content: '';
+  content: ;
   box-shadow: inset 0 0 0 .3em hsla(0,0%,0%,.4);
-  background-color: #F1A3A3;
+  background-color: #f0c58f;
   left: 1em;
   -webkit-transform-style: preserve-3d;
 }
 
 .player.two.height-1:after {
-  background-color: #F1A3A3;
+  background-color: #f0c58f;
   -webkit-transform: rotateX(-90deg) translateY(3em) scaleY(0.6);
   -webkit-transform-origin: 100% 100%;
   box-shadow: inset 0 0 0 .3em hsla(0,0%,0%,0.4);
@@ -177,12 +129,8 @@
   position: absolute;
 }
 
-.player.two.height-1:hover:after {
-  background-color: red;
-}
-
 .player.two.height-1:before {
-  background-color: #F1A3A3;
+  background-color: #f0c58f;
   -webkit-transform: rotateY(90deg) translateX(3em) scaleX(0.6);
   -webkit-transform-origin: 100% 0%;
   box-shadow: inset 0 0 0 .3em hsla(0,0%,0%,0.4);
@@ -191,26 +139,14 @@
   width: 5em;
   position: absolute;
 }
-
-.player.two.height-1:hover {
-  background-color: #f8cfcf;
-}
-
-.player.two.height-1:hover:before {
-  background-color: #f8cfcf;
-}
-
-.player.two.height-1:hover:after {
-  background-color: #f8cfcf;
-}
 .player.one.height-2 {
   width: 5em;
   top: 1em;
   height: 5em;
-  -webkit-transform: translateZ(8.0em) scaleX(0.2) scaleY(0.2);
-  -webkit-transition: 0.1s;
+  -webkit-transform: translateZ(9em) scaleX(0.2) scaleY(0.2);
+  -webkit-transition: 0.2s;
   position: absolute;
-  content: '';
+  content: ;
   box-shadow: inset 0 0 0 .3em hsla(0,0%,0%,.4);
   background-color: #a5d4f3;
   left: 1em;
@@ -228,10 +164,6 @@
   position: absolute;
 }
 
-.player.one.height-2:hover:after {
-  background-color: red;
-}
-
 .player.one.height-2:before {
   background-color: #a5d4f3;
   -webkit-transform: rotateY(90deg) translateX(3em) scaleX(0.6);
@@ -242,34 +174,22 @@
   width: 5em;
   position: absolute;
 }
-
-.player.one.height-2:hover {
-  background-color: #d2eaf9;
-}
-
-.player.one.height-2:hover:before {
-  background-color: #d2eaf9;
-}
-
-.player.one.height-2:hover:after {
-  background-color: #d2eaf9;
-}
 .player.two.height-2 {
   width: 5em;
   top: 1em;
   height: 5em;
-  -webkit-transform: translateZ(8.0em) scaleX(0.2) scaleY(0.2);
-  -webkit-transition: 0.1s;
+  -webkit-transform: translateZ(9em) scaleX(0.2) scaleY(0.2);
+  -webkit-transition: 0.2s;
   position: absolute;
-  content: '';
+  content: ;
   box-shadow: inset 0 0 0 .3em hsla(0,0%,0%,.4);
-  background-color: #F1A3A3;
+  background-color: #f0c58f;
   left: 1em;
   -webkit-transform-style: preserve-3d;
 }
 
 .player.two.height-2:after {
-  background-color: #F1A3A3;
+  background-color: #f0c58f;
   -webkit-transform: rotateX(-90deg) translateY(3em) scaleY(0.6);
   -webkit-transform-origin: 100% 100%;
   box-shadow: inset 0 0 0 .3em hsla(0,0%,0%,0.4);
@@ -279,12 +199,8 @@
   position: absolute;
 }
 
-.player.two.height-2:hover:after {
-  background-color: red;
-}
-
 .player.two.height-2:before {
-  background-color: #F1A3A3;
+  background-color: #f0c58f;
   -webkit-transform: rotateY(90deg) translateX(3em) scaleX(0.6);
   -webkit-transform-origin: 100% 0%;
   box-shadow: inset 0 0 0 .3em hsla(0,0%,0%,0.4);
@@ -293,26 +209,14 @@
   width: 5em;
   position: absolute;
 }
-
-.player.two.height-2:hover {
-  background-color: #f8cfcf;
-}
-
-.player.two.height-2:hover:before {
-  background-color: #f8cfcf;
-}
-
-.player.two.height-2:hover:after {
-  background-color: #f8cfcf;
-}
 .player.one.height-3 {
   width: 5em;
   top: 1em;
   height: 5em;
-  -webkit-transform: translateZ(10.5em) scaleX(0.2) scaleY(0.2);
-  -webkit-transition: 0.1s;
+  -webkit-transform: translateZ(12em) scaleX(0.2) scaleY(0.2);
+  -webkit-transition: 0.2s;
   position: absolute;
-  content: '';
+  content: ;
   box-shadow: inset 0 0 0 .3em hsla(0,0%,0%,.4);
   background-color: #a5d4f3;
   left: 1em;
@@ -330,10 +234,6 @@
   position: absolute;
 }
 
-.player.one.height-3:hover:after {
-  background-color: red;
-}
-
 .player.one.height-3:before {
   background-color: #a5d4f3;
   -webkit-transform: rotateY(90deg) translateX(3em) scaleX(0.6);
@@ -344,34 +244,22 @@
   width: 5em;
   position: absolute;
 }
-
-.player.one.height-3:hover {
-  background-color: #d2eaf9;
-}
-
-.player.one.height-3:hover:before {
-  background-color: #d2eaf9;
-}
-
-.player.one.height-3:hover:after {
-  background-color: #d2eaf9;
-}
 .player.two.height-3 {
   width: 5em;
   top: 1em;
   height: 5em;
-  -webkit-transform: translateZ(10.5em) scaleX(0.2) scaleY(0.2);
-  -webkit-transition: 0.1s;
+  -webkit-transform: translateZ(12em) scaleX(0.2) scaleY(0.2);
+  -webkit-transition: 0.2s;
   position: absolute;
-  content: '';
+  content: ;
   box-shadow: inset 0 0 0 .3em hsla(0,0%,0%,.4);
-  background-color: #F1A3A3;
+  background-color: #f0c58f;
   left: 1em;
   -webkit-transform-style: preserve-3d;
 }
 
 .player.two.height-3:after {
-  background-color: #F1A3A3;
+  background-color: #f0c58f;
   -webkit-transform: rotateX(-90deg) translateY(3em) scaleY(0.6);
   -webkit-transform-origin: 100% 100%;
   box-shadow: inset 0 0 0 .3em hsla(0,0%,0%,0.4);
@@ -381,12 +269,8 @@
   position: absolute;
 }
 
-.player.two.height-3:hover:after {
-  background-color: red;
-}
-
 .player.two.height-3:before {
-  background-color: #F1A3A3;
+  background-color: #f0c58f;
   -webkit-transform: rotateY(90deg) translateX(3em) scaleX(0.6);
   -webkit-transform-origin: 100% 0%;
   box-shadow: inset 0 0 0 .3em hsla(0,0%,0%,0.4);
@@ -394,16 +278,4 @@
   height: 5em;
   width: 5em;
   position: absolute;
-}
-
-.player.two.height-3:hover {
-  background-color: #f8cfcf;
-}
-
-.player.two.height-3:hover:before {
-  background-color: #f8cfcf;
-}
-
-.player.two.height-3:hover:after {
-  background-color: #f8cfcf;
 }/* END GENERATED CSS */
