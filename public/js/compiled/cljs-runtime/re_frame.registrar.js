@@ -2,8 +2,8 @@ goog.provide('re_frame.registrar');
 re_frame.registrar.kinds = new cljs.core.PersistentHashSet(null, new cljs.core.PersistentArrayMap(null, 4, [new cljs.core.Keyword(null,"sub","sub",-2093760025),null,new cljs.core.Keyword(null,"event","event",301435442),null,new cljs.core.Keyword(null,"cofx","cofx",2013202907),null,new cljs.core.Keyword(null,"fx","fx",-1237829572),null], null), null);
 re_frame.registrar.kind__GT_id__GT_handler = cljs.core.atom.cljs$core$IFn$_invoke$arity$1(cljs.core.PersistentArrayMap.EMPTY);
 re_frame.registrar.get_handler = (function re_frame$registrar$get_handler(var_args){
-var G__34083 = arguments.length;
-switch (G__34083) {
+var G__44223 = arguments.length;
+switch (G__44223) {
 case 1:
 return re_frame.registrar.get_handler.cljs$core$IFn$_invoke$arity$1((arguments[(0)]));
 
@@ -33,11 +33,11 @@ return cljs.core.get.cljs$core$IFn$_invoke$arity$2(cljs.core.get.cljs$core$IFn$_
 (re_frame.registrar.get_handler.cljs$core$IFn$_invoke$arity$3 = (function (kind,id,required_QMARK_){
 var handler = re_frame.registrar.get_handler.cljs$core$IFn$_invoke$arity$2(kind,id);
 if(re_frame.interop.debug_enabled_QMARK_){
-if(cljs.core.truth_((function (){var and__4115__auto__ = required_QMARK_;
-if(cljs.core.truth_(and__4115__auto__)){
+if(cljs.core.truth_((function (){var and__4210__auto__ = required_QMARK_;
+if(cljs.core.truth_(and__4210__auto__)){
 return (handler == null);
 } else {
-return and__4115__auto__;
+return and__4210__auto__;
 }
 })())){
 re_frame.loggers.console.cljs$core$IFn$_invoke$arity$variadic(new cljs.core.Keyword(null,"error","error",-978969032),cljs.core.prim_seq.cljs$core$IFn$_invoke$arity$2(["re-frame: no",cljs.core.str.cljs$core$IFn$_invoke$arity$1(kind),"handler registered for:",id], 0));
@@ -65,8 +65,8 @@ cljs.core.swap_BANG_.cljs$core$IFn$_invoke$arity$4(re_frame.registrar.kind__GT_i
 return handler_fn;
 });
 re_frame.registrar.clear_handlers = (function re_frame$registrar$clear_handlers(var_args){
-var G__34109 = arguments.length;
-switch (G__34109) {
+var G__44231 = arguments.length;
+switch (G__44231) {
 case 0:
 return re_frame.registrar.clear_handlers.cljs$core$IFn$_invoke$arity$0();
 
