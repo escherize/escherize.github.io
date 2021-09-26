@@ -15,11 +15,9 @@
          ;;      :task (System/getenv (first *command-line-args*))}
          -copy-paths (shell "./link_games.joke")
          -prod-build (shell "shadow-cljs release :app")
-         -push-code (do
-                      (shell "git add -A")
-                      (shell (str "git commit -am \"$(date)\""))
-                      (shell "git push"))
-         release (do
-                   (run "-copy-paths")
-                   (run "-prod-build")
-                   (run "-push-code"))}}
+         -push-code (do (shell "git add -A")
+                        (shell (str "git commit -am \"$(date)\""))
+                        (shell "git push"))
+
+         release (do (run "-copy-paths") (run "-prod-build") (run "-push-code"))
+         no-build-release (do (run "-copy-paths") (run "-push-code"))}}
