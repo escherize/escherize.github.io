@@ -1,0 +1,27 @@
+html, body { margin:0; padding:0; overflow:hidden }
+
+svg {position:fixed; top:0px; bottom:0; left:0; right:0; z-index:-199}
+
+.link {
+
+}
+
+.node {
+  cursor: move;
+}
+
+.label{
+  font-family: Monaco, Menlo, 'Ubuntu Mono', Consolas, source-code-pro, monospace;
+  font-size: 12px;
+  fill: #444;
+  text-anchor: middle;
+  cursor: move;
+}
+
+#editor{
+  margin-bottom: -200px;
+}
+
+/* body{ */
+/*   background-color: rgb(39, 40, 34); */
+/* } */

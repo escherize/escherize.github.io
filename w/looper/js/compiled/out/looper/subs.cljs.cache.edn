@@ -1,0 +1,2 @@
+;; Analyzed by ClojureScript 0.0-3211
+{:use-macros {reaction reagent.ratom}, :excludes #{}, :name looper.subs, :imports nil, :requires {re-frame.core re-frame.core, re-frame re-frame.core}, :uses nil, :require-macros {reagent.ratom reagent.ratom}, :cljs.analyzer/constants {:order [:name :content :raw-content :else :graph-data :count :the-count :parsed-data :nodes :edges :??? :parsed], :seen #{:parsed-data :else :content :name :graph-data :the-count :??? :nodes :count :raw-content :parsed :edges}}, :doc nil}

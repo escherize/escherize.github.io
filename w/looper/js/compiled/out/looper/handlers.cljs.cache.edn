@@ -1,0 +1,2 @@
+;; Analyzed by ClojureScript 0.0-3211
+{:name looper.handlers, :doc nil, :excludes #{}, :use-macros nil, :require-macros nil, :uses nil, :requires {re-frame re-frame.core, re-frame.core re-frame.core, db looper.db, looper.db looper.db}, :imports nil, :cljs.analyzer/constants {:seen #{:initialize-db :parsed-data :update-graph :db :content :source :nodes :id :target :edges}, :order [:initialize-db :db :content :parsed-data :nodes :edges :id :source :target :update-graph]}}

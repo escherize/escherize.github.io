@@ -1,7 +1,6 @@
 {:paths ["scripts"]
  :tasks {:requires ([babashka.fs :as fs])
-         :init (do
-                 (def log (Object.)))
+         :init (do (def log (Object.)))
          :enter (locking log (println (str "Running: " (:name (current-task)) ":") (java.util.Date.)))
 
          ;; -clj-files (map str (fs/glob "." "**{.clj,cljc}"))
@@ -19,5 +18,7 @@
                         (shell (str "git commit -am \"$(date)\""))
                         (shell "git push"))
 
-         release (do (run "-copy-paths") (run "-prod-build") (run "-push-code"))
-         no-build-release (do (run "-copy-paths") (run "-push-code"))}}
+         release (do ;; (run "-copy-paths")
+                     (run "-prod-build") (run "-push-code"))
+         no-build-release (do ;; (run "-copy-paths")
+                              (run "-push-code"))}}
