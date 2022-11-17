@@ -1,0 +1,2 @@
+;; Analyzed by ClojureScript 0.0-3211
+{:use-macros nil, :excludes #{}, :name looper.db, :imports nil, :requires nil, :uses nil, :defs {default-db {:meta {:end-column 16, :end-line 3, :column 6, :line 3, :file "/Users/bcm/dv/looper/src/cljs/looper/db.cljs"}, :file "src/cljs/looper/db.cljs", :line 3, :column 1, :end-line 3, :end-column 16, :test true, :name looper.db/default-db}}, :require-macros nil, :cljs.analyzer/constants {:order [:content], :seen #{:content}}, :doc nil}

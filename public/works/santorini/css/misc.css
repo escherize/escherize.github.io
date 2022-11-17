@@ -1,0 +1,41 @@
+/* CSS GENERATED FROM src/bt/css_gen.cljc -> floor-css */
+.floor {
+  width: 5em;
+  top: 1em;
+  height: 5em;
+  -webkit-transform: translateZ (0.01em);
+  -webkit-transition: .5s;
+  position: absolute;
+  content: '';
+  box-shadow: inset 0 0 0 .1em hsla(0,0%,0%,.1);
+  background-color: #d6e8bf;
+  left: 1em;
+  -webkit-transform-style: preserve-3d;
+}
+
+.canselect {
+  background-color: #f4fdee;
+  cursor: pointer;
+}
+
+.canselect:hover {
+  background-color: #e5fad7;
+}
+
+.canmoveto {
+  background-color: #fdeef4;
+  cursor: pointer;
+}
+
+.canmoveto:hover {
+  background-color: #fad7e5;
+}
+
+.canbuild {
+  background-color: #eef4fd;
+  cursor: pointer;
+}
+
+.canbuild:hover {
+  background-color: #d7e5fa;
+}/* END GENERATED CSS */

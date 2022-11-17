@@ -1,8 +1,11 @@
 {:paths ["scripts"]
- :tasks {:requires ([babashka.fs :as fs])
-         :init (do
-                 (def log (Object.)))
-         :enter (locking log (println (str "Running: " (:name (current-task)) ":") (java.util.Date.)))
+ :tasks {:requires ([babashka.fs :as fs]
+                    [clojure.string :as str])
+         :init (do (def log (Object.)))
+         :enter (locking log (println
+                               (str "Running: "
+                                    (:name (current-task)) ":")
+                               (java.util.Date.)))
 
          ;; -clj-files (map str (fs/glob "." "**{.clj,cljc}"))
 
@@ -14,9 +17,8 @@
          ;; env {:doc "Prints environment var"
          ;;      :task (System/getenv (first *command-line-args*))}
          -prod-build (shell "shadow-cljs release :app")
-         -push-code (do (shell "git add -A")
-                        (shell (str "git commit -am \"$(date)\""))
-                        (shell "git push"))
-
+         -push-code (let [date (str/trim (:out (deref (shell {:out :string} "date"))))] (shell "git add -A")
+                         (shell (str "git commit -am 'commited at:" date "'"))
+                         (shell "git push"))
          release (do (run "-prod-build") (run "-push-code"))
-         no-build-release (do (run "-copy-paths") (run "-push-code"))}}
+         no-build-release (run "-push-code")}}

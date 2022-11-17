@@ -1,0 +1,251 @@
+meta:
+  format: FRESH@0.6.0
+  version: 0.4.0
+name: 'Bryan Maass'
+info:
+  label: 'Software Engineer'
+  characterClass: 'Software Engineer'
+  brief: 'Bryan brings his "get it done" mindset from Co-founding Fetchh to improve products and experiences.'
+  image: bryan.png
+  quote: '“The essence of strategy is choosing what not to do.” – Michael Porter'
+contact:
+  website: 'http://escherize.com'
+  phone: '626 404 8410'
+  email: bryan.maass@gmail.com
+location:
+  address: 'Bryan Maass 3809 South Congress, '
+  city: Austin
+  region: Texas
+  code: '78704'
+  country: USA
+SKIPME_project:
+  title: 'TextMeTheLink.com (TMTL ldt.)'
+  category: SaaS
+  role: Creator
+  url: 'http://textmethelink.com'
+  start: 2016-03
+  repo: Private
+  description: 'web-app for helping mobile app creators reach their customers'
+  summary: 'web-app for helping app makers reach customers'
+  keywords:
+    - 'ClojureScript,'
+    - 'Clojure,'
+    - SaaS
+    - SideBiz
+  media: []
+projects:
+  -
+    title: 'CLJS Fiddle'
+    category: 'Open Source'
+    role: Creator
+    url: 'http://escherize.com/cljsfiddle'
+    start: 2016-03
+    repo: 'https://gitlab.com/escherize/cljsfiddle'
+    description: 'site for exploring and sharing interactive ClojureScript snippets.'
+    summary: 'site for exploring and sharing interactive ClojureScript snippets.'
+    keywords:
+      - 'ClojureScript,'
+      - 'Reagent,'
+      - Parinfer
+    media: []
+  -
+    title: hiccup.space
+    category: FOSS
+    role: Creator
+    start: 2015-02
+    end: 2015-03
+    url: 'http://escherize.com/hiccup.space'
+    description: 'site to espouse the virtues of Clojure data as an HTML DSL.'
+    summary: 'Minimalist site to showcase Clojure''s ability to manipulate HTML as datastructures.'
+    SKIPME_keywords:
+      - 'Clojure,'
+      - 'Hiccup,'
+      - Reagent
+  -
+    title: Blog
+    category: personal
+    role: Creator
+    url: 'http://escherize.com'
+    start: 2016-02
+    description: 'My programming blog. Powered by Org-Mode.'
+    summary: 'Conceptualization, design, development, deployment, and content.'
+    SKIPME_keywords:
+      - 'Org Mode,'
+      - 'Jekyll,'
+      - 'HTML 5,'
+      - 'JavaScript,'
+      - pages.github.io
+social:
+  -
+    label: GitHub
+    network: GitHub
+    user: escherize
+    url: 'https://github.com/escherize'
+  -
+    label: GitLab
+    network: GitLab
+    user: escherize
+    url: 'https://gitlab.com/escherize'
+employment:
+  summary: 'Battle tested Clojure developer'
+  history:
+    -
+      employer: 'Threatgrid at Cisco'
+      url: 'https://www.cisco.com/c/en/us/products/security/threat-grid/index.html'
+      position: 'Senior Frontend Software Engineer'
+      start: '2017-06-01'
+      end: present
+      summary: 'Advanced Malware Analysis'
+      keywords: []
+      highlights:
+        - 'Applied management techniques to co-lead a frontend engineering team'
+        - 'Installed single source state management for 30% faster development time'
+        - 'Upgraded a frontend JS single page app to a clojurescript app'
+        - 'Introduced systematic code cleaning which eradicated 97% of bike-shedding'
+    -
+      employer: ROKT
+      url: 'https://ROKT.com'
+      position: 'Senior Data Engineer Contractor'
+      summary: 'a mid-size transactional marketing startup'
+      start: '2016-05-01'
+      end: present
+      keywords: []
+      highlights:
+        - 'Mentored developers regarding Clojure best practices, style, and team culture'
+        - 'Implemented and maintained self-serve UI for Advertiser APIs which lead to 80% fewer API support requests'
+        - 'Lead multiple workshops ranging from Emacs, Higher Order Functions, and re-frame'
+    -
+      employer: Fetchh.io
+      url: 'http://www.startupdaily.net/2016/03/zoom2u-acquires-demand-shipping-startup-fetchh/'
+      position: 'Technical Co-Founder'
+      summary: 'an on-demand logistics service and the easiest way to pack and post items.'
+      start: '2015-03-01'
+      end: '2016-04-01'
+      keywords: []
+      highlights:
+        - 'Designed, developed, and deployed entire SPA, Clojure backend, and Postgres infrastructure'
+        - 'Rolled an analytics platform to measure user behavior (sql queries + Google Analytics + Intercom.io)'
+        - 'Reverse engineered postage carrier APIs and placed thousands of shipments'
+        - 'Architected a system to track parcels and automatically inform customers about the status of thousands of shipments'
+        - 'Sent highly customized marketing through Etsy''s in-app messaging protocol'
+        - 'Raised 150k Angel Round'
+    -
+      employer: 'Staples Inc. (Staples SparX)'
+      url: 'https://Staples.com'
+      position: 'Software Engineer'
+      summary: 'an applied machine learning branch of Staples Inc.'
+      start: '2014-03-01'
+      end: '2015-02-15'
+      keywords: []
+      highlights:
+        - 'Lead developer for the SparX reporting platform'
+        - 'Improved SparX''s A/B testing platform, getting it into production 3 months ahead of schedule'
+    -
+      employer: 'Oxygen Cloud Inc.'
+      url: 'https://oxygencloud.com'
+      position: 'Software Engineer'
+      summary: 'a self-hostable Dropbox clone.'
+      start: '2013-08-20'
+      end: '2014-02-01'
+      keywords: []
+      highlights:
+        - 'Engineered a compatibility layer which linked ftp into the Oxygen Cloud file system'
+        - 'Mentored 3 new team-mates to successfully build compatibility layers for WebDAV, SFTP, and Samba'
+education:
+  summary: 'Studying the principles of computation.'
+  level: degree
+  degree: 'Bachelor of Science'
+  history:
+    -
+      institution: 'University of California at Davis'
+      title: 'Bachelor of Science'
+      url: 'https://cs.ucdavis.edu/'
+      start: '2009'
+      end: '2013'
+skills:
+  sets:
+    -
+      name: 'Backend Development'
+      level: Master
+      skills:
+        - 'Clojure,'
+        - 'Postgres,'
+        - 'leiningen,'
+        - 'oh-my-zsh,'
+        - clojure.spec
+    -
+      name: 'Frontend Development'
+      level: Master
+      skills:
+        - 'ClojureScript,'
+        - 'Re-Frame,'
+        - 'rum,'
+        - 'JS,'
+        - 'react,'
+        - 'websockets,'
+        - 'Semantic UI,'
+        - 'HTML,'
+        - CSS
+    -
+      name: 'Dev Ops'
+      level: Advanced
+      skills:
+        - 'Ubuntu,'
+        - 'ssh,'
+        - 'lein,'
+        - 'nrepl,'
+        - 'bash,'
+        - Jenkins
+    -
+      name: Emacs
+      level: Master
+      skills:
+        - 'magit,'
+        - 'cider,'
+        - 'org-mode,'
+        - 'paredit,'
+        - 'projectile,'
+        - helm
+  list: []
+testimonials:
+  -
+    name: 'Will Jensen'
+    flavor: professional
+    quote: 'My time working with Bryan to build, grow, and sell Fetchh has given me great insight into his abilities as a leader and thinker. Bryan has an ability to develop lean strategies that develop and grow products fast. His ability to iterate makes him an asset to any company and I would jump at the opportunity to work with him again.'
+    private: false
+  -
+    name: 'Mike Thompson'
+    flavor: professional
+    quote: 'Bryan has a deep knowledge of re-frame. I worked with him on a port to the JVM, which was a great success. It was also when I was tossing around ideas with Bryan that the concept of reg-sub arrived.'
+    private: false
+writing: []
+reading: []
+service: []
+speaking:
+  -
+    title: 'Simplifying Clojure Data with Tracks'
+    role: Speaker
+    event: 'Sydney Clojure Group'
+    location: 'Sydney, Australia'
+    date: '2016'
+    summary: 'http://escherize.com/tracks_talk'
+  -
+    title: 'CLJS Fiddle (https://youtu.be/FDRBTXfFOhw)'
+    role: Speaker
+    event: 'ReactJS Sydney'
+    location: 'Sydney, Australia'
+    date: '2016'
+    summary: 'http://escherize.com/cljsfiddle_talk'
+  -
+    title: 'Clojure, RethinkDB, and You'
+    role: Speaker
+    event: 'Sydney Clojure Group'
+    location: 'Sydney, Australia'
+    date: '2016'
+    summary: 'http://escherize.com/rethinkdb_talk'
+recognition: []
+references: []
+languages: []
+extracurricular: []
+governance: []
+interests: []
