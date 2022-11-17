@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html class="overflow-hidden min-h-screen"><head><title>--- Day 3: Binary Diagnostic ---</title><meta charset="UTF-8"><meta content="width=device-width, initial-scale=1" name="viewport"><script src="https://cdn.tailwindcss.com?plugins=typography" type="text/javascript"></script><script>tailwind.config = {
+  darkMode: "class",
+  content: ["./public/build/index.html", "./public/build/**/*.html", "./build/viewer.js"],
+  safelist: ['dark'],
+  theme: {
+    extend: {},
+    fontFamily: {
+      sans: ["Fira Sans", "-apple-system", "BlinkMacSystemFont", "sans-serif"],
+      serif: ["PT Serif", "serif"],
+      mono: ["Fira Mono", "monospace"]
+    }
+  },
+  variants: {
+    extend: {},
+  },
+  plugins: [],
+}
+</script><style type="text/tailwindcss">@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    font-size: 18px;
+  }
+  @media (max-width: 600px) {
+    html {
+      font-size: 16px;
+    }
+  }
+  .font-condensed { font-family: "Fira Sans Condensed", sans-serif; }
+  .font-inter     { font-family: "Inter", sans-serif; }
+  body {
+    @apply font-serif antialiased text-gray-900 sm:overscroll-y-none;
+  }
+  code, .code {
+    @apply font-mono text-sm text-gray-900 bg-slate-50 px-0.5 py-px rounded dark:bg-gray-800;
+  }
+  code::before, code::after { @apply content-none !important; }
+  h1, h3, h4, h5, h6 {
+    @apply font-condensed font-bold mt-8 first:mt-0;
+  }
+  h2 {
+    /*We cannot collapse margins due to nesting but we want to*/
+    /*keep the h2’s large margin visible*/
+    @apply font-condensed font-bold mt-8 first:mt-2;
+  }
+  h1 { @apply text-4xl; }
+  h2 { @apply text-3xl; }
+  h3 { @apply text-2xl; }
+
+  button { @apply focus:outline-none; }
+  strong { @apply font-bold; }
+  em     { @apply italic; }
+  pre    { @apply m-0 font-mono; }
+}
+
+/* Compatibility */
+/* --------------------------------------------------------------- */
+/* TODO: Verify which colors are in use and replace with Tailwind
+   colors accordingly. Move Nj-specific styles out of here. */
+
+:root {
+  --teal-color: #31afd0;
+  --dark-teal-color: #095960;
+  --near-black-color: #2e2e2c;
+  --red-color: #d64242;
+  --dark-blue-color: #1f2937;
+  --dark-blue-60-color: rgba(28, 42, 56, 0.6);
+  --gray-panel-color: rgba(239, 241, 245, 1.000);
+  --brand-color: var(--dark-blue-color);
+  --link-color: #5046e4;
+  --command-bar-selected-color: var(--teal-color);
+}
+
+.serif      { @apply font-serif; }
+.sans-serif { @apply font-sans; }
+.monospace  { @apply font-mono; }
+.inter      { @apply font-inter; }
+
+.border-color-teal { border-color: var(--dark-teal-color); }
+.teal { color: var(--teal-color); }
+.bg-dark-blue { background: var(--dark-blue-color); }
+.bg-dark-blue-60 { background: rgba(28, 42, 56, 0.6); }
+.bg-gray-panel { background: var(--gray-panel-color); }
+.text-dark-blue  { color: var(--dark-blue-color); }
+.text-dark-blue-60 { color: var(--dark-blue-60-color); }
+.border-dark-blue-30 { border-color: rgba(28, 42, 56, 0.6); }
+.text-brand { color: var(--dark-blue-color); }
+.bg-brand { background: var(--dark-blue-color); }
+.text-selected { color: white; }
+.red { color: var(--red-color); }
+
+/* Disclose Button */
+/* --------------------------------------------------------------- */
+
+.disclose {
+  @apply content-none border-solid cursor-pointer inline-block relative mr-[3px] top-[-2px] transition-all;
+  border-color: var(--near-black-color) transparent;
+  border-width: 6px 4px 0;
+}
+.disclose:hover {
+  border-color: var(--near-black-color) transparent;
+}
+.dark .disclose,
+.dark .disclose:hover {
+  border-color: white transparent;
+}
+.disclose.collapsed {
+  @apply rotate-[-90deg];
+}
+
+/* Layout */
+/* --------------------------------------------------------------- */
+
+.page {
+  @apply max-w-5xl mx-auto px-12 box-border flex-shrink-0;
+}
+.max-w-prose { @apply max-w-[46rem] !important; }
+.max-w-wide  { @apply max-w-3xl !important; }
+
+/* List Styles */
+/* --------------------------------------------------------------- */
+
+.task-list-item + .task-list-item,
+.viewer-markdown ul ul {
+  @apply mt-1 mb-0;
+}
+
+/* compact TOC */
+.viewer-markdown .toc ul {
+  list-style: none;
+  @apply my-1;
+}
+
+/* Code Viewer */
+/* --------------------------------------------------------------- */
+
+.viewer-code {
+  @apply font-mono bg-slate-100 rounded-sm text-sm overflow-x-auto dark:bg-gray-800;
+}
+.viewer-code .cm-content {
+  @apply py-4 px-8;
+}
+@media (min-width: 960px){
+  .viewer-notebook .viewer-code .cm-content {
+    @apply py-4 pl-12;
+  }
+}
+/* Don’t show focus outline when double-clicking cell in Safari */
+.cm-scroller { @apply focus:outline-none; }
+
+/* Syntax Highlighting */
+/* --------------------------------------------------------------- */
+
+.inspected-value { @apply text-xs font-mono leading-[1.25rem]; }
+.cmt-strong, .cmt-heading { @apply font-bold; }
+.cmt-italic, .cmt-emphasis { @apply italic; }
+.cmt-strikethrough { @apply line-through; }
+.cmt-link { @apply underline; }
+.untyped-value { @apply whitespace-nowrap; }
+
+.cm-editor, .cmt-default, .viewer-result {
+  @apply text-slate-800 dark:text-slate-300;
+}
+.cmt-keyword {
+  @apply text-purple-800 dark:text-pink-400;
+}
+.cmt-atom, .cmt-bool, .cmt-url, .cmt-contentSeparator, .cmt-labelName {
+  @apply text-blue-900 dark:text-blue-300;
+}
+.cmt-inserted, .cmt-literal {
+  @apply text-emerald-700 dark:text-emerald-200;
+}
+.cmt-string, .cmt-deleted {
+  @apply text-rose-700 dark:text-sky-300;
+}
+.cmt-italic.cmt-string {
+  @apply dark:text-sky-200;
+}
+.cmt-regexp, .cmt-escape {
+  @apply text-orange-500 dark:text-orange-300;
+}
+.cmt-variableName {
+  @apply text-blue-800 dark:text-sky-300;
+}
+.cmt-typeName, .cmt-namespace {
+  @apply text-emerald-600 dark:text-emerald-300;
+}
+.cmt-className {
+  @apply text-teal-600 dark:text-teal-200;
+}
+.cmt-macroName {
+  @apply text-teal-700 dark:text-teal-200;
+}
+.cmt-propertyName {
+  @apply text-blue-700 dark:text-blue-200;
+}
+.cmt-comment {
+  @apply text-slate-500 dark:text-slate-400;
+}
+.cmt-meta {
+  @apply text-slate-600 dark:text-slate-400;
+}
+.cmt-invalid {
+  @apply text-red-500 dark:text-red-300;
+}
+
+.result-data {
+  @apply font-mono text-sm overflow-x-auto whitespace-nowrap leading-normal;
+}
+.result-data::-webkit-scrollbar, .path-nav::-webkit-scrollbar {
+  @apply h-0;
+}
+.result-data-collapsed {
+  @apply whitespace-nowrap;
+}
+.result-data-field {
+  @apply ml-4 whitespace-nowrap;
+}
+.result-data-field-link{
+  @apply ml-4 whitespace-nowrap cursor-pointer;
+}
+.result-data-field-link:hover {
+  @apply text-black bg-black/5;
+}
+.result-text-empty {
+  color: rgba(0,0,0,.3);
+}
+.browsify-button:hover {
+  box-shadow: -2px 0 0 2px #edf2f7;
+}
+
+/* Prose */
+/* --------------------------------------------------------------- */
+
+.viewer-notebook,
+.viewer-markdown {
+  @apply prose
+    dark:prose-invert
+    prose-a:text-blue-600 prose-a:no-underline hover:prose-a:underline
+    dark:prose-a:text-blue-300
+    prose-p:mt-4 prose-p:leading-snug
+    prose-ol:mt-4 prose-ol:mb-6 prose-ol:leading-snug
+    prose-ul:mt-4 prose-ul:mb-6 prose-ul:leading-snug
+    prose-blockquote:mt-4 prose-blockquote:leading-snug
+    prose-hr:mt-6 prose-hr:border-t-2 prose-hr:border-solid prose-hr:border-slate-200
+    prose-figure:mt-4
+    prose-figcaption:mt-2 prose-figcaption:text-xs
+    prose-headings:mb-4
+    prose-table:mt-0
+    prose-th:mb-0
+    prose-img:my-0
+    prose-code:font-medium prose-code:bg-slate-100
+    max-w-none;
+}
+.viewer-markdown blockquote p:first-of-type:before,
+.viewer-markdown blockquote p:last-of-type:after {
+  @apply content-none;
+}
+
+/* Images */
+/* --------------------------------------------------------------- */
+
+
+/* Todo Lists */
+/* --------------------------------------------------------------- */
+
+.contains-task-list {
+  @apply pl-6 list-none;
+}
+.contains-task-list input[type="checkbox"] {
+  @apply appearance-none h-4 w-4 rounded border border-slate-200 relative mr-[0.3rem] ml-[-1.5rem] top-[0.15rem];
+}
+.contains-task-list input[type="checkbox"]:checked {
+  @apply border-indigo-600 bg-indigo-600 bg-no-repeat bg-contain;
+  background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='M12.207 4.793a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0l-2-2a1 1 0 011.414-1.414L6.5 9.086l4.293-4.293a1 1 0 011.414 0z'/%3e%3c/svg%3e");
+}
+
+/* Markdown TOC */
+/* --------------------------------------------------------------- */
+
+.viewer-markdown .toc      { @apply mt-4; }
+.viewer-markdown h1 + .toc { @apply mt-8; }
+
+.viewer-markdown .toc h1,
+.viewer-markdown .toc h2,
+.viewer-markdown .toc h3,
+.viewer-markdown .toc h4,
+.viewer-markdown .toc h5,
+.viewer-markdown .toc h6 {
+  @apply text-base text-indigo-600 font-sans my-0;
+}
+.viewer-markdown .toc a {
+  @apply text-indigo-600 font-normal no-underline hover:underline;
+}
+.viewer-markdown .toc li    { @apply m-0; }
+.viewer-markdown .toc ul ul { @apply pl-4; }
+
+/* Notebook Spacing */
+/* --------------------------------------------------------------- */
+
+.viewer-notebook { @apply py-16; }
+#clerk-static-app .viewer-notebook { @apply pt-[0.8rem] pb-16; }
+.viewer-markdown *:first-child:not(.viewer-code):not(li):not(h2) { @apply mt-0; }
+/*.viewer + .viewer { @apply mt-6; }*/
+.viewer + .viewer-result { @apply mt-0; }
+.viewer-code + .viewer-result { @apply mt-3; }
+.viewer-markdown + .viewer-markdown { @apply mt-0; }
+
+/* Sidenotes */
+/* --------------------------------------------------------------- */
+
+.sidenote-ref {
+  @apply top-[-3px] inline-flex justify-center items-center w-[18px] h-[18px]
+    rounded-full bg-slate-100 border border-slate-300 hover:bg-slate-200 hover:border-slate-300
+    m-0 ml-[4px] cursor-pointer;
+}
+.sidenote {
+  @apply hidden float-left clear-both mx-[2.5%] my-4 text-xs relative w-[95%];
+}
+.sidenote-ref.expanded + .sidenote {
+  @apply block;
+}
+@media (min-width: 860px) {
+  .sidenote-ref {
+    @apply top-[-0.5em] w-auto h-auto inline border-0 bg-transparent m-0 pointer-events-none;
+  }
+  .sidenote sup { @apply inline; }
+  .viewer-markdown .contains-sidenotes p { @apply max-w-[65%]; }
+  .viewer-markdown p .sidenote {
+    @apply mr-[-54%] mt-[0.2rem] w-1/2 float-right clear-right relative block;
+  }
+}
+.viewer-code + .viewer:not(.viewer-markdown):not(.viewer-code):not(.viewer-code-folded),
+.viewer-code-folded + .viewer:not(.viewer-markdown):not(.viewer-code):not(.viewer-code-folded),
+.viewer-result + .viewer-result {
+  @apply mt-2;
+}
+.viewer-code + .viewer-code-folded {
+  @apply mt-4;
+}
+.viewer-result {
+  @apply leading-tight mb-6;
+}
+.viewer-result figure {
+  @apply mt-0 !important;
+}
+@media (min-width: 768px) {
+  .devcard-desc > div {
+    @apply max-w-full m-0;
+  }
+}
+
+/* Command Palette */
+/* --------------------------------------------------------------- */
+
+.nj-commands-input {
+  @apply bg-transparent text-white;
+}
+.nj-context-menu-item:hover:not([disabled]) {
+  @apply cursor-pointer;
+  background-color: rgba(255,255,255,.14);
+}
+
+/* Devdocs */
+/* --------------------------------------------------------------- */
+
+.logo, .logo-white {
+  @apply block indent-[-999em];
+  background: url(/images/nextjournal-logo.svg) center center no-repeat;
+}
+.devdocs-body {
+  @apply font-inter;
+}
+
+/* Workarounds */
+/* --------------------------------------------------------------- */
+
+/* Fixes vega viewer resizing into infinity */
+.vega-embed .chart-wrapper { @apply h-auto !important; }
+/* fixes fraction separators being overridden by tw’s border-color */
+.katex * { @apply border-black; }
+</style><script src="https://storage.googleapis.com/nextjournal-cas-eu/assets/28ktYzexRpt9ZsXvxpxDRnu497pkEeZjEvXB1NMVzfEoPEgsbQXEyM3j5CEucNccte6QGnX1qQxHL2KHfoBRG2FN-viewer.js" type="text/javascript"></script><link href="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.css" rel="stylesheet" type="text/css"><link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;700&amp;family=Fira+Mono:wght@400;700&amp;family=Fira+Sans+Condensed:ital,wght@0,700;1,700&amp;family=Fira+Sans:ital,wght@0,400;0,500;0,700;1,400;1,500;1,700&amp;family=PT+Serif:ital,wght@0,400;0,700;1,400;1,700&amp;display=swap" rel="stylesheet" type="text/css"></head><body><div id="clerk-static-app"></div><script>let viewer = nextjournal.clerk.sci_viewer
+let app = nextjournal.clerk.static_app
+let opts = viewer.read_string("{:out-path \"public/build\", :bundle? false, :browse? false, :report-fn #function[nextjournal.clerk.builder/stdout-reporter], :paths [\"src/playground/aoc/2021/three.clj\"], :path->doc {\"src/playground/aoc/2021/three.clj\" {:nextjournal/viewer {:name :clerk/notebook, :render-fn #viewer-fn v/notebook-viewer}, :nextjournal/value {:blocks [{:nextjournal/viewer {:name :html-, :render-fn #viewer-fn v/html}, :nextjournal/value [:div.viewer-markdown [\"h1\" {:id \"---%20Day%203:%20Binary%20Diagnostic%20---\"} [:span \"--- Day 3: Binary Diagnostic ---\"]] [:blockquote [:p [:a {:href \"https://adventofcode.com/2021/day/3\"} [:span \"Advent of code day 3, 2021\"]]]]]} {:nextjournal/viewer {:name :code-folded, :render-fn #viewer-fn v/foldable-code-viewer}, :nextjournal/value \"(ns playground.aoc.2021.three\\n  {:nextjournal.clerk/visibility {:code :fold :result :show}}\\n  (:require [clojure.string :as str]\\n            [nextjournal.clerk :as clerk]))\", :nextjournal/opts {:loc {:line 5, :column 1}}} {:nextjournal/viewer {:name :html-, :render-fn #viewer-fn v/html}, :nextjournal/value [:div.viewer-markdown [:p [:span \"The submarine has been making some odd creaking noises, so you ask it to produce a diagnostic report just in case.\"]] [:p [:span \"The diagnostic report (your puzzle input) consists of a list of binary numbers which, when decoded properly, can tell you many useful things about the conditions of the submarine. The first parameter to check is the power consumption.\"]] [:p [:span \"You need to use the binary numbers in the diagnostic report to generate two new binary numbers (called the gamma rate and the epsilon rate). The power consumption can then be found by multiplying the gamma rate by the epsilon rate.\"]] [:p [:span \"Each bit in the gamma rate can be determined by finding the most common bit in the corresponding position of all numbers in the diagnostic report. For example, given the following diagnostic report:\"]] [\"h2\" {:id \"Example%20Codes:\"} [:span \"Example Codes:\"]]]} {:nextjournal/viewer {:name :code-folded, :render-fn #viewer-fn v/foldable-code-viewer}, :nextjournal/value \"(def codes\\n  (map\\n    #(map {\\\\0 0 \\\\1 1} %)\\n    [\\\"00100\\\" \\\"11110\\\" \\\"10110\\\" \\\"10111\\\" \\\"10101\\\" \\\"01111\\\" \\\"00111\\\" \\\"11100\\\" \\\"10000\\\" \\\"11001\\\" \\\"00010\\\" \\\"01010\\\"]))\", :nextjournal/opts {:loc {:line 20, :column 1}}} {:nextjournal/viewer {:name :clerk/result, :render-fn #viewer-fn v/result-viewer}, :nextjournal/value {:nextjournal/edn \"{:nextjournal/viewer {:render-fn #viewer-fn v/coll-viewer, :opening-paren \\\"(\\\", :page-size 20}, :nextjournal/value [{:nextjournal/viewer {:render-fn #viewer-fn v/coll-viewer, :opening-paren \\\"(\\\", :closing-paren (\\\")\\\"), :page-size 20}, :nextjournal/value [{:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 0, :path [0 0]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 0, :path [0 1]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 1, :path [0 2]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 0, :path [0 3]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 0, :path [0 4]}], :path [0]} {:nextjournal/viewer {:render-fn #viewer-fn v/coll-viewer, :opening-paren \\\"(\\\", :closing-paren (\\\")\\\"), :page-size 20}, :nextjournal/value [{:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 1, :path [1 0]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 1, :path [1 1]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 1, :path [1 2]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 1, :path [1 3]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 0, :path [1 4]}], :path [1]} {:nextjournal/viewer {:render-fn #viewer-fn v/coll-viewer, :opening-paren \\\"(\\\", :closing-paren (\\\")\\\"), :page-size 20}, :nextjournal/value [{:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 1, :path [2 0]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 0, :path [2 1]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 1, :path [2 2]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 1, :path [2 3]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 0, :path [2 4]}], :path [2]} {:nextjournal/viewer {:render-fn #viewer-fn v/coll-viewer, :opening-paren \\\"(\\\", :closing-paren (\\\")\\\"), :page-size 20}, :nextjournal/value [{:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 1, :path [3 0]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 0, :path [3 1]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 1, :path [3 2]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 1, :path [3 3]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 1, :path [3 4]}], :path [3]} {:nextjournal/viewer {:render-fn #viewer-fn v/coll-viewer, :opening-paren \\\"(\\\", :closing-paren (\\\")\\\"), :page-size 20}, :nextjournal/value [{:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 1, :path [4 0]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 0, :path [4 1]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 1, :path [4 2]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 0, :path [4 3]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 1, :path [4 4]}], :path [4]} {:nextjournal/viewer {:render-fn #viewer-fn v/coll-viewer, :opening-paren \\\"(\\\", :closing-paren (\\\")\\\"), :page-size 20}, :nextjournal/value [{:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 0, :path [5 0]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 1, :path [5 1]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 1, :path [5 2]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 1, :path [5 3]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 1, :path [5 4]}], :path [5]} {:nextjournal/viewer {:render-fn #viewer-fn v/coll-viewer, :opening-paren \\\"(\\\", :closing-paren (\\\")\\\"), :page-size 20}, :nextjournal/value [{:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 0, :path [6 0]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 0, :path [6 1]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 1, :path [6 2]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 1, :path [6 3]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 1, :path [6 4]}], :path [6]} {:nextjournal/viewer {:render-fn #viewer-fn v/coll-viewer, :opening-paren \\\"(\\\", :closing-paren (\\\")\\\"), :page-size 20}, :nextjournal/value [{:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 1, :path [7 0]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 1, :path [7 1]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 1, :path [7 2]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 0, :path [7 3]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 0, :path [7 4]}], :path [7]} {:nextjournal/viewer {:render-fn #viewer-fn v/coll-viewer, :opening-paren \\\"(\\\", :closing-paren (\\\")\\\"), :page-size 20}, :nextjournal/value [{:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 1, :path [8 0]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 0, :path [8 1]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 0, :path [8 2]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 0, :path [8 3]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 0, :path [8 4]}], :path [8]} {:nextjournal/viewer {:render-fn #viewer-fn v/coll-viewer, :opening-paren \\\"(\\\", :closing-paren (\\\")\\\"), :page-size 20}, :nextjournal/value [{:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 1, :path [9 0]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 1, :path [9 1]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 0, :path [9 2]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 0, :path [9 3]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 1, :path [9 4]}], :path [9]} {:nextjournal/viewer {:render-fn #viewer-fn v/coll-viewer, :opening-paren \\\"(\\\", :closing-paren (\\\")\\\"), :page-size 20}, :nextjournal/value [{:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 0, :path [10 0]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 0, :path [10 1]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 0, :path [10 2]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 1, :path [10 3]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 0, :path [10 4]}], :path [10]} {:nextjournal/viewer {:render-fn #viewer-fn v/coll-viewer, :opening-paren \\\"(\\\", :closing-paren (\\\")\\\" \\\")\\\"), :page-size 20}, :nextjournal/value [{:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 0, :path [11 0]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 1, :path [11 1]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 0, :path [11 2]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 1, :path [11 3]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 0, :path [11 4]}], :path [11]}], :path [], :nextjournal/expanded-at {[4] false, [7 1] false, [7] false, [11 2] false, [4 3] false, [2 2] false, [0 0] false, [1 0] false, [8 4] false, [2 3] false, [7 2] false, [7 4] false, [8 3] false, [3 3] false, [5 4] false, [1 1] false, [6 3] false, [10] false, [3 4] false, [11 0] false, [7 3] false, [4 2] false, [6] false, [3 0] false, [9 0] false, [] false, [5 3] false, [9 3] false, [9] false, [3] false, [8 0] false, [4 1] false, [5 2] false, [11 4] false, [1 4] false, [10 2] false, [8 2] false, [10 0] false, [1 3] false, [8] false, [11 3] false, [6 4] false, [8 1] false, [0] false, [0 3] false, [5 1] false, [6 1] false, [10 1] false, [11 1] false, [2 4] false, [5] false, [9 2] false, [9 1] false, [10 4] false, [7 0] false, [0 2] false, [2 0] false, [0 4] false, [3 1] false, [2 1] false, [9 4] false, [4 4] false, [11] false, [5 0] false, [2] false, [6 2] false, [6 0] false, [1 2] false, [10 3] false, [1] false, [3 2] false, [0 1] false, [4 0] false}}\"}, :path []} {:nextjournal/viewer {:name :html-, :render-fn #viewer-fn v/html}, :nextjournal/value [:div.viewer-markdown [:p [:span \"Next we need to decide what the most and least common values are.\"]]]} {:nextjournal/viewer {:name :code-folded, :render-fn #viewer-fn v/foldable-code-viewer}, :nextjournal/value \"(defn common-by\\n  [compare-frequencies xs]\\n  (let [freqs (frequencies xs)\\n        [winner winner-req] (first\\n                              (sort\\n                                (fn [a b] (compare-frequencies (second a) (second b)))\\n                                freqs))\\n        ;; checking for ties, multiple values would have the max or min frequency.\\n        winners (filter #(= winner-req (second %)) freqs)]\\n    (if (< 1 (count winners))\\n      {:error (str (str/join \\\", \\\"\\n                             (map first winners))\\n                   \\\" are tied with \\\"\\n                   (second (first winners)) \\\" each.\\\")}\\n      winner)))\", :nextjournal/opts {:loc {:line 28, :column 1}}} {:nextjournal/viewer {:name :code-folded, :render-fn #viewer-fn v/foldable-code-viewer}, :nextjournal/value \"(defn most-common [xs] (common-by > xs))\", :nextjournal/opts {:loc {:line 44, :column 1}}} {:nextjournal/viewer {:name :code-folded, :render-fn #viewer-fn v/foldable-code-viewer}, :nextjournal/value \"(defn least-common [xs] (common-by < xs))\", :nextjournal/opts {:loc {:line 45, :column 1}}} {:nextjournal/viewer {:name :html-, :render-fn #viewer-fn v/html}, :nextjournal/value [:div.viewer-markdown [:p [:span \"Considering only the \"] [:code [:span \"first\"]] [:span \" bit of each number, there are five \"] [:code [:span \"0\"]] [:span \" bits and seven \"] [:code [:span \"1\"]] [:span \" bits.\"]]]} {:nextjournal/viewer {:name :code, :render-fn #viewer-fn v/code-viewer}, :nextjournal/value \"(sort (map first codes))\", :nextjournal/opts {:loc {:line 51, :column 1}}} {:nextjournal/viewer {:name :clerk/result, :render-fn #viewer-fn v/result-viewer}, :nextjournal/value {:nextjournal/edn \"{:nextjournal/viewer {:render-fn #viewer-fn v/coll-viewer, :opening-paren \\\"(\\\", :closing-paren (\\\")\\\"), :page-size 20}, :nextjournal/value [{:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 0, :path [0]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 0, :path [1]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 0, :path [2]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 0, :path [3]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 0, :path [4]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 1, :path [5]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 1, :path [6]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 1, :path [7]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 1, :path [8]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 1, :path [9]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 1, :path [10]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 1, :path [11]}], :path [], :nextjournal/expanded-at {[4] false, [7] false, [10] false, [6] false, [] false, [9] false, [3] false, [8] false, [0] false, [5] false, [11] false, [2] false, [1] false}}\"}, :path []} {:nextjournal/viewer {:name :html-, :render-fn #viewer-fn v/html}, :nextjournal/value [:div.viewer-markdown [:p [:span \"Since the most common bit is 1, the first bit of the gamma rate is 1.\"]]]} {:nextjournal/viewer {:name :code, :render-fn #viewer-fn v/code-viewer}, :nextjournal/value \"(most-common (sort (map first codes)))\", :nextjournal/opts {:loc {:line 55, :column 1}}} {:nextjournal/viewer {:name :clerk/result, :render-fn #viewer-fn v/result-viewer}, :nextjournal/value {:nextjournal/edn \"{:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 1, :path [], :nextjournal/expanded-at {[] false}}\"}, :path []} {:nextjournal/viewer {:name :html-, :render-fn #viewer-fn v/html}, :nextjournal/value [:div.viewer-markdown [:p [:span \"The most common second bit of the numbers in the diagnostic report is 0, so the second bit of the gamma rate is 0.\"]]]} {:nextjournal/viewer {:name :code, :render-fn #viewer-fn v/code-viewer}, :nextjournal/value \"(most-common (sort (map second codes)))\", :nextjournal/opts {:loc {:line 59, :column 1}}} {:nextjournal/viewer {:name :clerk/result, :render-fn #viewer-fn v/result-viewer}, :nextjournal/value {:nextjournal/edn \"{:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 0, :path [], :nextjournal/expanded-at {[] false}}\"}, :path []} {:nextjournal/viewer {:name :html-, :render-fn #viewer-fn v/html}, :nextjournal/value [:div.viewer-markdown [:p [:span \"The most common value of the third, fourth, and fifth bits are 1, 1, and 0, respectively, and so the final three bits of the gamma rate are 110.\"]]]} {:nextjournal/viewer {:name :code, :render-fn #viewer-fn v/code-viewer}, :nextjournal/value \"[(most-common (sort (map #(nth % 2) codes)))\\n (most-common (sort (map #(nth % 3) codes)))\\n (most-common (sort (map #(nth % 4) codes)))]\", :nextjournal/opts {:loc {:line 63, :column 1}}} {:nextjournal/viewer {:name :clerk/result, :render-fn #viewer-fn v/result-viewer}, :nextjournal/value {:nextjournal/edn \"{:nextjournal/viewer {:render-fn #viewer-fn v/coll-viewer, :opening-paren \\\"[\\\", :closing-paren (\\\"]\\\"), :page-size 20}, :nextjournal/value [{:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 1, :path [0]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 1, :path [1]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 0, :path [2]}], :path [], :nextjournal/expanded-at {[] false, [0] false, [1] false, [2] false}}\"}, :path []} {:nextjournal/viewer {:name :code-folded, :render-fn #viewer-fn v/foldable-code-viewer}, :nextjournal/value \"(defn cols [codes]\\n  (apply (partial mapv #(into [] %&)) codes))\", :nextjournal/opts {:loc {:line 69, :column 1}}} {:nextjournal/viewer {:name :code, :render-fn #viewer-fn v/code-viewer}, :nextjournal/value \"(cols [[:aa :ab :ac]\\n       [:ba :bb :bc]\\n       [:ca :cb :cc]])\", :nextjournal/opts {:loc {:line 74, :column 1}}} {:nextjournal/viewer {:name :clerk/result, :render-fn #viewer-fn v/result-viewer}, :nextjournal/value {:nextjournal/edn \"{:nextjournal/viewer {:render-fn #viewer-fn v/coll-viewer, :opening-paren \\\"[\\\", :page-size 20}, :nextjournal/value [{:nextjournal/viewer {:render-fn #viewer-fn v/coll-viewer, :opening-paren \\\"[\\\", :closing-paren (\\\"]\\\"), :page-size 20}, :nextjournal/value [{:nextjournal/viewer {:render-fn #viewer-fn (fn [x] (v/html [:span.cmt-atom.inspected-value (str x)]))}, :nextjournal/value :aa, :path [0 0]} {:nextjournal/viewer {:render-fn #viewer-fn (fn [x] (v/html [:span.cmt-atom.inspected-value (str x)]))}, :nextjournal/value :ba, :path [0 1]} {:nextjournal/viewer {:render-fn #viewer-fn (fn [x] (v/html [:span.cmt-atom.inspected-value (str x)]))}, :nextjournal/value :ca, :path [0 2]}], :path [0]} {:nextjournal/viewer {:render-fn #viewer-fn v/coll-viewer, :opening-paren \\\"[\\\", :closing-paren (\\\"]\\\"), :page-size 20}, :nextjournal/value [{:nextjournal/viewer {:render-fn #viewer-fn (fn [x] (v/html [:span.cmt-atom.inspected-value (str x)]))}, :nextjournal/value :ab, :path [1 0]} {:nextjournal/viewer {:render-fn #viewer-fn (fn [x] (v/html [:span.cmt-atom.inspected-value (str x)]))}, :nextjournal/value :bb, :path [1 1]} {:nextjournal/viewer {:render-fn #viewer-fn (fn [x] (v/html [:span.cmt-atom.inspected-value (str x)]))}, :nextjournal/value :cb, :path [1 2]}], :path [1]} {:nextjournal/viewer {:render-fn #viewer-fn v/coll-viewer, :opening-paren \\\"[\\\", :closing-paren (\\\"]\\\" \\\"]\\\"), :page-size 20}, :nextjournal/value [{:nextjournal/viewer {:render-fn #viewer-fn (fn [x] (v/html [:span.cmt-atom.inspected-value (str x)]))}, :nextjournal/value :ac, :path [2 0]} {:nextjournal/viewer {:render-fn #viewer-fn (fn [x] (v/html [:span.cmt-atom.inspected-value (str x)]))}, :nextjournal/value :bc, :path [2 1]} {:nextjournal/viewer {:render-fn #viewer-fn (fn [x] (v/html [:span.cmt-atom.inspected-value (str x)]))}, :nextjournal/value :cc, :path [2 2]}], :path [2]}], :path [], :nextjournal/expanded-at {[2 2] false, [0 0] false, [1 0] false, [1 1] false, [] false, [0] false, [0 2] false, [2 0] false, [2 1] false, [2] false, [1 2] false, [1] false, [0 1] false}}\"}, :path []} {:nextjournal/viewer {:name :html-, :render-fn #viewer-fn v/html}, :nextjournal/value [:div.viewer-markdown [:p [:span \"So, the gamma rate is the binary number \"] [:code [:span \"10110\"]] [:span \",\"]]]} {:nextjournal/viewer {:name :code, :render-fn #viewer-fn v/code-viewer}, :nextjournal/value \"(map most-common (cols codes))\", :nextjournal/opts {:loc {:line 82, :column 1}}} {:nextjournal/viewer {:name :clerk/result, :render-fn #viewer-fn v/result-viewer}, :nextjournal/value {:nextjournal/edn \"{:nextjournal/viewer {:render-fn #viewer-fn v/coll-viewer, :opening-paren \\\"(\\\", :closing-paren (\\\")\\\"), :page-size 20}, :nextjournal/value [{:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 1, :path [0]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 0, :path [1]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 1, :path [2]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 1, :path [3]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 0, :path [4]}], :path [], :nextjournal/expanded-at {[] false, [0] false, [1] false, [2] false, [3] false, [4] false}}\"}, :path []} {:nextjournal/viewer {:name :code, :render-fn #viewer-fn v/code-viewer}, :nextjournal/value \"(defn ->decimal [code-col]\\n  (Integer/parseInt (str/join code-col) 2))\", :nextjournal/opts {:loc {:line 86, :column 1}}} {:nextjournal/viewer {:name :code, :render-fn #viewer-fn v/code-viewer}, :nextjournal/value \"(->decimal (map most-common (cols codes)))\", :nextjournal/opts {:loc {:line 90, :column 1}}} {:nextjournal/viewer {:name :clerk/result, :render-fn #viewer-fn v/result-viewer}, :nextjournal/value {:nextjournal/edn \"{:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 22, :path [], :nextjournal/expanded-at {[] false}}\"}, :path []} {:nextjournal/viewer {:name :html-, :render-fn #viewer-fn v/html}, :nextjournal/value [:div.viewer-markdown [:p [:span \"or \"] [:code [:span \"22\"]] [:span \" in decimal.\"]] [:p [:span \"The epsilon rate is calculated in a similar way; rather than use the most common bit, the least common bit from each position is used. So, the epsilon rate is 01001, or 9 in decimal.\"]]]} {:nextjournal/viewer {:name :code, :render-fn #viewer-fn v/code-viewer}, :nextjournal/value \"(->decimal (map least-common (cols codes)))\", :nextjournal/opts {:loc {:line 97, :column 1}}} {:nextjournal/viewer {:name :clerk/result, :render-fn #viewer-fn v/result-viewer}, :nextjournal/value {:nextjournal/edn \"{:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 9, :path [], :nextjournal/expanded-at {[] false}}\"}, :path []} {:nextjournal/viewer {:name :code, :render-fn #viewer-fn v/code-viewer}, :nextjournal/value \"(defn calculate-power-consumption [codes]\\n  (let [code (->decimal (map most-common (cols codes)))\\n        epsilon (->decimal (map least-common (cols codes)))]\\n    (* code epsilon)))\", :nextjournal/opts {:loc {:line 101, :column 1}}} {:nextjournal/viewer {:name :html-, :render-fn #viewer-fn v/html}, :nextjournal/value [:div.viewer-markdown [:p [:span \"Multiplying the gamma rate (22) by the epsilon rate (9) produces the power consumption, 198.\"]]]} {:nextjournal/viewer {:name :code, :render-fn #viewer-fn v/code-viewer}, :nextjournal/value \"(calculate-power-consumption codes)\", :nextjournal/opts {:loc {:line 110, :column 1}}} {:nextjournal/viewer {:name :clerk/result, :render-fn #viewer-fn v/result-viewer}, :nextjournal/value {:nextjournal/edn \"{:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 198, :path [], :nextjournal/expanded-at {[] false}}\"}, :path []}], :toc {:type :toc, :children [{:type :toc, :content [{:type :text, :text \"--- Day 3: Binary Diagnostic ---\"}], :heading-level 1, :children [{:type :toc, :content [{:type :text, :text \"Example Codes:\"}], :heading-level 2}]}]}, :toc-visibility false, :title \"--- Day 3: Binary Diagnostic ---\", :scope {:namespace :playground.aoc.2021.three}}, :path [], :nextjournal/expanded-at {[] false}}}, :path->url {\"src/playground/aoc/2021/three.clj\" \"src/playground/aoc/2021/three.html\"}, :current-path \"src/playground/aoc/2021/three.clj\"}")
+app.init(opts)
+</script></body></html>
