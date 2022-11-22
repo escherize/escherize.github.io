@@ -1,0 +1,23 @@
+{:paths ["scripts"]
+ :tasks {:requires ([babashka.fs :as fs])
+         :init (do
+                 (def log (Object.)))
+         :enter (locking log (println (str "Running: " (:name (current-task)) ":") (java.util.Date.)))
+
+         ;; -clj-files (map str (fs/glob "." "**{.clj,cljc}"))
+
+         ;; -bump-count {:requires ([fileatom])
+         ;;              :task (fileatom/swap! release-counter (fnil inc 0))}
+
+         ;; all-env {:doc "Prints environment var"
+         ;;          :task (clojure.pprint/pprint (System/env))}
+         ;; env {:doc "Prints environment var"
+         ;;      :task (System/getenv (first *command-line-args*))}
+         -copy-paths (shell "./link_games.joke")
+         -prod-build (shell "shadow-cljs release :app")
+         -push-code (do (shell "git add -A")
+                        (shell (str "git commit -am \"$(date)\""))
+                        (shell "git push"))
+
+         release (do (run "-copy-paths") (run "-prod-build") (run "-push-code"))
+         no-build-release (do (run "-copy-paths") (run "-push-code"))}}
