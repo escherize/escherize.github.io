@@ -39,3 +39,4 @@ package-lock.json
 *.log
 .shadow-cljs/builds/*
 public/js/compiled/*
+.clj-kondo
