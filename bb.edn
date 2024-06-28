@@ -3,7 +3,7 @@
                     [clojure.string :as str])
          :init (do (def log (Object.))
                    (defn s [c]
-                     (println "shell: '" c "'")
+                     (println (format "shell: '%s'" c))
                      (shell c)))
          :enter (locking log (println
                                (str "Running: "
