@@ -1,7 +1,10 @@
 {:paths ["scripts"]
  :tasks {:requires ([babashka.fs :as fs]
                     [clojure.string :as str])
-         :init (do (def log (Object.)))
+         :init (do (def log (Object.))
+                   (defn s [c]
+                     (println "running: '" c "'")
+                     (shell c)))
          :enter (locking log (println
                                (str "Running: "
                                     (:name (current-task)) ":")
@@ -18,24 +21,19 @@
          ;;      :task (System/getenv (first *command-line-args*))}
          -prod-build (shell "shadow-cljs release :app")
          -push-code (let [date (str/trim (:out (deref (shell {:out :string} "date"))))] (shell "git add -A")
-                         (shell (str "git commit -am 'commited at:" date "'"))
-                         (shell "git push"))
-         deploy-rp (do
-                     (println "Deploying roguelite_platformer")
-                     (println "make sure you just exported the game.")
-                     (shell "cp -r /Users/bcm/dv/roguelite_platformer/out ./works/rp")
-                     (spit "./works/rp/index.html"
-                           (str/replace (slurp "./works/rp/roguelite_platformer.html")
-                                        "<script src=\"roguelite_platformer.js\"></script>"
-                                        (str "<script src=\"roguelite_platformer.js\"></script>\n" "
+                         (s (str "git commit -am 'commited at:" date "'"))
+                         (s "git push"))
+         inject-service-worker (do (spit "./works/rp/index.html"
+                                         (str/replace (slurp "./works/rp/roguelite_platformer.html")
+                                                      "<script src=\"roguelite_platformer.js\"></script>"
+                                                      (str "<script src=\"roguelite_platformer.js\"></script>\n" "
                                             <script>
                                               if ('serviceWorker' in navigator) {
                                                 navigator.serviceWorker.register('/service-worker.js');
                                               }
-                                            </script>")
-                                        ))
-                     (spit "./works/rp/service-worker.js"
-                           "// service-worker.js
+                                            </script>")))
+                                   (spit "./works/rp/service-worker.js"
+                                         "// service-worker.js
                           self.addEventListener('install', function(event) {
                             self.skipWaiting();
                           });
@@ -58,7 +56,12 @@
                                 });
                               })
                             );
-                          });")
+                          });"))
+         deploy-rp (do
+                     (println "Deploying roguelite_platformer")
+                     (println "make sure you just exported the game.")
+                     (s "cp -r /Users/bcm/dv/roguelite_platformer/out ./works/rp")
+                     (run "inject-service-worker")
                      (run "no-build-release"))
          release (do (run "-prod-build") (run "-push-code"))
          no-build-release (run "-push-code")}}
