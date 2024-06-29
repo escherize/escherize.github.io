@@ -59,7 +59,8 @@
                           });"))
          deploy-rp (do
                      (println "Deploying roguelite_platformer")
-                     (println "make sure you just exported the game.")
+                     (println "\nMake sure you just exported the game.\n")
+                     (s "rm -rf ./works/rp")
                      (s "cp -r /Users/bcm/dv/roguelite_platformer/out ./works/rp")
                      (run "inject-service-worker")
                      (run "no-build-release"))
