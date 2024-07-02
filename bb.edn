@@ -27,8 +27,8 @@
                                  (println "Injecting service worker")
                                  (spit "./works/rp/index.html"
                                        (str/replace (slurp "./works/rp/index.html")
-                                                    "<script src=\"roguelite_platformer.js\"></script>"
-                                                    "<script src=\"roguelite_platformer.js\"></script>\n
+                                                    "<script src=\"index.js\"></script>"
+                                                    "\n
                                             <script>
                                               if ('serviceWorker' in navigator) {
                                                 navigator.serviceWorker.register('service-worker.js');
@@ -42,7 +42,8 @@ function updateServiceWorker() {
   });
 }
 
-updateServiceWorker(); </script>"))
+updateServiceWorker(); </script>
+<script src=\"index.js\"></script>"))
                                  (spit "./works/rp/service-worker.js"
                                        "// service-worker.js
                           self.addEventListener('install', function(event) {
