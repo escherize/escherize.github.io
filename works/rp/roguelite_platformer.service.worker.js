@@ -3,7 +3,7 @@
 // that they need an Internet connection to run the project if desired.
 // Incrementing CACHE_VERSION will kick off the install event and force
 // previously cached resources to be updated from the network.
-const CACHE_VERSION = "1719548130|7758350606";
+const CACHE_VERSION = "1719896395|5106808170";
 const CACHE_PREFIX = "roguelite_platfo-sw-cache-";
 const CACHE_NAME = CACHE_PREFIX + CACHE_VERSION;
 const OFFLINE_URL = "roguelite_platformer.offline.html";
