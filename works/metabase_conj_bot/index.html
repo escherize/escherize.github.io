@@ -19,7 +19,7 @@
              box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
              padding: 20px;
          }
-         h1 {
+         h1, h2 {
              text-align: center;
          }
          .highlight {
@@ -58,6 +58,12 @@
          input[type="submit"]:hover {
              background-color: #005fa3;
          }
+         .say {
+             font-size: 1.9em;
+         }
+         .space {
+             margin-top: 20px;
+         }
         </style>
 
         <!-- <style>
@@ -66,7 +72,7 @@
     </head>
     <body style="margin: 20px">
         <div class="container">
-            <h1>Why Metabase?</h1>
+
 
             <span style="display: flex; align-items: center; justify-content: center;">
                 <img src="https://www.metabase.com/images/logo.svg" alt="Metabase Logo" style="width: 100px; height: 100px; margin: 0 10px;">
@@ -74,10 +80,15 @@
                 <img src="./clojure-logo-120b.png" alt="Clojure Logo" style="width: 100px; height: 100px; margin: 0 10px;">
             </span>
 
+            <h2 class="highlight">Why Metabase?</h2>
+
             <div class="content">
-                    <p><strong class="highlight">We are open source.</strong></p>
-                <p><strong class="highlight">We are hiring!</strong></p>
-                <p><a href="https://github.com/trending/clojure" target="_blank" class="highlight"><strong>We have the most GitHub stars for a Clojure project.</strong></a></p>
+                <p><strong class="say">We are open source.</strong></p>
+                <p><strong class="say">We are hiring!</strong></p>
+
+                <div class="space">​</div>
+
+                <p><a href="https://github.com/trending/clojure" target="_blank" class=""><strong>We have the most Clojure GitHub stars</strong></a></p>
                 <div class="link-container">
                     <a href="https://stats.metabase.com/public/dashboard/92d6b7ea-7526-487c-b183-366bf84672d7" target="_blank">
                         Check out our live stats dashboard!
@@ -85,20 +96,19 @@
                 </div>
             </div>
 
+            <div class="space">​</div>
 
-            <hr>
-
-            <h1>Interested in an exciting opportunity?</h1>
+            <h1>Interested in <em>this</em> exciting opportunity?</h1>
             <div id="response">
-            <form id="submission-form" action="https://script.google.com/macros/s/AKfycbyNpdYmRnNnddkUQiZ2knBkR3Z3xEAkXEZUjP8XAgDZ45b4ITkfFI4qkVeU6PSek0fi/exec" method="POST">
-                <label for="name">Name:</label>
-                <input type="text" id="name" name="name" required><br><br>
+                <form id="submission-form" action="https://script.google.com/macros/s/AKfycbyNpdYmRnNnddkUQiZ2knBkR3Z3xEAkXEZUjP8XAgDZ45b4ITkfFI4qkVeU6PSek0fi/exec" method="POST">
+                    <label for="name">Name:</label>
+                    <input type="text" id="name" name="name" required><br><br>
 
-                <label for="email">Email:</label>
-                <input type="email" id="email" name="email" required><br><br>
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" required><br><br>
 
-                <button type="submit">Submit</button>
-            </form>
+                    <button type="submit">Submit</button>
+                </form>
             </div>
             <script>
              const form = document.getElementById('submission-form');
