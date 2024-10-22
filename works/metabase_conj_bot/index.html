@@ -16,10 +16,10 @@
              margin: 0 auto;
              background-color: #fff;
              border-radius: 8px;
-             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+             box-shadow: 0 10px 10px rgba(0, 0, 0, 0.1);
              padding: 20px;
          }
-         h1, h2 {
+         h1, h2, .center {
              text-align: center;
          }
          .highlight {
@@ -64,6 +64,35 @@
          .space {
              margin-top: 20px;
          }
+
+         button.submit {
+             background-color: #228be6; /* Mantine's primary blue */
+             color: white;
+             border: none;
+             border-radius: 4px; /* Rounded corners */
+             padding: 10px 20px;
+             font-size: 16px;
+             font-weight: 600;
+             cursor: pointer;
+             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+             transition: background-color 0.2s ease, box-shadow 0.2s ease;
+         }
+
+         button.submit:hover {
+             background-color: #1c7ed6; /* Darken the blue on hover */
+             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Slightly stronger shadow */
+         }
+
+         button.submit:active {
+             background-color: #1971c2; /* Even darker on active */
+             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Reset shadow */
+         }
+
+         button.submit:disabled {
+             background-color: #adb5bd; /* Disabled state color */
+             cursor: not-allowed;
+             box-shadow: none;
+         }
         </style>
 
         <!-- <style>
@@ -98,16 +127,21 @@
 
             <div class="space">​</div>
 
-            <h1>Interested in this exciting opportunity?</h1>
+            <h1>No time to apply right now?</h1>
+            <h2 class="center">Send us your email and we will be in touch</h2>
+
             <div id="response">
                 <form id="submission-form" action="https://script.google.com/macros/s/AKfycbyNpdYmRnNnddkUQiZ2knBkR3Z3xEAkXEZUjP8XAgDZ45b4ITkfFI4qkVeU6PSek0fi/exec" method="POST">
-                    <label for="name">Name:</label>
-                    <input type="text" id="name" name="name" required><br><br>
+                    <span style="width: 300px; display: flex; align-items: center; justify-content: space-between;">
+                        <label for="name">Name: </label>
+                        <input type="text" id="name" name="name" required><br><br>
+                    </span>
 
-                    <label for="email">Email:</label>
-                    <input type="email" id="email" name="email" required><br><br>
-
-                    <button type="submit">Submit</button>
+                    <span style="width: 300px; display: flex; align-items: center; justify-content: space-between;">
+                        <label for="email">Email: </label>
+                        <input type="email" id="email" name="email" required><br><br>
+                    </span>
+                    <button class="submit" type="submit">Submit</button>
                 </form>
             </div>
             <script>
